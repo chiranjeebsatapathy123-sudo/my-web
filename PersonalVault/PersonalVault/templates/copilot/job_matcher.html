@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block page_title %}AI Job Matcher{% endblock %}
+{% block content %}
+<div class="row justify-content-center animate-fade-in">
+    <div class="col-md-8 text-center">
+        <i class="bi bi-briefcase-fill text-success" style="font-size: 3rem;"></i>
+        <h3 class="text-white mt-2">AI Job Matcher</h3>
+        <p class="text-secondary">Paste a job description to see how well your vault profile matches.</p>
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            <textarea name="job_description" rows="8" class="form-control bg-dark text-light border-secondary" placeholder="Paste job description..." required></textarea>
+            <button type="submit" class="btn btn-premium w-100 mt-3" onclick="this.innerHTML='Analyzing...';"><i class="bi bi-magic me-2"></i>Analyze Match</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

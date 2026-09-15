@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <!-- Main Form Column -->
+        <div class="col-lg-6 mb-4">
+            <div class="glass-card h-100">
+                <div class="border-bottom border-secondary pb-3 mb-4">
+                    <h2 class="fw-bold text-white mb-1"><i class="bi bi-envelope-paper text-primary me-2"></i>Get in Touch</h2>
+                    <p class="text-secondary mb-0">Have a project, a question, or just want to say hi? Drop a message below!</p>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group-premium mb-4">
+                            <label class="form-label text-secondary fw-semibold mb-2" for="{{ field.id_for_label }}">
+                                {% if field.name == 'name' %}
+                                    <i class="bi bi-person me-1"></i> Full Name
+                                {% elif field.name == 'email' %}
+                                    <i class="bi bi-envelope me-1"></i> Email Address
+                                {% elif field.name == 'subject' %}
+                                    <i class="bi bi-chat-left-text me-1"></i> Subject
+                                {% elif field.name == 'message' %}
+                                    <i class="bi bi-pencil-square me-1"></i> Message
+                                {% else %}
+                                    {{ field.label }}
+                                {% endif %}
+                            </label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text text-muted small mt-1">{{ field.help_text }}</div>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <div class="text-danger small mt-1"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-premium py-3 fw-bold">
+                            <i class="bi bi-send-fill me-2"></i> Send Message
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Info/Map Column -->
+        <div class="col-lg-5 mb-4">
+            <div class="glass-card h-100 d-flex flex-column">
+                <div class="border-bottom border-secondary pb-3 mb-4">
+                    <h3 class="fw-bold text-white mb-1"><i class="bi bi-info-circle text-info me-2"></i>Contact Details</h3>
+                    <p class="text-secondary mb-0">Reach out directly or follow social profiles.</p>
+                </div>
+
+                <div class="my-3 flex-grow-1">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; min-width: 50px;">
+                            <i class="bi bi-envelope text-primary fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-secondary small fw-semibold">Email Us</div>
+                            <div class="text-white fw-bold">chiranjeebsatapathy123@gmail.com</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; min-width: 50px;">
+                            <i class="bi bi-telephone text-success fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-secondary small fw-semibold">Call Me</div>
+                            <div class="text-white fw-bold">+91 8763614209</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="rounded-circle bg-secondary d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px; min-width: 50px;">
+                            <i class="bi bi-geo-alt text-danger fs-4"></i>
+                        </div>
+                        <div>
+                            <div class="text-secondary small fw-semibold">Location</div>
+                            <div class="text-white fw-bold">Odisha, India</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Google Maps Embed for Location -->
+                <div class="rounded-3 overflow-hidden border border-secondary mt-auto" style="height: 220px;">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3826233.153723321!2d81.33230623233234!3d20.155723145454547!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19137c357f893d%3A0xc3dfbb0164c0db92!2sOdisha%2C%20India!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus" 
+                        width="100%" 
+                        height="100%" 
+                        style="border: 0; filter: invert(90%) hue-rotate(180deg) grayscale(30%) contrast(95%);" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

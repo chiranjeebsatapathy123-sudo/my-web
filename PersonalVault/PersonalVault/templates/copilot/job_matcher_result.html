@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-white">Job Match Report</h2>
+<a href="{% url 'job_matcher' %}" class="btn btn-outline-secondary mb-3">Analyze Another</a>
+<div class="glass-card text-light markdown-content" id="md-content">{{ match_report|escapejs }}</div>
+<script>document.getElementById('md-content').innerHTML = marked.parse(document.getElementById('md-content').innerHTML);</script>
+{% endblock %}

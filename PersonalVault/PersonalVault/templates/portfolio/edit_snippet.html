@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Edit Snippet{% endblock %}
+{% block page_title %}Edit Snippet{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="glass-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold text-white mb-0"><i class="bi bi-pencil-square text-primary me-2"></i>Edit Snippet</h3>
+                <a href="{% url 'snippets' %}" class="btn btn-premium-outline btn-sm"><i class="bi bi-arrow-left me-1"></i> Back</a>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="row g-3">
+                    <div class="col-md-8 form-group-premium">
+                        <label class="form-label text-white">Title *</label>
+                        {{ form.title }}
+                    </div>
+                    
+                    <div class="col-md-4 form-group-premium">
+                        <label class="form-label text-white">Language</label>
+                        {{ form.language }}
+                    </div>
+                    
+                    <div class="col-12 form-group-premium position-relative">
+                        <div class="d-flex justify-content-between align-items-end mb-2">
+                            <label class="form-label text-white mb-0">Code Content *</label>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-premium dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-magic me-1"></i> AI Copilot
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark glass-card p-2" style="border: 1px solid var(--primary);">
+                                    <li><a class="dropdown-item ai-action" href="#" data-action="optimize"><i class="bi bi-lightning-charge me-2 text-warning"></i>Optimize Code</a></li>
+                                    <li><a class="dropdown-item ai-action" href="#" data-action="explain"><i class="bi bi-chat-left-text me-2 text-info"></i>Explain Code</a></li>
+                                    <li><hr class="dropdown-divider border-secondary"></li>
+                                    <li><a class="dropdown-item ai-action" href="#" data-action="translate_py"><i class="bi bi-file-earmark-python me-2 text-primary"></i>To Python</a></li>
+                                    <li><a class="dropdown-item ai-action" href="#" data-action="translate_js"><i class="bi bi-filetype-js me-2 text-warning"></i>To JavaScript</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="ai-loading" class="position-absolute d-none" style="top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                        {{ form.code_content }}
+                    </div>
+                    
+                    <div class="col-12 form-group-premium">
+                        <label class="form-label text-white">Tags</label>
+                        {{ form.tags }}
+                    </div>
+                </div>
+
+                <div class="mt-4 border-top border-secondary pt-4 text-end">
+                    <button type="submit" class="btn btn-premium px-4"><i class="bi bi-check2-circle me-2"></i>Update Snippet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const aiButtons = document.querySelectorAll('.ai-action');
+    const codeArea = document.querySelector('textarea[name="code_content"]');
+    const loading = document.getElementById('ai-loading');
+    
+    aiButtons.forEach(btn => {
+        btn.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const action = this.getAttribute('data-action');
+            const code = codeArea.value;
+            
+            if (!code) {
+                alert('Please enter some code first.');
+                return;
+            }
+            
+            loading.classList.remove('d-none');
+            codeArea.style.opacity = '0.5';
+            
+            try {
+                const response = await fetch('{% url "optimize_snippet_api" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        code: code,
+                        action: action
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    codeArea.value = data.result;
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while communicating with the AI.');
+            } finally {
+                loading.classList.add('d-none');
+                codeArea.style.opacity = '1';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login | Welcome to the 3D Vault{% endblock %}
+
+{% block content %}
+<style>
+    /* Remove base background and padding for the cinematic login experience */
+    body {
+        background: transparent !important; 
+        overflow: hidden !important;
+    }
+    .main-wrapper {
+        background: transparent !important;
+    }
+    .navbar, .sidebar, .footer {
+        display: none !important; /* Hide UI during cinematic intro */
+    }
+    main {
+        padding: 0 !important;
+        margin: 0 !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    /* 3D Glass Login Panel */
+    #login-panel {
+        width: 100%;
+        max-width: 420px;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 50px 40px;
+        box-shadow: 
+            0 30px 60px rgba(0,0,0,0.5), 
+            inset 0 1px 0 rgba(255,255,255,0.2),
+            0 0 40px rgba(99, 102, 241, 0.2); /* Subtle colored glow */
+        z-index: 10;
+        /* Initial state is hidden; GSAP will animate this */
+        opacity: 0;
+        transform: translateY(100px) rotateX(-15deg); 
+    }
+
+    .login-brand {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .login-brand h2 {
+        color: #fff;
+        font-weight: 800;
+        font-size: 2.5rem;
+        margin-bottom: 5px;
+        background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .login-brand p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.95rem;
+    }
+
+    .form-group-premium {
+        position: relative;
+        margin-bottom: 25px;
+    }
+
+    .form-group-premium i {
+        position: absolute;
+        top: 50%;
+        left: 20px;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+        pointer-events: none;
+    }
+
+    .form-control-login {
+        width: 100%;
+        padding: 16px 20px 16px 55px;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
+        color: #fff;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-login::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    .form-control-login:focus {
+        background: rgba(0, 0, 0, 0.4);
+        border-color: #6366f1;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+    }
+
+    .form-control-login:focus + i {
+        color: #6366f1;
+        transform: translateY(-50%) scale(1.1);
+    }
+
+    .btn-login-3d {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+        color: #fff;
+        border: none;
+        border-radius: 14px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-login-3d::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%; width: 50%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transform: skewX(-20deg);
+        transition: all 0.5s;
+    }
+
+    .btn-login-3d:hover {
+        transform: translateY(-3px) scale(1.02);
+        box-shadow: 0 15px 25px rgba(99, 102, 241, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
+    }
+
+    .btn-login-3d:hover::after {
+        left: 200%;
+    }
+
+    .btn-login-3d:active {
+        transform: translateY(2px) scale(0.98);
+        box-shadow: 0 5px 10px rgba(99, 102, 241, 0.3);
+    }
+
+    .register-link {
+        text-align: center;
+        margin-top: 30px;
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.95rem;
+    }
+
+    .register-link a {
+        color: #a5b4fc;
+        text-decoration: none;
+        font-weight: 600;
+        margin-left: 5px;
+        transition: color 0.3s;
+    }
+
+    .register-link a:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+</style>
+
+<div id="login-panel">
+    <div class="login-brand">
+        <h2>3D Vault</h2>
+        <p>Enter the digital workspace.</p>
+    </div>
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div class="form-group-premium">
+            {{ field }}
+            {% if field.name == 'username' %}
+                <i class="bi bi-person-fill"></i>
+            {% elif field.name == 'password' %}
+                <i class="bi bi-shield-lock-fill"></i>
+            {% else %}
+                <i class="bi bi-pencil-fill"></i>
+            {% endif %}
+            
+            {% for error in field.errors %}
+                <div class="text-danger small mt-2" style="background: rgba(239,68,68,0.1); padding: 8px; border-radius: 8px;">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i> {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn-login-3d">
+            Access System <i class="bi bi-arrow-right-short ms-1 fs-4"></i>
+        </button>
+    </form>
+
+    <div class="register-link">
+        New here? <a href="{% url 'register' %}">Initialize Account</a>
+    </div>
+</div>
+
+    <script>
+        // Ensure Django inputs have the correct class
+        document.addEventListener("DOMContentLoaded", function() {
+            const inputs = document.querySelectorAll('.form-group-premium input');
+            
+            inputs.forEach(input => {
+                input.classList.add('form-control-login');
+                if(input.name.toLowerCase().includes('username')) {
+                    input.placeholder = 'Username';
+                } else if(input.name.toLowerCase().includes('password')) {
+                    input.placeholder = 'Password';
+                } else {
+                    input.placeholder = input.name;
+                }
+
+                // Micro-interactions for the 3D Engine
+                input.addEventListener('focus', () => {
+                    gsap.to(input.parentElement, { z: 20, scale: 1.02, duration: 0.3, ease: "power2.out" });
+                    // Mascot looks down/reacts
+                    window.dispatchEvent(new Event('ai-thinking'));
+                });
+
+                input.addEventListener('blur', () => {
+                    gsap.to(input.parentElement, { z: 0, scale: 1, duration: 0.3, ease: "power2.in" });
+                    // Mascot returns to idle
+                    window.dispatchEvent(new Event('ai-idle'));
+                });
+            });
+            
+            // Allow 3D transforms on form groups
+            gsap.set('.form-group-premium', { transformStyle: "preserve-3d" });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-white">Your Elevator Pitches</h2>
+<div class="glass-card text-light markdown-content" id="md-content">{{ pitches|escapejs }}</div>
+<script>document.getElementById('md-content').innerHTML = marked.parse(document.getElementById('md-content').innerHTML);</script>
+{% endblock %}

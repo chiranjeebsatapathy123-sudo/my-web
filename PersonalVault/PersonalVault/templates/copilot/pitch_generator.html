@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center animate-fade-in mt-5">
+    <i class="bi bi-megaphone-fill text-danger" style="font-size: 4rem;"></i>
+    <h3 class="text-white mt-3">Elevator Pitch Generator</h3>
+    <p class="text-secondary">Generate 30s, 60s, and 2m pitch scripts about yourself.</p>
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-premium btn-lg" onclick="this.innerHTML='Drafting...';"><i class="bi bi-magic me-2"></i>Generate Pitches</button>
+    </form>
+</div>
+{% endblock %}

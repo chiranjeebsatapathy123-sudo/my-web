@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}My Certificates{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom border-secondary pb-3 mb-5">
+        <div>
+            <h2 class="fw-bold text-white mb-1"><i class="bi bi-patch-check text-success me-2"></i>Credentials & Certificates</h2>
+            <p class="text-secondary mb-0">Browse and manage verified training achievements and educational degrees.</p>
+        </div>
+        {% if user.is_authenticated %}
+            <a href="{% url 'add_certificate' %}" class="btn btn-premium mt-2 mt-md-0">
+                <i class="bi bi-file-earmark-arrow-up me-1"></i> Upload Certificate
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="row g-4">
+        {% for certificate in certificates %}
+            <div class="col-md-6 col-lg-4">
+                <div class="glass-card h-100 d-flex flex-column p-0 overflow-hidden">
+                    {% if certificate.certificate_image %}
+                        <div style="height: 220px; overflow: hidden;" class="position-relative border-bottom border-secondary">
+                            <img src="{{ certificate.certificate_image.url }}" class="w-100 h-100" style="object-fit: cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+                            {% if user.is_authenticated and certificate.user == user %}
+                                <div class="position-absolute top-0 end-0 p-2 d-flex gap-2" style="z-index: 10;">
+                                    <a href="{% url 'edit_certificate' certificate.id %}" class="btn btn-premium btn-sm py-1 px-2 shadow-lg" title="Edit Certificate">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <form action="{% url 'delete_certificate' certificate.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this certificate?');" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger-premium btn-sm py-1 px-2 shadow-lg" title="Delete Certificate">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% else %}
+                        <div style="height: 220px; background-color: var(--bg-secondary);" class="d-flex align-items-center justify-content-center border-bottom border-secondary position-relative">
+                            <i class="bi bi-patch-check text-muted display-2"></i>
+                            {% if user.is_authenticated and certificate.user == user %}
+                                <div class="position-absolute top-0 end-0 p-2 d-flex gap-2" style="z-index: 10;">
+                                    <a href="{% url 'edit_certificate' certificate.id %}" class="btn btn-premium btn-sm py-1 px-2 shadow-lg" title="Edit Certificate">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <form action="{% url 'delete_certificate' certificate.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this certificate?');" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger-premium btn-sm py-1 px-2 shadow-lg" title="Delete Certificate">
+                                            <i class="bi bi-trash3"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <h4 class="text-white fw-bold mb-2">{{ certificate.title }}</h4>
+                        <div class="mb-3">
+                            <div class="text-secondary small mb-1"><i class="bi bi-building me-2"></i><strong>Organization:</strong> {{ certificate.organization }}</div>
+                            <div class="text-secondary small"><i class="bi bi-calendar3 me-2"></i><strong>Issued Date:</strong> {{ certificate.issue_date|date:"F d, Y" }}</div>
+                        </div>
+                        
+                        <div class="d-grid mt-auto pt-3 border-top border-secondary">
+                            <a href="{{ certificate.certificate_image.url }}" target="_blank" class="btn btn-premium-outline py-2">
+                                <i class="bi bi-fullscreen me-1"></i> View Full Certificate
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-award text-muted display-2 mb-3"></i>
+                <h4 class="text-secondary">No certificates uploaded yet</h4>
+                {% if user.is_authenticated %}
+                    <p class="text-muted">Click the button above to upload your first certificate.</p>
+                {% else %}
+                    <p class="text-muted">The user hasn't added any certificate records to their vault yet.</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

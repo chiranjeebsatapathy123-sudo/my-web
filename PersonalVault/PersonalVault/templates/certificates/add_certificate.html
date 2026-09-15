@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Certificate{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="glass-card">
+            <div class="border-bottom border-secondary pb-3 mb-4">
+                <h3 class="fw-bold text-white mb-1"><i class="bi bi-patch-plus text-success me-2"></i>Add Certificate</h3>
+                <p class="text-secondary mb-0">Record a new verified certificate, credential, or licensing asset.</p>
+            </div>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="form-group-premium mb-4">
+                        <label class="form-label text-secondary fw-semibold mb-2" for="{{ field.id_for_label }}">
+                            {% if field.name == 'title' %}
+                                <i class="bi bi-tag me-1"></i> Certificate Title
+                            {% elif field.name == 'organization' %}
+                                <i class="bi bi-building me-1"></i> Issuing Organization
+                            {% elif field.name == 'issue_date' %}
+                                <i class="bi bi-calendar3 me-1"></i> Issue Date
+                            {% elif field.name == 'certificate_image' %}
+                                <i class="bi bi-image me-1"></i> Certificate Image / Copy
+                            {% else %}
+                                {{ field.label }}
+                            {% endif %}
+                        </label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text text-muted small mt-1">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="text-danger small mt-1"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div class="d-flex justify-content-end gap-3 mt-4 pt-3 border-top border-secondary">
+                    <a href="{% url 'certificate_list' %}" class="btn btn-premium-outline px-4">
+                        <i class="bi bi-x-circle me-1"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn btn-premium px-5">
+                        <i class="bi bi-check-circle me-1"></i> Upload Certificate
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

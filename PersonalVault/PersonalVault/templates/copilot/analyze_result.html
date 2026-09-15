@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block page_title %}Analysis Result{% endblock %}
+
+{% block content %}
+<div class="row mb-4 animate-fade-in">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <div>
+            <h2 class="fw-bold mb-0">AI Feedback <i class="bi bi-robot text-info ms-2"></i></h2>
+            <p class="text-secondary mb-0">Analysis for: <span class="text-white">{{ resume.title }}</span></p>
+        </div>
+        <a href="{% url 'analyze_resume' %}" class="btn btn-premium-outline">
+            <i class="bi bi-arrow-left me-2"></i> Analyze Another
+        </a>
+    </div>
+</div>
+
+<div class="row animate-fade-in" style="animation-delay: 0.1s;">
+    <div class="col-12">
+        <div class="glass-card">
+            <div id="analysis-content" class="text-light markdown-content" style="font-size: 1.05rem; line-height: 1.7;">
+                {{ analysis|escapejs }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const contentDiv = document.getElementById('analysis-content');
+        const rawContent = contentDiv.innerHTML;
+        contentDiv.innerHTML = marked.parse(rawContent);
+    });
+</script>
+{% endblock %}

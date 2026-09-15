@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block page_title %}AI Resume Analyzer{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center animate-fade-in">
+    <div class="col-md-8 col-lg-6">
+        <div class="glass-card text-center">
+            <i class="bi bi-robot text-info mb-3" style="font-size: 4rem;"></i>
+            <h3 class="fw-bold text-white mb-2">AI Resume Analyzer</h3>
+            <p class="text-secondary mb-4">Select one of your uploaded resumes and Gemini will analyze it, providing actionable feedback to help you land your dream job.</p>
+            
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+
+            {% if resumes %}
+                <form method="post" action="{% url 'analyze_resume' %}" class="text-start">
+                    {% csrf_token %}
+                    <div class="form-group-premium">
+                        <label for="resume_id" class="form-label">Select Resume to Analyze</label>
+                        <select class="form-select bg-dark text-light border-secondary" id="resume_id" name="resume_id" required>
+                            <option value="">-- Choose a Resume --</option>
+                            {% for resume in resumes %}
+                                <option value="{{ resume.id }}">{{ resume.title }} (Uploaded {{ resume.uploaded_at|date:"M d, Y" }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-premium w-100 mt-3" onclick="this.innerHTML='<i class=\'spinner-border spinner-border-sm me-2\'></i> Analyzing...'; this.classList.add('disabled');">
+                        <i class="bi bi-magic me-2"></i> Analyze Resume
+                    </button>
+                </form>
+            {% else %}
+                <div class="alert alert-warning text-start">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i> You don't have any resumes uploaded yet.
+                </div>
+                <a href="{% url 'resume_view' %}" class="btn btn-premium-outline mt-3">Upload a Resume</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

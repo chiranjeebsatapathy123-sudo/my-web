@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Resume{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <!-- Main Resume Display Column -->
+        <div class="col-lg-8">
+            <div class="glass-card mb-4">
+                <div class="d-flex justify-content-between align-items-center border-bottom border-secondary pb-3 mb-4">
+                    <div>
+                        <h2 class="fw-bold text-white mb-1"><i class="bi bi-file-earmark-pdf text-danger me-2"></i>Curriculum Vitae</h2>
+                        <p class="text-secondary mb-0">View or download the latest professional resume.</p>
+                    </div>
+                    {% if resume %}
+                        <a href="{{ resume.file.url }}" download class="btn btn-premium">
+                            <i class="bi bi-cloud-arrow-down me-1"></i> Download PDF
+                        </a>
+                    {% endif %}
+                </div>
+
+                {% if resume %}
+                    <div class="mb-4">
+                        <h4 class="text-white mb-3"><i class="bi bi-info-circle me-2 text-primary"></i>Resume Details</h4>
+                        <table class="table table-dark table-borderless bg-transparent">
+                            <tbody>
+                                <tr>
+                                    <td class="text-secondary fw-semibold ps-0" style="width: 150px;">Title</td>
+                                    <td class="text-light">{{ resume.title }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary fw-semibold ps-0">Uploaded At</td>
+                                    <td class="text-light">{{ resume.uploaded_at|date:"F d, Y H:i" }}</td>
+                                </tr>
+                                {% if profile %}
+                                    {% if profile.github %}
+                                    <tr>
+                                        <td class="text-secondary fw-semibold ps-0">GitHub</td>
+                                        <td>
+                                            <a href="{{ profile.github }}" target="_blank" class="text-info text-decoration-none">
+                                                <i class="bi bi-github me-1"></i> {{ profile.github }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                    {% if profile.linkedin %}
+                                    <tr>
+                                        <td class="text-secondary fw-semibold ps-0">LinkedIn</td>
+                                        <td>
+                                            <a href="{{ profile.linkedin }}" target="_blank" class="text-info text-decoration-none">
+                                                <i class="bi bi-linkedin me-1"></i> {{ profile.linkedin }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- PDF Viewer -->
+                    <div class="ratio ratio-16x9 rounded-3 overflow-hidden border border-secondary shadow-lg mb-2" style="height: 600px;">
+                        <iframe src="{{ resume.file.url }}" type="application/pdf" width="100%" height="100%">
+                            <p class="text-center py-5">Your browser does not support embedded PDFs. 
+                                <a href="{{ resume.file.url }}" class="text-primary text-decoration-none">Download the PDF</a> to view it.
+                            </p>
+                        </iframe>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-file-earmark-x text-muted display-3 mb-3"></i>
+                        <h4 class="text-secondary">No resume has been uploaded yet</h4>
+                        <p class="text-muted">Once a resume is uploaded, it will be displayed here for public viewing and downloading.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Admin Control Sidebar -->
+        {% if user.is_authenticated %}
+            <div class="col-lg-4">
+                <!-- Upload Form -->
+                <div class="glass-card mb-4">
+                    <h4 class="fw-bold text-white mb-3"><i class="bi bi-file-earmark-arrow-up text-success me-2"></i>Upload/Update</h4>
+                    <p class="text-secondary small">Upload a new PDF to replace the active resume shown on the portfolio.</p>
+                    
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group-premium mb-3">
+                                <label class="form-label text-secondary small fw-semibold" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% for error in field.errors %}
+                                    <div class="text-danger small mt-1"><i class="bi bi-exclamation-triangle-fill"></i> {{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-premium py-2">
+                                <i class="bi bi-cloud-upload me-1"></i> Upload Resume
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Danger Zone (Delete) -->
+                {% if resume %}
+                    <div class="glass-card border border-danger-subtle">
+                        <h4 class="fw-bold text-danger mb-3"><i class="bi bi-exclamation-triangle me-2"></i>Danger Zone</h4>
+                        <p class="text-secondary small">Deleting the active resume will remove it from the system entirely. Visitors will not be able to download it.</p>
+                        <div class="d-grid mt-4">
+                            <form action="{% url 'delete_resume' resume.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this resume?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger-premium py-2 w-100">
+                                    <i class="bi bi-trash3 me-1"></i> Delete Active Resume
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Snippets Knowledge Base{% endblock %}
+{% block page_title %}Snippets Knowledge Base{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-white mb-0"><i class="bi bi-code-square text-primary me-2"></i>Code Snippets</h2>
+    <a href="{% url 'add_snippet' %}" class="btn btn-premium"><i class="bi bi-plus-lg me-1"></i> Add Snippet</a>
+</div>
+
+<div class="row g-4">
+    {% for snippet in snippets %}
+    <div class="col-md-6 col-lg-4">
+        <div class="glass-card h-100 d-flex flex-column">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+                <h5 class="fw-bold text-white mb-0">{{ snippet.title }}</h5>
+                {% if snippet.language %}
+                <span class="badge-premium mb-0 py-1 px-2" style="font-size: 0.75rem;">{{ snippet.language }}</span>
+                {% endif %}
+            </div>
+            
+            {% if snippet.tags %}
+            <div class="mb-3">
+                {% for tag in snippet.tags.split %}
+                <span class="tech-tag">{{ tag }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="code-preview flex-grow-1 p-3 rounded mb-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--card-border); overflow: hidden; max-height: 150px; position: relative;">
+                <pre class="mb-0 text-secondary" style="font-size: 0.85rem;"><code>{{ snippet.code_content|truncatechars:150 }}</code></pre>
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 50px; background: linear-gradient(transparent, rgba(15, 23, 42, 0.9));"></div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-auto border-top border-secondary pt-3">
+                <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ snippet.created_at|date:"M d, Y" }}</small>
+                <div>
+                    <a href="{% url 'edit_snippet' snippet.pk %}" class="btn btn-sm btn-premium-outline me-2"><i class="bi bi-pencil"></i></a>
+                    <form action="{% url 'delete_snippet' snippet.pk %}" method="POST" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger-premium" onclick="return confirm('Are you sure you want to delete this snippet?');">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5 glass-card">
+        <i class="bi bi-code-slash text-muted display-1 mb-3"></i>
+        <h3 class="text-white">Your Knowledge Base is Empty</h3>
+        <p class="text-secondary mb-4">Start saving reusable code, terminal commands, or markdown notes.</p>
+        <a href="{% url 'add_snippet' %}" class="btn btn-premium"><i class="bi bi-plus-lg me-1"></i> Create First Snippet</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

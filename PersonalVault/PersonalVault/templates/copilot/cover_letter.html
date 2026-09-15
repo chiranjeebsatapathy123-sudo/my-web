@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block page_title %}Cover Letter Generator{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center animate-fade-in">
+    <div class="col-md-10 col-lg-8">
+        <div class="glass-card text-center mb-4">
+            <i class="bi bi-file-earmark-text text-primary mb-3" style="font-size: 3rem;"></i>
+            <h3 class="fw-bold text-white mb-2">AI Cover Letter Generator</h3>
+            <p class="text-secondary mb-0">Paste the job description below, and the AI will craft a personalized cover letter using your bio and projects.</p>
+        </div>
+        
+        <div class="glass-card">
+            {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" action="{% url 'cover_letter' %}">
+                {% csrf_token %}
+                <div class="form-group-premium">
+                    <label for="job_description" class="form-label fw-bold">Target Job Description</label>
+                    <textarea class="form-control bg-dark text-light border-secondary" id="job_description" name="job_description" rows="10" required placeholder="Paste the full job description here..."></textarea>
+                </div>
+                
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-premium btn-lg" onclick="this.innerHTML='<i class=\'spinner-border spinner-border-sm me-2\'></i> Generating...'; this.classList.add('disabled');">
+                        <i class="bi bi-magic me-2"></i> Generate Cover Letter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

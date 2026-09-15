@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3"><h2 class="text-white"><i class="bi bi-people text-info me-2"></i>Connections CRM</h2><button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#addModal">Add Contact</button></div>
+<div class="row">
+    {% for conn in connections %}
+    <div class="col-md-4 mb-3">
+        <div class="glass-card">
+            <h5 class="text-white">{{ conn.name }}</h5>
+            <p class="text-secondary mb-1">{{ conn.role }} at {{ conn.company }}</p>
+            {% if conn.linkedin_url %}<a href="{{ conn.linkedin_url }}" target="_blank" class="btn btn-sm btn-outline-info"><i class="bi bi-linkedin"></i></a>{% endif %}
+            <form action="{% url 'delete_connection' conn.pk %}" method="post" class="d-inline float-end">{% csrf_token %}<button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button></form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<!-- Add Modal -->
+<div class="modal fade" id="addModal"><div class="modal-dialog"><div class="modal-content bg-dark border-secondary">
+<form method="post">{% csrf_token %}
+<div class="modal-body">
+    <input name="name" class="form-control bg-dark text-white mb-2" placeholder="Name" required>
+    <input name="role" class="form-control bg-dark text-white mb-2" placeholder="Role" required>
+    <input name="company" class="form-control bg-dark text-white mb-2" placeholder="Company" required>
+    <input name="linkedin_url" class="form-control bg-dark text-white mb-2" placeholder="LinkedIn URL">
+    <button type="submit" class="btn btn-premium w-100 mt-2">Save Contact</button>
+</div>
+</form></div></div></div>
+{% endblock %}

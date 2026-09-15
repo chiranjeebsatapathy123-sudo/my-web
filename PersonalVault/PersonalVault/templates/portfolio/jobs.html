@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row animate-fade-in mb-3">
+    <div class="col-12 d-flex justify-content-between">
+        <h2 class="text-white"><i class="bi bi-kanban text-primary me-2"></i>Job Board</h2>
+        <button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#addJobModal"><i class="bi bi-plus"></i> Add Job</button>
+    </div>
+</div>
+<div class="row">
+    {% for status in "Applied,Interviewing,Offer,Rejected"|slice:""|make_list|join:","|split:"," %}
+    <div class="col-md-3">
+        <div class="glass-card p-3">
+            <h5 class="text-white border-bottom border-secondary pb-2">{{ status }}</h5>
+            {% for job in jobs %}{% if job.status == status %}
+            <div class="bg-dark p-2 rounded mb-2 border border-secondary position-relative">
+                <form action="{% url 'delete_job' job.pk %}" method="post" class="position-absolute top-0 end-0 p-1">
+                    {% csrf_token %}<button type="submit" class="btn btn-sm text-danger p-0"><i class="bi bi-x"></i></button>
+                </form>
+                <h6 class="text-white mb-0">{{ job.position }}</h6>
+                <small class="text-secondary">{{ job.company }}</small>
+            </div>
+            {% endif %}{% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Add Job Modal -->
+<div class="modal fade" id="addJobModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark border-secondary">
+      <form method="post">
+          {% csrf_token %}
+          <div class="modal-header border-secondary text-white"><h5 class="modal-title">Add Application</h5></div>
+          <div class="modal-body">
+              <input type="text" name="company" class="form-control bg-dark text-white mb-2" placeholder="Company" required>
+              <input type="text" name="position" class="form-control bg-dark text-white mb-2" placeholder="Position" required>
+              <select name="status" class="form-select bg-dark text-white">
+                  <option value="Applied">Applied</option>
+                  <option value="Interviewing">Interviewing</option>
+                  <option value="Offer">Offer</option>
+                  <option value="Rejected">Rejected</option>
+              </select>
+          </div>
+          <div class="modal-footer border-secondary">
+              <button type="submit" class="btn btn-premium">Save</button>
+          </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

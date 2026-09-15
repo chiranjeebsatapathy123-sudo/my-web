@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 animate-slide-up">
+
+    <!-- Greeting Header -->
+    <div class="row mb-5 align-items-center">
+        <div class="col-md-8">
+            <h1 class="fw-bold"><span class="gradient-text">Vault Dashboard</span></h1>
+            <p class="mb-0" style="color: var(--text-secondary);">Welcome back, <strong style="color: var(--text-primary);">{{ request.user.first_name|default:request.user.username }}</strong>. Manage your secure vault items and view visitor inquiries.</p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0 d-flex justify-content-md-end gap-2">
+            <a href="{% url 'profile' %}" class="btn btn-premium-outline">
+                <i class="bi bi-person-gear"></i> Edit Profile
+            </a>
+            <a href="{% url 'logout' %}" class="btn btn-premium" style="background: linear-gradient(180deg, var(--danger) 0%, #b91c1c 100%); box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,0.3);">
+                <i class="bi bi-box-arrow-right"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="stat-card h-100 position-relative">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span style="color: var(--text-secondary); font-weight: 500;">Documents</span>
+                    <i class="bi bi-folder2-open fs-3" style="color: var(--info);"></i>
+                </div>
+                <h2 class="fw-bold mb-1" style="color: var(--text-primary); font-size: 2.5rem;">{{ documents }}</h2>
+                <p class="small mb-0" style="color: var(--text-muted);">Secure documents stored</p>
+                <a href="/documents/" class="stretched-link"></a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card h-100 position-relative">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span style="color: var(--text-secondary); font-weight: 500;">Certificates</span>
+                    <i class="bi bi-patch-check fs-3" style="color: var(--success);"></i>
+                </div>
+                <h2 class="fw-bold mb-1" style="color: var(--text-primary); font-size: 2.5rem;">{{ certificates }}</h2>
+                <p class="small mb-0" style="color: var(--text-muted);">Credentials uploaded</p>
+                <a href="{% url 'certificate_list' %}" class="stretched-link"></a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card h-100 position-relative">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span style="color: var(--text-secondary); font-weight: 500;">Resumes</span>
+                    <i class="bi bi-file-earmark-person fs-3" style="color: var(--warning);"></i>
+                </div>
+                <h2 class="fw-bold mb-1" style="color: var(--text-primary); font-size: 2.5rem;">{{ resumes }}</h2>
+                <p class="small mb-0" style="color: var(--text-muted);">Active curriculum vitae</p>
+                <a href="/resume/" class="stretched-link"></a>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="stat-card h-100 position-relative">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span style="color: var(--text-secondary); font-weight: 500;">Projects</span>
+                    <i class="bi bi-code-square fs-3" style="color: var(--brand-secondary);"></i>
+                </div>
+                <h2 class="fw-bold mb-1" style="color: var(--text-primary); font-size: 2.5rem;">{{ projects }}</h2>
+                <p class="small mb-0" style="color: var(--text-muted);">Portfolio items listed</p>
+                <a href="{% url 'project_list' %}" class="stretched-link"></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Shortcuts & Inbox Grid -->
+    <div class="row g-4">
+        <!-- Quick Actions Sidebar -->
+        <div class="col-lg-4">
+            <div class="glass-panel p-4 h-100">
+                <h4 class="mb-4 d-flex align-items-center" style="color: var(--text-primary);">
+                    <i class="bi bi-lightning-charge-fill me-2" style="color: var(--warning);"></i>
+                    <span>Quick Actions</span>
+                </h4>
+                <div class="d-grid gap-3">
+                    <a href="{% url 'upload_document' %}" class="btn btn-premium-outline text-start py-3 px-4 d-flex align-items-center">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; background: rgba(59, 130, 246, 0.1); color: var(--info);">
+                            <i class="bi bi-file-earmark-arrow-up fs-5"></i>
+                        </div>
+                        <span class="fw-semibold">Upload Document</span>
+                    </a>
+                    <a href="{% url 'add_certificate' %}" class="btn btn-premium-outline text-start py-3 px-4 d-flex align-items-center">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; background: rgba(16, 185, 129, 0.1); color: var(--success);">
+                            <i class="bi bi-patch-plus fs-5"></i>
+                        </div>
+                        <span class="fw-semibold">Add Certificate</span>
+                    </a>
+                    <a href="{% url 'add_project' %}" class="btn btn-premium-outline text-start py-3 px-4 d-flex align-items-center">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; background: rgba(168, 85, 247, 0.1); color: var(--brand-secondary);">
+                            <i class="bi bi-plus-square fs-5"></i>
+                        </div>
+                        <span class="fw-semibold">Add New Project</span>
+                    </a>
+                    <a href="/resume/" class="btn btn-premium text-start py-3 px-4 d-flex align-items-center">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); color: #fff;">
+                            <i class="bi bi-file-pdf fs-5"></i>
+                        </div>
+                        <span class="fw-semibold">Manage Resume</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inbox / Visitor Inquiries -->
+        <div class="col-lg-8">
+            <div class="glass-panel p-4 h-100 d-flex flex-column">
+                <h4 class="mb-4 d-flex align-items-center justify-content-between" style="color: var(--text-primary);">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-envelope-paper me-2" style="color: var(--brand-primary);"></i>
+                        <span>Visitor Inbox</span>
+                    </div>
+                    <span class="badge badge-premium badge-primary px-3 rounded-pill">
+                        {% if contact_messages %}{{ contact_messages.count }}{% else %}0{% endif %} New
+                    </span>
+                </h4>
+
+                {% if contact_messages %}
+                    <div class="table-responsive flex-grow-1">
+                        <table class="table table-premium w-100">
+                            <thead>
+                                <tr>
+                                    <th>Sender</th>
+                                    <th>Subject & Message</th>
+                                    <th>Date</th>
+                                    <th class="text-end">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for msg in contact_messages %}
+                                    <tr>
+                                        <td>
+                                            <div class="fw-bold" style="color: var(--text-primary);">{{ msg.name }}</div>
+                                            <div class="small"><a href="mailto:{{ msg.email }}" class="text-decoration-none" style="color: var(--text-muted);"><i class="bi bi-envelope-fill me-1"></i>{{ msg.email }}</a></div>
+                                        </td>
+                                        <td>
+                                            <div class="fw-semibold mb-1" style="color: var(--text-primary);">{{ msg.subject }}</div>
+                                            <p class="small mb-0 text-wrap" style="color: var(--text-secondary); max-width: 320px;">{{ msg.message }}</p>
+                                        </td>
+                                        <td>
+                                            <span class="small" style="color: var(--text-muted);"><i class="bi bi-calendar3 me-1"></i>{{ msg.sent_at|date:"M d, Y H:i" }}</span>
+                                        </td>
+                                        <td class="text-end">
+                                            <form action="{% url 'delete_contact_message' msg.id %}" method="POST" onsubmit="return confirm('Are you sure you want to delete this message?');" style="display:inline;">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-premium-outline py-2 px-3 text-danger border-danger" style="background: rgba(239, 68, 68, 0.1);">
+                                                    <i class="bi bi-trash3"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5 flex-grow-1 d-flex flex-column justify-content-center align-items-center">
+                        <div class="rounded-circle d-flex justify-content-center align-items-center mb-4" style="width: 100px; height: 100px; background: var(--bg-surface-elevated); box-shadow: inset 0 4px 6px rgba(0,0,0,0.1);">
+                            <i class="bi bi-mailbox2 display-4" style="color: var(--text-muted);"></i>
+                        </div>
+                        <h5 style="color: var(--text-primary);">Your inbox is clean</h5>
+                        <p class="mb-0" style="color: var(--text-secondary);">Messages submitted through the contact form will show up here.</p>
+                    </div>
+                {% endif %}
+            </div>
+            
+            {% if leetcode_stats %}
+            <div class="glass-panel p-4 h-100 mt-4 d-flex flex-column">
+                <h4 class="mb-4 d-flex align-items-center" style="color: var(--text-primary);">
+                    <i class="bi bi-code-slash me-2" style="color: var(--warning);"></i>
+                    <span>LeetCode Stats</span>
+                </h4>
+                <div class="row text-center mb-3">
+                    <div class="col-4">
+                        <h3 class="fw-bold m-0" style="color: var(--text-primary);">{{ leetcode_stats.totalSolved }}</h3>
+                        <p class="small m-0" style="color: var(--text-secondary);">Total</p>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="fw-bold m-0" style="color: var(--success);">{{ leetcode_stats.easySolved }}</h3>
+                        <p class="small m-0" style="color: var(--text-secondary);">Easy</p>
+                    </div>
+                    <div class="col-4">
+                        <h3 class="fw-bold m-0" style="color: var(--warning);">{{ leetcode_stats.mediumSolved }}</h3>
+                        <p class="small m-0" style="color: var(--text-secondary);">Medium</p>
+                    </div>
+                </div>
+                <div class="progress-premium mt-auto">
+                    <div class="progress-bar bg-success" style="width: {{ leetcode_stats.easySolved|add:0 }}%"></div>
+                    <div class="progress-bar bg-warning" style="width: {{ leetcode_stats.mediumSolved|add:0 }}%"></div>
+                    <div class="progress-bar bg-danger" style="width: {{ leetcode_stats.hardSolved|add:0 }}%"></div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof gsap !== 'undefined') {
+            // Apply 3D perspective to container
+            gsap.set(".row", { perspective: 1000 });
+            
+            const cards = document.querySelectorAll('.stat-card, .glass-panel');
+            cards.forEach(card => {
+                // Initialize transform style
+                gsap.set(card, { transformStyle: "preserve-3d", transformPerspective: 1000 });
+                
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = ((y - centerY) / centerY) * -10; // Max 10 deg rotation
+                    const rotateY = ((x - centerX) / centerX) * 10;
+                    
+                    gsap.to(card, {
+                        duration: 0.3,
+                        rotateX: rotateX,
+                        rotateY: rotateY,
+                        z: 20,
+                        boxShadow: "0 25px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3)",
+                        ease: "power2.out"
+                    });
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        duration: 0.6,
+                        rotateX: 0,
+                        rotateY: 0,
+                        z: 0,
+                        boxShadow: "0 10px 30px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)",
+                        ease: "elastic.out(1, 0.3)"
+                    });
+                });
+            });
+
+            // Animate numbers
+            const numbers = document.querySelectorAll('.stat-card h2');
+            numbers.forEach(el => {
+                const target = parseInt(el.innerText) || 0;
+                gsap.fromTo(el, 
+                    { innerText: 0 }, 
+                    { 
+                        innerText: target, 
+                        duration: 2, 
+                        ease: "power3.out",
+                        snap: { innerText: 1 },
+                        stagger: 0.2
+                    }
+                );
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center animate-fade-in">
+    <div class="col-md-8 text-center">
+        <i class="bi bi-cpu-fill text-primary" style="font-size: 3rem;"></i>
+        <h3 class="text-white mt-2">Tech Stack Explainer</h3>
+        <p class="text-secondary">Get interview talking points for any project.</p>
+        <form method="post" class="mt-4 text-start">
+            {% csrf_token %}
+            <select name="project_id" class="form-select bg-dark text-white border-secondary mb-3" required>
+                {% for project in projects %}<option value="{{ project.id }}">{{ project.title }}</option>{% endfor %}
+            </select>
+            <button type="submit" class="btn btn-premium w-100" onclick="this.innerHTML='Analyzing...';"><i class="bi bi-magic me-2"></i>Explain Tech Stack</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

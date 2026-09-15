@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="glass-card text-center mt-5 col-md-8 mx-auto">
+    <h2 class="text-success"><i class="bi bi-check-circle"></i> Link Generated</h2>
+    <p class="text-white mt-3 fs-5 bg-dark p-3 rounded" style="word-break: break-all;">{{ request.scheme }}://{{ request.get_host }}{% url 'view_shared_link' link.url_hash %}</p>
+    <p class="text-secondary">This link will expire in {{ link.expires_at|timeuntil }}</p>
+    <a href="{% url 'generate_link' %}" class="btn btn-premium-outline mt-3">Generate Another</a>
+</div>
+{% endblock %}

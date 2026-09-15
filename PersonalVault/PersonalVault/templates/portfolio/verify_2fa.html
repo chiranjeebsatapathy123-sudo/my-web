@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-5"><div class="col-md-5 glass-card text-center">
+    <i class="bi bi-phone-vibrate text-warning" style="font-size: 4rem;"></i>
+    <h3 class="text-white mt-3">2FA Verification</h3>
+    <p class="text-secondary mb-4">Please enter the 6-digit code from your authenticator app to continue.</p>
+    <form method="post">{% csrf_token %}
+        <input type="text" name="token" class="form-control bg-dark text-white border-secondary form-control-lg text-center font-monospace mb-3" placeholder="000000" maxlength="6" autofocus required autocomplete="off">
+        <button type="submit" class="btn btn-premium w-100 btn-lg">Verify</button>
+    </form>
+</div></div>
+{% endblock %}

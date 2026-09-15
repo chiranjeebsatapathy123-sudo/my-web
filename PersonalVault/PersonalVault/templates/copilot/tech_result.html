@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-white">Tech Stack: {{ project.title }}</h2>
+<a href="{% url 'tech_explainer' %}" class="btn btn-outline-secondary mb-3">Back</a>
+<div class="glass-card text-light markdown-content" id="md-content">{{ explanation|escapejs }}</div>
+<script>document.getElementById('md-content').innerHTML = marked.parse(document.getElementById('md-content').innerHTML);</script>
+{% endblock %}

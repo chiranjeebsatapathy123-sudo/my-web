@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Add Snippet{% endblock %}
+{% block page_title %}Add Snippet{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="glass-card">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold text-white mb-0"><i class="bi bi-plus-circle text-primary me-2"></i>New Snippet</h3>
+                <a href="{% url 'snippets' %}" class="btn btn-premium-outline btn-sm"><i class="bi bi-arrow-left me-1"></i> Back</a>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                
+                <div class="row g-3">
+                    <div class="col-md-8 form-group-premium">
+                        <label class="form-label text-white">Title *</label>
+                        {{ form.title }}
+                    </div>
+                    
+                    <div class="col-md-4 form-group-premium">
+                        <label class="form-label text-white">Language</label>
+                        {{ form.language }}
+                    </div>
+                    
+                    <div class="col-12 form-group-premium">
+                        <label class="form-label text-white">Code Content *</label>
+                        {{ form.code_content }}
+                        <small class="text-secondary mt-1 d-block">Paste your code, configuration, or markdown notes here.</small>
+                    </div>
+                    
+                    <div class="col-12 form-group-premium">
+                        <label class="form-label text-white">Tags</label>
+                        {{ form.tags }}
+                        <small class="text-secondary mt-1 d-block">Space or comma separated tags (e.g., python django backend)</small>
+                    </div>
+                </div>
+
+                <div class="mt-4 border-top border-secondary pt-4 text-end">
+                    <button type="submit" class="btn btn-premium px-4"><i class="bi bi-save me-2"></i>Save Snippet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

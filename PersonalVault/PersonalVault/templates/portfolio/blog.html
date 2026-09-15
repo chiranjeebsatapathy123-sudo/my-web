@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3"><h2 class="text-white"><i class="bi bi-journal-code text-success me-2"></i>Dev Blog</h2><button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#addModal">New Post</button></div>
+<div class="row">
+    {% for post in posts %}
+    <div class="col-12 mb-3">
+        <div class="glass-card">
+            <h4 class="text-white">{{ post.title }} <small class="text-secondary fs-6 ms-2">{{ post.created_at|date }}</small></h4>
+            <div class="text-light markdown-content">{{ post.content|escapejs }}</div>
+            <form action="{% url 'delete_blog' post.pk %}" method="post" class="mt-2">{% csrf_token %}<button class="btn btn-sm btn-outline-danger">Delete</button></form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<!-- Add Modal -->
+<div class="modal fade" id="addModal"><div class="modal-dialog modal-lg"><div class="modal-content bg-dark border-secondary">
+<form method="post">{% csrf_token %}
+<div class="modal-body">
+    <input name="title" class="form-control bg-dark text-white mb-3" placeholder="Post Title" required>
+    <textarea name="content" class="form-control bg-dark text-white mb-3" rows="10" placeholder="Markdown content..." required></textarea>
+    <button type="submit" class="btn btn-premium w-100">Publish</button>
+</div>
+</form></div></div></div>
+<script>document.querySelectorAll('.markdown-content').forEach(el => el.innerHTML = marked.parse(el.innerHTML));</script>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center animate-fade-in"><div class="col-md-6 glass-card">
+    <h3 class="text-white"><i class="bi bi-palette text-warning me-2"></i>Theme Engine</h3>
+    <form method="post" class="mt-4">{% csrf_token %}
+        <div class="mb-3">
+            <label class="text-secondary">Primary Color</label>
+            <input type="color" name="primary_color" class="form-control form-control-color bg-dark w-100" value="{{ pref.primary_color }}">
+        </div>
+        <div class="mb-3">
+            <label class="text-secondary">Background Tint</label>
+            <input type="color" name="bg_color" class="form-control form-control-color bg-dark w-100" value="{{ pref.bg_color }}">
+        </div>
+        <button type="submit" class="btn btn-premium w-100">Save Theme</button>
+    </form>
+</div></div>
+{% endblock %}

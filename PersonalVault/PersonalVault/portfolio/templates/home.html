@@ -1,0 +1,335 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero-gradient mb-5 animate-fade-in">
+    <div class="hero-shape"></div>
+    <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+            <span class="badge-premium mb-3"><i class="bi bi-rocket-takeoff-fill me-1"></i> Available for Full-Time
+                Roles</span>
+
+            <h1 class="display-3 fw-extrabold text-white mb-3" style="line-height: 1.1;">
+                Hi, I'm <span class="gradient-text">
+                    {% if profile %}
+                    {{ profile.user.first_name }} {{ profile.user.last_name }}
+                    {% else %}
+                    Chiranjeeb Satapathy
+                    {% endif %}
+                </span>
+            </h1>
+
+            <h3 class="h4 text-secondary mb-4 d-flex align-items-center flex-wrap gap-2">
+                <span>Computer Science Engineer (AI & ML)</span>
+                <span class="text-muted">|</span>
+                <span class="text-light">Software Developer</span>
+                <span class="text-muted">|</span>
+                <span class="text-light">Problem Solver</span>
+            </h3>
+
+            <p class="lead text-secondary mb-5" style="max-width: 580px; line-height: 1.7;">
+                {% if profile and profile.bio %}
+                {{ profile.bio }}
+                {% else %}
+                B.Tech Computer Science Engineering student with hands-on experience in Artificial Intelligence, Machine Learning, and Full-Stack Web Development. Skilled in building responsive web applications, developing machine learning models, and solving real-world problems using Python and modern web technologies. Passionate about AI, software engineering, and continuous learning. Seeking internship opportunities in AI Engineering, Machine Learning, or Full-Stack Development.
+                {% endif %}
+            </p>
+
+            <div class="d-flex flex-wrap gap-3 mb-5">
+                <a href="/resume/" class="btn btn-premium btn-lg px-4 py-3">
+                    <i class="bi bi-file-earmark-pdf me-2"></i> View Resume
+                </a>
+                <a href="/contact/" class="btn btn-premium-outline btn-lg px-4 py-3">
+                    <i class="bi bi-chat-text me-2"></i> Get In Touch
+                </a>
+            </div>
+
+            <!-- Social Coordinates -->
+            <div class="d-flex align-items-center gap-4 border-top border-secondary pt-4">
+                <span class="text-secondary small fw-semibold text-uppercase" style="letter-spacing: 1px;">Find Me
+                    on:</span>
+                <a href="{% if profile.github %}{{ profile.github }}{% else %}https://github.com{% endif %}"
+                    target="_blank" class="text-secondary hover-primary fs-4"><i class="bi bi-github"></i></a>
+                <a href="{% if profile.linkedin %}{{ profile.linkedin }}{% else %}https://linkedin.com{% endif %}"
+                    target="_blank" class="text-secondary hover-primary fs-4"><i class="bi bi-linkedin"></i></a>
+                {% if profile.website %}
+                <a href="{{ profile.website }}" target="_blank" class="text-secondary hover-primary fs-4"><i
+                        class="bi bi-globe"></i></a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-lg-5 text-center">
+            <div class="avatar-border-gradient">
+                {% if profile and profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}" class="rounded-circle" width="300" height="300"
+                    style="object-fit: cover; aspect-ratio: 1/1;">
+                {% else %}
+                <img src="{% static 'images/default.png' %}" class="rounded-circle" width="300" height="300"
+                    style="object-fit: cover; aspect-ratio: 1/1;">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Highlight Bar -->
+<section class="mb-5 py-4 animate-fade-in">
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="glass-card py-4">
+                <i class="bi bi-code-slash text-primary fs-2 mb-2 d-block"></i>
+                <h3 class="fw-extrabold text-white mb-1">{% if projects_count %}{{ projects_count }}{% else %}0{% endif %}</h3>
+                <p class="text-muted small mb-0 uppercase">Projects Completed</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card py-4">
+                <i class="bi bi-patch-check text-success fs-2 mb-2 d-block"></i>
+                <h3 class="fw-extrabold text-white mb-1">{% if certificates_count %}{{ certificates_count }}{% else %}0{% endif %}</h3>
+                <p class="text-muted small mb-0 uppercase">Verified Certifications</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card py-4">
+                <i class="bi bi-shield-check text-warning fs-2 mb-2 d-block"></i>
+                <h3 class="fw-extrabold text-white mb-1">100%</h3>
+                <p class="text-muted small mb-0 uppercase">Secure Document Vault</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Detailed Skills & Capabilities -->
+<section class="py-5 mb-5 animate-fade-in">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-white mb-2"><i class="bi bi-grid-fill text-primary me-2"></i>My Tech Stack & Skills</h2>
+        <p class="text-secondary mx-auto" style="max-width: 600px;">A specialized breakdown of backend engineering,
+            artificial intelligence, machine learning, and programming toolkits.</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Skill meters -->
+        <div class="col-lg-6">
+            <div class="glass-card h-100">
+                <h4 class="fw-bold text-white mb-4"><i class="bi bi-sliders text-success me-2"></i>Skill Levels</h4>
+
+                <div class="mb-4">
+                    <div class="skill-label">
+                        <span>Python & AI/ML Programming</span>
+                        <span>90%</span>
+                    </div>
+                    <div class="progress-premium">
+                        <div class="progress-bar-premium" style="width: 90%;"></div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="skill-label">
+                        <span>Computer Vision (OpenCV & YOLOv8)</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="progress-premium">
+                        <div class="progress-bar-premium"
+                            style="width: 85%; background: linear-gradient(90deg, #10b981 0%, #059669 100%);"></div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="skill-label">
+                        <span>Django Web Framework</span>
+                        <span>80%</span>
+                    </div>
+                    <div class="progress-premium">
+                        <div class="progress-bar-premium"
+                            style="width: 80%; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);"></div>
+                    </div>
+                </div>
+
+                <div class="mb-0">
+                    <div class="skill-label">
+                        <span>Data Structures & Algorithms</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="progress-premium">
+                        <div class="progress-bar-premium"
+                            style="width: 85%; background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categorized Tags Grid -->
+        <div class="col-lg-6">
+            <div class="glass-card h-100">
+                <h4 class="fw-bold text-white mb-4"><i class="bi bi-box-fill text-info me-2"></i>Categorized Tech Index
+                </h4>
+
+                <div class="mb-4">
+                    <h6 class="text-white fw-bold mb-2"><i class="bi bi-terminal-fill text-warning me-1"></i> Languages
+                    </h6>
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">SQL</span>
+                    <span class="tech-tag">C++</span>
+                    <span class="tech-tag">Java</span>
+                    <span class="tech-tag">JavaScript</span>
+                    <span class="tech-tag">HTML5 / CSS3</span>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="text-white fw-bold mb-2"><i class="bi bi-gear-wide-connected text-success me-1"></i>
+                        Frameworks & Libraries</h6>
+                    <span class="tech-tag">Django Framework</span>
+                    <span class="tech-tag">Django ORM</span>
+                    <span class="tech-tag">OpenCV</span>
+                    <span class="tech-tag">YOLOv8</span>
+                    <span class="tech-tag">Scikit-Learn</span>
+                    <span class="tech-tag">RESTful APIs</span>
+                    <span class="tech-tag">Pandas / NumPy</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Timeline (Education & Milestones) -->
+<section class="py-5 mb-5 animate-fade-in">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-white mb-2"><i class="bi bi-calendar2-week text-success me-2"></i>Roadmap & Achievements</h2>
+        <p class="text-secondary mx-auto" style="max-width: 600px;">A detailed dual-timeline tracking my academic milestones alongside my professional internships and hands-on industrial experiences.</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Education Timeline (Left) -->
+        <div class="col-lg-6">
+            <div class="glass-card h-100">
+                <h4 class="fw-bold text-white mb-4 border-bottom border-secondary pb-3">
+                    <i class="bi bi-mortarboard-fill text-primary me-2"></i>Academic Foundation
+                </h4>
+                <div class="timeline-premium">
+                    <div class="timeline-item-premium">
+                        <div class="timeline-date">2024 - 2028</div>
+                        <h4 class="timeline-title text-white">B.Tech in Computer Science Engineering</h4>
+                        <div class="timeline-subtitle text-secondary">Siksha 'O' Anusandhan University (ITER-SOA)</div>
+                        <p class="text-muted small">
+                            Specializing in Artificial Intelligence and Machine Learning (AI & ML). Actively studying Data Structures & Algorithms, Object-Oriented Programming (OOP), database schemas, and statistical analysis, holding a strong foundation for technical implementation.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experience Timeline (Right) -->
+        <div class="col-lg-6">
+            <div class="glass-card h-100">
+                <h4 class="fw-bold text-white mb-4 border-bottom border-secondary pb-3">
+                    <i class="bi bi-briefcase-fill text-success me-2"></i>Internships & Experiences
+                </h4>
+                <div class="timeline-premium" style="max-height: 480px; overflow-y: auto; padding-right: 10px;">
+                    <div class="timeline-item-premium mb-4">
+                        <div class="timeline-date" style="font-size: 0.8rem; background: rgba(16, 185, 129, 0.15); color: #10b981;">CTTC</div>
+                        <h5 class="timeline-title text-white" style="font-size: 1.1rem;">AI/ML Intern</h5>
+                        <p class="text-muted small">Worked on Artificial Intelligence and Machine Learning models.</p>
+                    </div>
+                    <div class="timeline-item-premium">
+                        <div class="timeline-date" style="font-size: 0.8rem; background: rgba(16, 185, 129, 0.15); color: #10b981;">Thiranex</div>
+                        <h5 class="timeline-title text-white" style="font-size: 1.1rem;">Web Development Intern</h5>
+                        <p class="text-muted small">Developed and maintained web applications and responsive user interfaces.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Projects -->
+<section class="py-5 mb-5 animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="fw-bold text-white mb-1"><i class="bi bi-folder-check text-info me-3"></i>Featured Showcases</h2>
+            <p class="text-secondary mb-0">Browse through select custom projects. Fully built in Django/Python.</p>
+        </div>
+        <a href="{% url 'project_list' %}" class="btn btn-premium-outline">
+            Browse All <i class="bi bi-arrow-right-short ms-1"></i>
+        </a>
+    </div>
+
+    <div class="row g-4">
+        {% for project in projects %}
+        <div class="col-md-6 col-lg-4">
+            <div class="glass-card h-100 d-flex flex-column p-0 overflow-hidden">
+                {% if project.image %}
+                <div style="height: 200px; overflow: hidden;" class="position-relative border-bottom border-secondary">
+                    <img src="{{ project.image.url }}" class="w-100 h-100"
+                        style="object-fit: cover; transition: transform 0.5s ease;"
+                        onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+                </div>
+                {% else %}
+                <div style="height: 200px; background-color: var(--bg-secondary);"
+                    class="d-flex align-items-center justify-content-center border-bottom border-secondary position-relative">
+                    <i class="bi bi-code-square text-muted display-3"></i>
+                </div>
+                {% endif %}
+
+                <div class="p-4 d-flex flex-column flex-grow-1">
+                    <h4 class="text-white fw-bold mb-2">{{ project.title }}</h4>
+
+                    <!-- Tech Badges Mockup -->
+                    <div class="mb-3">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Django</span>
+                        <span class="tech-tag">SQLite</span>
+                    </div>
+
+                    <p class="text-secondary small flex-grow-1 mb-4" style="line-height: 1.6;">
+                        {{ project.description|truncatewords:22 }}
+                    </p>
+
+                    <div class="d-flex gap-2 mt-auto">
+                        {% if project.github_link %}
+                        <a href="{{ project.github_link }}" target="_blank"
+                            class="btn btn-premium-outline btn-sm w-50 py-2">
+                            <i class="bi bi-github me-1"></i> Code
+                        </a>
+                        {% endif %}
+                        {% if project.live_demo %}
+                        <a href="{{ project.live_demo }}" target="_blank" class="btn btn-premium btn-sm w-50 py-2">
+                            <i class="bi bi-box-arrow-up-right me-1"></i> Demo
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-window-x text-muted display-4 mb-3"></i>
+            <h5 class="text-secondary">No projects added yet</h5>
+            <p class="text-muted">Stay tuned for future uploads!</p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Direct Contact Section -->
+<section class="py-5 mb-4 animate-fade-in">
+    <div class="glass-card text-center py-5 position-relative overflow-hidden">
+        <div class="position-absolute w-100 h-100 top-0 start-0 opacity-10"
+            style="background-image: radial-gradient(var(--primary) 1px, transparent 1px); background-size: 24px 24px;">
+        </div>
+        <h2 class="fw-bold text-white mb-3">Let's build something together</h2>
+        <p class="text-secondary mx-auto mb-4" style="max-width: 500px;">
+            I'm currently looking for internships and entry-level developer roles. Reach out if you have any questions
+            or opportunities!
+        </p>
+        <a href="/contact/" class="btn btn-premium btn-lg px-5 py-3">
+            <i class="bi bi-chat-left-dots-fill me-2"></i> Contact Me Now
+        </a>
+    </div>
+</section>
+
+{% endblock %}

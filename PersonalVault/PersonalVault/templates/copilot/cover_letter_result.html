@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block page_title %}Your Cover Letter{% endblock %}
+
+{% block content %}
+<div class="row mb-4 animate-fade-in">
+    <div class="col-12 d-flex justify-content-between align-items-center">
+        <h2 class="fw-bold mb-0">Generated Cover Letter <i class="bi bi-check-circle-fill text-success ms-2"></i></h2>
+        <div>
+            <button class="btn btn-premium-outline me-2" onclick="navigator.clipboard.writeText(document.getElementById('raw-text').textContent); alert('Copied to clipboard!');">
+                <i class="bi bi-copy me-2"></i> Copy Text
+            </button>
+            <a href="{% url 'cover_letter' %}" class="btn btn-premium">
+                <i class="bi bi-arrow-left me-2"></i> Back
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row animate-fade-in" style="animation-delay: 0.1s;">
+    <div class="col-12">
+        <div class="glass-card">
+            <div id="cl-content" class="text-light markdown-content" style="font-size: 1.05rem; line-height: 1.7; white-space: pre-wrap;">
+                {{ cover_letter|escapejs }}
+            </div>
+            <div id="raw-text" class="d-none">{{ cover_letter }}</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const contentDiv = document.getElementById('cl-content');
+        const rawContent = contentDiv.innerHTML;
+        contentDiv.innerHTML = marked.parse(rawContent);
+    });
+</script>
+{% endblock %}

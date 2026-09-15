@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center animate-fade-in mt-5">
+    <i class="bi bi-lightbulb-fill text-warning" style="font-size: 4rem;"></i>
+    <h3 class="text-white mt-3">Project Idea Generator</h3>
+    <p class="text-secondary">Let AI suggest your next big project based on your existing skills.</p>
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-premium btn-lg" onclick="this.innerHTML='Brainstorming...';"><i class="bi bi-magic me-2"></i>Generate 3 Ideas</button>
+    </form>
+</div>
+{% endblock %}
