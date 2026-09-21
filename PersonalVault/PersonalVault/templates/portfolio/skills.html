@@ -1,0 +1,234 @@
+{% extends 'public_base.html' %}
+
+{% block title %}Skills | Chiranjeeb Satapathy{% endblock %}
+
+{% block extra_css %}
+<style>
+    .skills-universe {
+        position: relative;
+        height: 70vh;
+        min-height: 600px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .center-node {
+        width: 120px;
+        height: 120px;
+        background: var(--c-bg-glass);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 2px solid var(--c-cyan);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-heading);
+        font-weight: 700;
+        font-size: 1.1rem;
+        box-shadow: 0 0 30px var(--c-cyan-glow);
+        z-index: 10;
+        position: relative;
+        animation: pulseCenter 3s infinite alternate;
+    }
+
+    @keyframes pulseCenter {
+        0% { box-shadow: 0 0 20px var(--c-cyan-glow); }
+        100% { box-shadow: 0 0 50px rgba(6, 182, 212, 0.6); }
+    }
+
+    .orbit {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    .orbit-1 { width: 350px; height: 350px; animation: spinOrbit 30s linear infinite; }
+    .orbit-2 { width: 550px; height: 550px; animation: spinOrbit 45s linear infinite reverse; }
+
+    @keyframes spinOrbit {
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .skill-category {
+        position: absolute;
+        pointer-events: auto;
+        /* Counter-rotate to keep text upright */
+    }
+
+    .orbit-1 .skill-category { animation: spinOrbitCounter 30s linear infinite; }
+    .orbit-2 .skill-category { animation: spinOrbitCounterRev 45s linear infinite; }
+
+    @keyframes spinOrbitCounter {
+        100% { transform: rotate(-360deg); }
+    }
+    
+    @keyframes spinOrbitCounterRev {
+        100% { transform: rotate(360deg); }
+    }
+
+    .category-label {
+        background: var(--c-indigo);
+        padding: 0.5rem 1.2rem;
+        border-radius: 20px;
+        font-family: var(--font-mono);
+        font-size: 0.9rem;
+        white-space: nowrap;
+        cursor: pointer;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: var(--glow-primary);
+        transition: all var(--t-fast);
+        text-transform: uppercase;
+    }
+
+    .category-label:hover {
+        background: var(--c-primary);
+        transform: scale(1.1);
+    }
+
+    /* Fallback / List view for mobile or accessibility */
+    .skills-grid {
+        display: none;
+    }
+
+    @media (max-width: 992px) {
+        .skills-universe { display: none; }
+        .skills-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 3rem; }
+    }
+
+    .skill-list-item {
+        background: rgba(255, 255, 255, 0.03);
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .skill-bar-container {
+        height: 6px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 3px;
+        overflow: hidden;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .skill-bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--c-indigo), var(--c-cyan));
+        border-radius: 3px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cinematic-container" style="padding-top: 120px;">
+    
+    <div class="section-header text-center">
+        <h2 class="section-title justify-content-center">Technical <span class="text-gradient-primary ms-2">Universe</span></h2>
+        <p class="text-muted mx-auto" style="max-width: 600px;">
+            A constellation of proficiencies spanning modern software engineering and artificial intelligence.
+        </p>
+    </div>
+
+    <!-- Desktop 2D Orbit Visualization -->
+    <div class="skills-universe">
+        <div class="orbit orbit-1">
+            <!-- Position categories dynamically along the orbit -->
+            {% for cat_name, skill_list in categories.items %}
+                {% if forloop.counter <= 3 %}
+                <div class="skill-category" style="top: {% if forloop.counter == 1 %}0{% elif forloop.counter == 2 %}75%{% else %}75%{% endif %}; left: {% if forloop.counter == 1 %}50%{% elif forloop.counter == 2 %}85%{% else %}15%{% endif %}; margin-left: -50px; margin-top: -15px;">
+                    <div class="category-label" data-bs-toggle="tooltip" title="{{ skill_list|length }} Skills">{{ cat_name }}</div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        
+        <div class="orbit orbit-2">
+            {% for cat_name, skill_list in categories.items %}
+                {% if forloop.counter > 3 %}
+                <div class="skill-category" style="top: {% if forloop.counter == 4 %}10%{% elif forloop.counter == 5 %}50%{% else %}90%{% endif %}; left: {% if forloop.counter == 4 %}80%{% elif forloop.counter == 5 %}10%{% else %}50%{% endif %}; margin-left: -50px; margin-top: -15px;">
+                    <div class="category-label" data-bs-toggle="tooltip" title="{{ skill_list|length }} Skills">{{ cat_name }}</div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="center-node">
+            CHIRANJEEB
+        </div>
+    </div>
+
+    <!-- Mobile / Accessible List View -->
+    <div class="skills-grid">
+        {% for cat_name, skill_list in categories.items %}
+        <div class="premium-module">
+            <h4 class="mb-4 text-gradient-primary" style="font-family: var(--font-mono); text-transform: uppercase;">
+                {{ cat_name }}
+            </h4>
+            <div>
+                {% for skill in skill_list %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between text-muted" style="font-size: 0.9rem;">
+                        <span>{{ skill.name }}</span>
+                        <span>{{ skill.proficiency }}%</span>
+                    </div>
+                    <div class="skill-bar-container">
+                        <div class="skill-bar-fill" style="width: {{ skill.proficiency }}%;"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted py-5">
+            No skills data available.
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Fallback if it's desktop but we want to show the lists below anyway for detail -->
+    <div class="row g-4 mt-5 d-none d-lg-flex">
+        {% for cat_name, skill_list in categories.items %}
+        <div class="col-md-6 col-lg-4">
+            <div class="premium-module h-100" style="padding: 1.5rem;">
+                <h5 class="mb-4" style="color: var(--c-cyan); font-family: var(--font-mono); font-size: 1rem;">{{ cat_name }}</h5>
+                {% for skill in skill_list %}
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between text-muted" style="font-size: 0.85rem;">
+                        <span>{{ skill.name }}</span>
+                    </div>
+                    <div class="skill-bar-container" style="height: 4px;">
+                        <div class="skill-bar-fill" style="width: {{ skill.proficiency }}%;"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize tooltips for the orbit labels
+    document.addEventListener("DOMContentLoaded", function() {
+        if(typeof bootstrap !== 'undefined') {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        }
+    });
+</script>
+{% endblock %}

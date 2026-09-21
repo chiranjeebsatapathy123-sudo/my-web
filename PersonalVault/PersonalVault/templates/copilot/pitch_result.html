@@ -1,6 +1,37 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% block title %}Pitch Result | Chiranjeeb Satapathy{% endblock %}
+{% block extra_css %}
+<style>
+    .markdown-body { color: var(--text-primary); line-height: 1.8; font-family: var(--font-body); white-space: pre-wrap; }
+</style>
+{% endblock %}
 {% block content %}
-<h2 class="text-white">Your Elevator Pitches</h2>
-<div class="glass-card text-light markdown-content" id="md-content">{{ pitches|escapejs }}</div>
-<script>document.getElementById('md-content').innerHTML = marked.parse(document.getElementById('md-content').innerHTML);</script>
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    {% include 'components/go_back.html' with fallback_url='/copilot/pitch/' label="Back to Generator" %}
+    <a href="{% url 'pitch_generator' %}" class="btn btn-sm btn-premium-outline"><i class="bi bi-arrow-repeat me-1"></i> Generate Another</a>
+</div>
+<div class="glass-card">
+    <div class="d-flex align-items-center mb-4 pb-3 border-bottom border-secondary justify-content-between">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-megaphone fs-2 text-primary me-3"></i>
+            <div><h3 class="fw-bold mb-0">Project Pitch</h3><p class="text-muted mb-0 small">Based on verified facts</p></div>
+        </div>
+        <button class="btn btn-sm btn-premium-outline" onclick="copyToClipboard()"><i class="bi bi-clipboard"></i> Copy</button>
+    </div>
+    <div class="markdown-body p-4 bg-dark rounded border border-secondary" id="pitch-content"></div>
+    <div id="raw-pitch" style="display: none;">{{ pitches|escapejs }}</div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const rawContent = document.getElementById('raw-pitch').textContent;
+        const targetDiv = document.getElementById('pitch-content');
+        if (typeof marked !== 'undefined') targetDiv.innerHTML = marked.parse(rawContent);
+        else targetDiv.innerText = rawContent;
+    });
+    function copyToClipboard() {
+        navigator.clipboard.writeText(document.getElementById('raw-pitch').textContent.trim()).then(() => alert('Copied!'));
+    }
+</script>
 {% endblock %}

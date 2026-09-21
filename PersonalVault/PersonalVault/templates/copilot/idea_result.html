@@ -1,7 +1,37 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% block title %}Ideation Result | Chiranjeeb Satapathy{% endblock %}
+{% block extra_css %}
+<style>
+    .markdown-body { color: var(--text-primary); line-height: 1.8; font-family: var(--font-body); white-space: pre-wrap; }
+</style>
+{% endblock %}
 {% block content %}
-<h2 class="text-white">Your Project Ideas</h2>
-<a href="{% url 'idea_generator' %}" class="btn btn-outline-secondary mb-3">Generate More</a>
-<div class="glass-card text-light markdown-content" id="md-content">{{ ideas|escapejs }}</div>
-<script>document.getElementById('md-content').innerHTML = marked.parse(document.getElementById('md-content').innerHTML);</script>
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    {% include 'components/go_back.html' with fallback_url='/copilot/ideate/' label="Back to Generator" %}
+    <a href="{% url 'idea_generator' %}" class="btn btn-sm btn-premium-outline"><i class="bi bi-arrow-repeat me-1"></i> Generate Another</a>
+</div>
+<div class="glass-card">
+    <div class="d-flex align-items-center mb-4 pb-3 border-bottom border-secondary justify-content-between">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-lightbulb fs-2 text-primary me-3"></i>
+            <div><h3 class="fw-bold mb-0">Project Ideas</h3><p class="text-muted mb-0 small">AI Generated</p></div>
+        </div>
+        <button class="btn btn-sm btn-premium-outline" onclick="copyToClipboard()"><i class="bi bi-clipboard"></i> Copy</button>
+    </div>
+    <div class="markdown-body p-4 bg-dark rounded border border-secondary" id="ideas-content"></div>
+    <div id="raw-ideas" style="display: none;">{{ ideas|escapejs }}</div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const rawContent = document.getElementById('raw-ideas').textContent;
+        const targetDiv = document.getElementById('ideas-content');
+        if (typeof marked !== 'undefined') targetDiv.innerHTML = marked.parse(rawContent);
+        else targetDiv.innerText = rawContent;
+    });
+    function copyToClipboard() {
+        navigator.clipboard.writeText(document.getElementById('raw-ideas').textContent.trim()).then(() => alert('Copied!'));
+    }
+</script>
 {% endblock %}

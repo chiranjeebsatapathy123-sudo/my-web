@@ -1,25 +1,282 @@
-{% extends "base.html" %}
+{% extends 'public_base.html' %}
+{% load static %}
+
+{% block title %}Developer Blog | Chiranjeeb Satapathy{% endblock %}
+
+{% block extra_css %}
+<style>
+    .blog-header {
+        position: relative;
+        padding-top: 120px;
+        padding-bottom: 3rem;
+        text-align: center;
+        z-index: 2;
+    }
+
+    .category-pill {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 0.5rem 1.2rem;
+        color: var(--c-text);
+        text-decoration: none;
+        transition: all var(--t-fast);
+        display: inline-block;
+        margin: 0.25rem;
+    }
+
+    .category-pill:hover, .category-pill.active {
+        background: rgba(6, 182, 212, 0.2);
+        border-color: var(--c-cyan);
+        color: var(--c-cyan);
+    }
+
+    .search-bar {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        padding: 0.8rem 1.5rem;
+        color: #fff;
+        width: 100%;
+        max-width: 500px;
+        backdrop-filter: blur(10px);
+    }
+
+    .search-bar:focus {
+        outline: none;
+        border-color: var(--c-cyan);
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+    }
+
+    .featured-article {
+        background: var(--c-bg-elevated);
+        border: var(--border-subtle);
+        border-radius: 24px;
+        overflow: hidden;
+        transition: all var(--t-cinematic);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    @media (min-width: 992px) {
+        .featured-article {
+            flex-direction: row;
+            min-height: 400px;
+        }
+    }
+
+    .featured-article:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        border-color: rgba(79, 70, 229, 0.4);
+    }
+
+    .featured-image-col {
+        flex: 1;
+        min-height: 250px;
+        background-size: cover;
+        background-position: center;
+        background-color: rgba(255,255,255,0.05);
+    }
+
+    .featured-content-col {
+        flex: 1;
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .article-card {
+        background: var(--c-bg-elevated);
+        border: var(--border-subtle);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: all var(--t-cinematic);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .article-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(6, 182, 212, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .article-img {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        background-color: rgba(255,255,255,0.05);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .article-body {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-between mb-3"><h2 class="text-white"><i class="bi bi-journal-code text-success me-2"></i>Dev Blog</h2><button class="btn btn-premium" data-bs-toggle="modal" data-bs-target="#addModal">New Post</button></div>
-<div class="row">
-    {% for post in posts %}
-    <div class="col-12 mb-3">
-        <div class="glass-card">
-            <h4 class="text-white">{{ post.title }} <small class="text-secondary fs-6 ms-2">{{ post.created_at|date }}</small></h4>
-            <div class="text-light markdown-content">{{ post.content|escapejs }}</div>
-            <form action="{% url 'delete_blog' post.pk %}" method="post" class="mt-2">{% csrf_token %}<button class="btn btn-sm btn-outline-danger">Delete</button></form>
+<div class="cinematic-container">
+    <div class="blog-header">
+        <h1 class="section-title justify-content-center">Knowledge <span class="text-gradient-primary ms-2">Platform</span></h1>
+        <p class="text-muted mx-auto mb-4" style="max-width: 600px;">
+            Insights, tutorials, and deep-dives into software engineering, AI, and architecture.
+        </p>
+
+        <!-- Search Bar -->
+        <form method="GET" action="{% url 'blog' %}" class="d-flex justify-content-center mb-4">
+            <div class="position-relative w-100" style="max-width: 500px;">
+                <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"></i>
+                <input type="text" name="q" class="search-bar ps-5" placeholder="Search articles..." value="{{ search_query }}">
+                {% if search_query %}
+                    <a href="{% url 'blog' %}" class="position-absolute top-50 end-0 translate-middle-y me-3 text-secondary"><i class="bi bi-x-circle"></i></a>
+                {% endif %}
+            </div>
+        </form>
+
+        <!-- Categories -->
+        <div class="d-flex flex-wrap justify-content-center gap-2">
+            <a href="{% url 'blog' %}" class="category-pill {% if not current_category %}active{% endif %}">All</a>
+            {% for cat in categories %}
+                <a href="?category={{ cat.slug }}" class="category-pill {% if current_category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+            {% endfor %}
         </div>
     </div>
-    {% endfor %}
+
+    <!-- Admin Actions -->
+    {% if user.is_authenticated %}
+    <div class="d-flex justify-content-end mb-4">
+        <button class="btn btn-premium-outline btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
+            <i class="bi bi-plus-lg me-1"></i> New Post
+        </button>
+    </div>
+    
+    <!-- Add Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content bg-dark border-secondary">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-body p-4">
+                        <h4 class="text-white mb-4">Create New Post</h4>
+                        <input name="title" class="form-control bg-dark text-white mb-3" placeholder="Post Title" required>
+                        <textarea name="excerpt" class="form-control bg-dark text-white mb-3" rows="2" placeholder="Short excerpt..."></textarea>
+                        <select name="category" class="form-select bg-dark text-white mb-3">
+                            <option value="">Select Category</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <input name="tags" class="form-control bg-dark text-white mb-3" placeholder="Tags (comma separated)">
+                        <div class="mb-3">
+                            <label class="text-secondary small mb-1">Cover Image (Optional)</label>
+                            <input type="file" name="cover_image" class="form-control bg-dark text-white">
+                        </div>
+                        <textarea name="content" class="form-control bg-dark text-white mb-3" rows="15" placeholder="Markdown content..." required></textarea>
+                        <button type="submit" class="btn btn-premium w-100">Publish Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Featured Article -->
+    {% if featured_post %}
+    <div class="mb-5">
+        <div class="featured-article text-decoration-none">
+            <div class="featured-image-col" style="background-image: url('{% if featured_post.cover_image %}{{ featured_post.cover_image.url }}{% else %}https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80{% endif %}');">
+            </div>
+            <div class="featured-content-col">
+                <div class="d-flex align-items-center mb-3">
+                    {% if featured_post.category %}
+                    <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-50 me-3">{{ featured_post.category.name }}</span>
+                    {% endif %}
+                    <span class="text-secondary small"><i class="bi bi-clock me-1"></i> {{ featured_post.reading_time }} min read</span>
+                </div>
+                <h2 class="text-white fw-bold mb-3">{{ featured_post.title }}</h2>
+                <p class="text-secondary mb-4">{{ featured_post.excerpt|default:featured_post.content|truncatechars:150 }}</p>
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <img src="{{ featured_post.user.profile.profile_image.url|default:'' }}" alt="Author" class="rounded-circle me-2" width="40" height="40" style="object-fit: cover;" onerror="this.style.display='none'">
+                        <div>
+                            <div class="text-white small fw-bold">{{ featured_post.user.get_full_name|default:featured_post.user.username }}</div>
+                            <div class="text-muted" style="font-size: 0.75rem;">{{ featured_post.created_at|date:"M d, Y" }}</div>
+                        </div>
+                    </div>
+                    <a href="{% url 'blog_detail' featured_post.slug %}" class="btn btn-sm btn-premium">Read Article</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Article Grid -->
+    <div class="row g-4 mb-5">
+        {% for post in page_obj %}
+        <div class="col-md-6 col-lg-4">
+            <a href="{% url 'blog_detail' post.slug %}" class="text-decoration-none text-reset d-block h-100">
+                <div class="article-card">
+                    <div class="article-img" style="background-image: url('{% if post.cover_image %}{{ post.cover_image.url }}{% else %}https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80{% endif %}');">
+                        {% if not post.is_published %}<span class="badge bg-warning position-absolute m-3">Draft</span>{% endif %}
+                    </div>
+                    <div class="article-body">
+                        <div class="d-flex align-items-center mb-2 justify-content-between">
+                            {% if post.category %}
+                            <span class="text-primary small fw-semibold">{{ post.category.name }}</span>
+                            {% endif %}
+                            <span class="text-secondary small"><i class="bi bi-clock me-1"></i> {{ post.reading_time }} min</span>
+                        </div>
+                        <h4 class="text-white mb-2 fs-5">{{ post.title }}</h4>
+                        <p class="text-secondary small mb-4 flex-grow-1">{{ post.excerpt|default:post.content|truncatechars:100 }}</p>
+                        
+                        <div class="d-flex align-items-center mt-auto border-top border-secondary pt-3">
+                            <span class="text-muted small">{{ post.created_at|date:"M d, Y" }}</span>
+                            <span class="ms-auto text-primary small">Read more <i class="bi bi-arrow-right ms-1"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <i class="bi bi-journal-x display-1 text-secondary mb-3 d-block"></i>
+            <h3 class="text-white">No articles found</h3>
+            <p class="text-muted">Try adjusting your search or filters.</p>
+            <a href="{% url 'blog' %}" class="btn btn-premium-outline mt-3">Clear Filters</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <nav aria-label="Blog navigation" class="mb-5">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item"><a class="page-link bg-dark text-white border-secondary" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}">Previous</a></li>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                    <li class="page-item active"><span class="page-link bg-primary border-primary text-white">{{ num }}</span></li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item"><a class="page-link bg-dark text-white border-secondary" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+                <li class="page-item"><a class="page-link bg-dark text-white border-secondary" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
 </div>
-<!-- Add Modal -->
-<div class="modal fade" id="addModal"><div class="modal-dialog modal-lg"><div class="modal-content bg-dark border-secondary">
-<form method="post">{% csrf_token %}
-<div class="modal-body">
-    <input name="title" class="form-control bg-dark text-white mb-3" placeholder="Post Title" required>
-    <textarea name="content" class="form-control bg-dark text-white mb-3" rows="10" placeholder="Markdown content..." required></textarea>
-    <button type="submit" class="btn btn-premium w-100">Publish</button>
-</div>
-</form></div></div></div>
-<script>document.querySelectorAll('.markdown-content').forEach(el => el.innerHTML = marked.parse(el.innerHTML));</script>
 {% endblock %}

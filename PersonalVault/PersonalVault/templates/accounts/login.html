@@ -1,250 +1,231 @@
-{% extends 'base.html' %}
+{% extends 'public_base.html' %}
 {% load static %}
 
-{% block title %}Login | Welcome to the 3D Vault{% endblock %}
+{% block title %}Authenticate | Chiranjeeb.AI{% endblock %}
 
-{% block content %}
+{% block extra_css %}
 <style>
-    /* Remove base background and padding for the cinematic login experience */
-    body {
-        background: transparent !important; 
-        overflow: hidden !important;
-    }
-    .main-wrapper {
-        background: transparent !important;
-    }
-    .navbar, .sidebar, .footer {
-        display: none !important; /* Hide UI during cinematic intro */
-    }
-    main {
-        padding: 0 !important;
-        margin: 0 !important;
+    /* Hide global layout elements for full immersive login */
+    .cinematic-nav, footer { display: none !important; }
+    body.cinematic-theme { overflow: hidden; background: #000; }
+
+    #login-wrapper {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        z-index: 100;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        width: 100vw;
-        position: absolute;
-        top: 0;
-        left: 0;
+        font-family: var(--font-body);
+        color: var(--c-text-main);
     }
 
-    /* 3D Glass Login Panel */
-    #login-panel {
-        width: 100%;
-        max-width: 420px;
-        background: rgba(15, 23, 42, 0.4);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 24px;
-        padding: 50px 40px;
-        box-shadow: 
-            0 30px 60px rgba(0,0,0,0.5), 
-            inset 0 1px 0 rgba(255,255,255,0.2),
-            0 0 40px rgba(99, 102, 241, 0.2); /* Subtle colored glow */
+    /* WebGL Canvas */
+    #webgl-canvas {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
         z-index: 10;
-        /* Initial state is hidden; GSAP will animate this */
-        opacity: 0;
-        transform: translateY(100px) rotateX(-15deg); 
-    }
-
-    .login-brand {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .login-brand h2 {
-        color: #fff;
-        font-weight: 800;
-        font-size: 2.5rem;
-        margin-bottom: 5px;
-        background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .login-brand p {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.95rem;
-    }
-
-    .form-group-premium {
-        position: relative;
-        margin-bottom: 25px;
-    }
-
-    .form-group-premium i {
-        position: absolute;
-        top: 50%;
-        left: 20px;
-        transform: translateY(-50%);
-        color: rgba(255, 255, 255, 0.4);
-        font-size: 1.2rem;
-        transition: all 0.3s ease;
         pointer-events: none;
     }
 
-    .form-control-login {
-        width: 100%;
-        padding: 16px 20px 16px 55px;
-        background: rgba(0, 0, 0, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 14px;
-        color: #fff;
-        font-size: 1rem;
-        outline: none;
-        transition: all 0.3s ease;
-    }
-
-    .form-control-login::placeholder {
-        color: rgba(255, 255, 255, 0.3);
-    }
-
-    .form-control-login:focus {
-        background: rgba(0, 0, 0, 0.4);
-        border-color: #6366f1;
-        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-    }
-
-    .form-control-login:focus + i {
-        color: #6366f1;
-        transform: translateY(-50%) scale(1.1);
-    }
-
-    .btn-login-3d {
-        width: 100%;
-        padding: 16px;
-        background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
-        color: #fff;
-        border: none;
-        border-radius: 14px;
-        font-size: 1.1rem;
-        font-weight: 600;
+    /* Skip Intro Button */
+    #skip-intro-btn {
+        position: fixed;
+        top: 2rem; right: 2rem;
+        z-index: 2000;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--c-text-muted);
+        padding: 0.5rem 1rem;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        border-radius: 4px;
         cursor: pointer;
-        transition: all 0.3s;
-        box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3), inset 0 1px 0 rgba(255,255,255,0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-top: 10px;
-        position: relative;
-        overflow: hidden;
+        transition: all var(--t-fast);
     }
+    #skip-intro-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
 
-    .btn-login-3d::after {
-        content: '';
+    /* Stages */
+    .sequence-stage {
         position: absolute;
-        top: 0; left: -100%; width: 50%; height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transform: skewX(-20deg);
-        transition: all 0.5s;
-    }
-
-    .btn-login-3d:hover {
-        transform: translateY(-3px) scale(1.02);
-        box-shadow: 0 15px 25px rgba(99, 102, 241, 0.4), inset 0 1px 0 rgba(255,255,255,0.3);
-    }
-
-    .btn-login-3d:hover::after {
-        left: 200%;
-    }
-
-    .btn-login-3d:active {
-        transform: translateY(2px) scale(0.98);
-        box-shadow: 0 5px 10px rgba(99, 102, 241, 0.3);
-    }
-
-    .register-link {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         text-align: center;
-        margin-top: 30px;
-        color: rgba(255, 255, 255, 0.5);
-        font-size: 0.95rem;
+        z-index: 50;
     }
 
-    .register-link a {
-        color: #a5b4fc;
-        text-decoration: none;
-        font-weight: 600;
-        margin-left: 5px;
-        transition: color 0.3s;
+    .sequence-stage.active {
+        opacity: 1;
+        pointer-events: auto;
     }
 
-    .register-link a:hover {
-        color: #fff;
-        text-decoration: underline;
+    /* Stage 1: Initialization */
+    .init-text { font-family: var(--font-mono); letter-spacing: 0.2em; font-size: 1.2rem; color: var(--c-cyan); }
+    .init-subtext { font-size: 0.9rem; color: var(--c-text-muted); margin-top: 1rem; letter-spacing: 0.1em; }
+
+    /* Stage 2: Identity */
+    .identity-frame {
+        width: 180px; height: 180px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 2px solid rgba(6, 182, 212, 0.5);
+        box-shadow: 0 0 30px rgba(6, 182, 212, 0.2);
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    .identity-frame img { width: 100%; height: 100%; object-fit: cover; }
+    .identity-name { font-family: var(--font-heading); font-size: 2.5rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.5rem; }
+    .identity-role { font-family: var(--font-mono); color: var(--c-cyan); font-size: 1rem; }
+
+    /* Stage 3: Auth Panel */
+    .auth-panel {
+        background: rgba(15, 17, 26, 0.8);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 3rem;
+        width: 100%;
+        max-width: 450px;
+        box-shadow: var(--shadow-cinematic), 0 0 40px rgba(6, 182, 212, 0.05);
+        transform: translateY(50px) scale(0.95);
+        transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .sequence-stage.active .auth-panel {
+        transform: translateY(0) scale(1);
+    }
+
+    .auth-header { margin-bottom: 2rem; text-align: left; }
+    .auth-header h2 { font-family: var(--font-heading); font-size: 1.5rem; letter-spacing: 0.1em; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem; margin-bottom: 0.5rem; color: var(--c-text-main); }
+    
+    .auth-group { position: relative; margin-bottom: 1.5rem; text-align: left; }
+    .auth-input {
+        width: 100%; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem 1rem 1rem 3rem; border-radius: 8px; color: var(--c-text-main); font-family: var(--font-body);
+        transition: all var(--t-fast);
+    }
+    .auth-input:focus { outline: none; border-color: var(--c-cyan); box-shadow: 0 0 15px rgba(6, 182, 212, 0.2); }
+    .auth-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--c-text-muted); transition: color var(--t-fast); }
+    .auth-input:focus + .auth-icon { color: var(--c-cyan); }
+
+    .btn-auth {
+        width: 100%; background: var(--c-indigo); color: #fff; border: none; padding: 1rem;
+        border-radius: 8px; font-family: var(--font-mono); font-size: 1rem; cursor: pointer;
+        transition: all var(--t-fast); text-transform: uppercase; letter-spacing: 0.1em;
+        margin-top: 1rem; box-shadow: 0 0 20px rgba(79, 70, 229, 0.3); display: flex; justify-content: center; align-items: center; gap: 0.5rem;
+    }
+    .btn-auth:hover { background: var(--c-primary); box-shadow: 0 0 30px rgba(59, 130, 246, 0.5); }
+    .btn-auth:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    /* Fallback CSS for No-WebGL */
+    .css-fallback-bg {
+        position: absolute; top:0; left:0; width:100%; height:100%; z-index: 1;
+        background: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
+        display: none;
     }
 </style>
+{% endblock %}
 
-<div id="login-panel">
-    <div class="login-brand">
-        <h2>3D Vault</h2>
-        <p>Enter the digital workspace.</p>
-    </div>
+{% block content %}
+<canvas id="webgl-canvas"></canvas>
+<div class="css-fallback-bg" id="css-fallback-bg"></div>
+
+<button id="skip-intro-btn">SKIP INTRO <kbd class="ms-1" style="background: rgba(255,255,255,0.2); padding: 0.1rem 0.3rem; border-radius: 3px;">Esc</kbd></button>
+
+<div id="login-wrapper">
     
-    <form method="POST">
-        {% csrf_token %}
-        
-        {% for field in form %}
-        <div class="form-group-premium">
-            {{ field }}
-            {% if field.name == 'username' %}
-                <i class="bi bi-person-fill"></i>
-            {% elif field.name == 'password' %}
-                <i class="bi bi-shield-lock-fill"></i>
-            {% else %}
-                <i class="bi bi-pencil-fill"></i>
-            {% endif %}
-            
-            {% for error in field.errors %}
-                <div class="text-danger small mt-2" style="background: rgba(239,68,68,0.1); padding: 8px; border-radius: 8px;">
-                    <i class="bi bi-exclamation-triangle-fill me-1"></i> {{ error }}
-                </div>
-            {% endfor %}
+    <!-- STAGE 1: INITIALIZATION -->
+    <div id="stage-1" class="sequence-stage active">
+        <div class="init-text">SYSTEM INITIALIZATION</div>
+        <div class="init-subtext">ESTABLISHING SECURE CONNECTION...</div>
+    </div>
+
+    <!-- STAGE 2: IDENTITY RECOGNITION -->
+    <div id="stage-2" class="sequence-stage">
+        <div class="identity-frame">
+            <img src="/media/profile/chiranjeeb_photo.jpg" onerror="this.src='{% static \'images/default_avatar.png\' %}'" alt="Chiranjeeb Satapathy">
         </div>
-        {% endfor %}
+        <div class="identity-name">CHIRANJEEB SATAPATHY</div>
+        <div class="identity-role">AI/ML ENGINEER & FULL-STACK DEVELOPER</div>
+    </div>
 
-        <button type="submit" class="btn-login-3d">
-            Access System <i class="bi bi-arrow-right-short ms-1 fs-4"></i>
-        </button>
-    </form>
-
-    <div class="register-link">
-        New here? <a href="{% url 'register' %}">Initialize Account</a>
+    <!-- STAGE 3: AUTHENTICATION PANEL -->
+    <div id="stage-3" class="sequence-stage">
+        <div class="auth-panel">
+            <div class="auth-header">
+                <h2>IDENTITY VERIFICATION</h2>
+            </div>
+            
+            <form method="POST" action="{% url 'login' %}" id="auth-form">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="auth-group">
+                    {{ field }}
+                    {% if field.name == 'username' %}
+                        <i class="bi bi-person-bounding-box auth-icon"></i>
+                    {% elif field.name == 'password' %}
+                        <i class="bi bi-shield-lock auth-icon"></i>
+                    {% else %}
+                        <i class="bi bi-pencil auth-icon"></i>
+                    {% endif %}
+                    
+                    {% for error in field.errors %}
+                        <div style="color: #ef4444; font-size: 0.85rem; margin-top: 0.5rem;">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                
+                <button type="submit" class="btn-auth" id="btn-submit">
+                    AUTHENTICATE <i class="bi bi-fingerprint"></i>
+                </button>
+            </form>
+        </div>
     </div>
 </div>
+{% endblock %}
 
-    <script>
-        // Ensure Django inputs have the correct class
-        document.addEventListener("DOMContentLoaded", function() {
-            const inputs = document.querySelectorAll('.form-group-premium input');
-            
-            inputs.forEach(input => {
-                input.classList.add('form-control-login');
-                if(input.name.toLowerCase().includes('username')) {
-                    input.placeholder = 'Username';
-                } else if(input.name.toLowerCase().includes('password')) {
-                    input.placeholder = 'Password';
-                } else {
-                    input.placeholder = input.name;
-                }
+{% block extra_js %}
+<!-- Ensure GSAP is loaded -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
-                // Micro-interactions for the 3D Engine
-                input.addEventListener('focus', () => {
-                    gsap.to(input.parentElement, { z: 20, scale: 1.02, duration: 0.3, ease: "power2.out" });
-                    // Mascot looks down/reacts
-                    window.dispatchEvent(new Event('ai-thinking'));
-                });
+<!-- Custom 3D Architecture Scripts -->
+<script src="{% static 'js/three/core/engine.js' %}"></script>
+<script src="{% static 'js/three/scenes/loginScene.js' %}"></script>
+<script src="{% static 'js/three/login/loginFlow.js' %}"></script>
 
-                input.addEventListener('blur', () => {
-                    gsap.to(input.parentElement, { z: 0, scale: 1, duration: 0.3, ease: "power2.in" });
-                    // Mascot returns to idle
-                    window.dispatchEvent(new Event('ai-idle'));
-                });
-            });
-            
-            // Allow 3D transforms on form groups
-            gsap.set('.form-group-premium', { transformStyle: "preserve-3d" });
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Fallback CSS activation
+        document.addEventListener('webgl-fallback', () => {
+            document.getElementById('css-fallback-bg').style.display = 'block';
         });
-    </script>
+
+        // Initialize 3D Engine Architecture
+        const engine = new WebGLEngine('webgl-canvas');
+        
+        let scene = null;
+        if (engine.isActive) {
+            scene = new LoginScene(engine);
+        }
+        
+        // Initialize Flow Manager (works with or without scene)
+        const flow = new LoginFlow(scene);
+
+        // Global Esc key hook for skip
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                flow.skipIntro();
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'public_base.html' %}
+{% block title %}404 - Node Not Found{% endblock %}
+
+{% block content %}
+<div class="cinematic-container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh; text-align: center;">
+    <h1 style="font-size: 8rem; color: var(--c-cyan); font-family: var(--font-mono); line-height: 1;">404</h1>
+    <h2 class="mb-4" style="font-size: 2rem; text-transform: uppercase;">Signal Lost</h2>
+    <p class="text-muted mb-5" style="max-width: 500px;">
+        The requested data node does not exist in this sector. It may have been relocated or purged from the database.
+    </p>
+    {% include 'components/go_back.html' with fallback_url='/' label="RETURN TO CORE" %}
+</div>
+{% endblock %}

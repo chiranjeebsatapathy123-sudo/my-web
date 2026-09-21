@@ -1,0 +1,190 @@
+{% extends 'public_base.html' %}
+{% load static %}
+
+{% block title %}AI Lab | Chiranjeeb Satapathy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ai-core.css' %}">
+<style>
+    .ai-lab-header {
+        position: relative;
+        padding-top: 120px;
+        padding-bottom: 3rem;
+        text-align: center;
+        z-index: 2;
+    }
+
+    .ai-lab-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 2rem;
+        margin-top: 3rem;
+        z-index: 2;
+        position: relative;
+    }
+
+    .ai-module {
+        background: var(--c-bg-elevated);
+        border: var(--border-subtle);
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        transition: all var(--t-cinematic);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .ai-module::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--c-indigo), var(--c-cyan));
+        opacity: 0;
+        transition: opacity var(--t-fast);
+    }
+
+    .ai-module:hover {
+        transform: translateY(-8px);
+        border-color: rgba(6, 182, 212, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(6, 182, 212, 0.05);
+        color: inherit;
+    }
+
+    .ai-module:hover::before {
+        opacity: 1;
+    }
+
+    .ai-module-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        color: var(--c-cyan);
+        margin-bottom: 1.5rem;
+        transition: all var(--t-fast);
+    }
+
+    .ai-module:hover .ai-module-icon {
+        background: var(--c-indigo);
+        color: #fff;
+        border-color: var(--c-indigo);
+        box-shadow: var(--glow-primary);
+        transform: scale(1.1);
+    }
+
+    .ai-module-title {
+        font-family: var(--font-heading);
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .ai-module-desc {
+        color: var(--c-text-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        flex: 1;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cinematic-container">
+    <div class="ai-lab-header">
+        <!-- AI Core Visualization -->
+        <div class="mb-5">
+            {% include 'components/ai_core.html' %}
+        </div>
+        
+        <h1 class="section-title justify-content-center">Intelligence <span class="text-gradient-primary ms-2">Hub</span></h1>
+        <p class="text-muted mx-auto" style="max-width: 600px; font-family: var(--font-mono); letter-spacing: 0.05em;">
+            SYSTEM ONLINE // SELECT CAPABILITY
+        </p>
+    </div>
+
+    <div class="ai-lab-grid pb-5">
+        
+        <!-- Ask AI (Project Aware Chat) -->
+        <a href="{% url 'ask_ai' %}" class="ai-module">
+            <div class="ai-module-icon"><i class="bi bi-robot"></i></div>
+            <h3 class="ai-module-title">Ask Chiranjeeb AI</h3>
+            <p class="ai-module-desc">
+                Interactive chat assistant trained on my verified portfolio data, projects, and resume.
+            </p>
+        </a>
+
+        <!-- Resume Analyzer -->
+        <a href="{% url 'analyze_resume' %}" class="ai-module">
+            <div class="ai-module-icon"><i class="bi bi-file-earmark-bar-graph"></i></div>
+            <h3 class="ai-module-title">Resume Analyzer</h3>
+            <p class="ai-module-desc">
+                AI-driven analysis of uploaded resumes providing feedback on structure and skills matching.
+            </p>
+        </a>
+
+        <!-- Cover Letter -->
+        <a href="{% url 'cover_letter' %}" class="ai-module">
+            <div class="ai-module-icon"><i class="bi bi-file-earmark-text"></i></div>
+            <h3 class="ai-module-title">Cover Letter Generator</h3>
+            <p class="ai-module-desc">
+                Generate tailored cover letters based on specific job descriptions and my actual portfolio.
+            </p>
+        </a>
+
+        <!-- Mock Interview -->
+        <a href="{% url 'interview' %}" class="ai-module">
+            <div class="ai-module-icon"><i class="bi bi-mic"></i></div>
+            <h3 class="ai-module-title">Mock Interview</h3>
+            <p class="ai-module-desc">
+                Interactive technical interview simulation powered by Voice AI and portfolio context.
+            </p>
+        </a>
+
+        <!-- Job Matcher -->
+        <a href="{% url 'job_matcher' %}" class="ai-module">
+            <div class="ai-module-icon"><i class="bi bi-bullseye"></i></div>
+            <h3 class="ai-module-title">Job Matcher</h3>
+            <p class="ai-module-desc">
+                Match resume skills against target job descriptions to determine factual compatibility.
+            </p>
+        </a>
+
+        <!-- Idea Generator -->
+        <a href="{% url 'idea_generator' %}" class="ai-module">
+            <div class="ai-module-icon"><i class="bi bi-lightbulb"></i></div>
+            <h3 class="ai-module-title">Project Ideation</h3>
+            <p class="ai-module-desc">
+                Generate unique project ideas based on existing tech stack and chosen difficulty domains.
+            </p>
+        </a>
+
+        <!-- Pitch Generator -->
+        <a href="{% url 'pitch_generator' %}" class="ai-module">
+            <div class="ai-module-icon"><i class="bi bi-megaphone"></i></div>
+            <h3 class="ai-module-title">Pitch Generator</h3>
+            <p class="ai-module-desc">
+                Generate 30-second and 60-second elevator pitches for existing portfolio projects.
+            </p>
+        </a>
+
+        <!-- Tech Explainer -->
+        <a href="{% url 'tech_explainer' %}" class="ai-module">
+            <div class="ai-module-icon"><i class="bi bi-book"></i></div>
+            <h3 class="ai-module-title">Technical Explainer</h3>
+            <p class="ai-module-desc">
+                Break down complex technical concepts or architectures into easy-to-understand explanations.
+            </p>
+        </a>
+    </div>
+</div>
+{% endblock %}

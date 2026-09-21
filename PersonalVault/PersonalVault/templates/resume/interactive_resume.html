@@ -1,0 +1,214 @@
+{% extends 'public_base.html' %}
+
+{% block title %}Interactive Resume | Chiranjeeb Satapathy{% endblock %}
+
+{% block extra_css %}
+<style>
+    .resume-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        border-bottom: 2px solid var(--c-indigo);
+        padding-bottom: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .resume-section {
+        margin-bottom: 4rem;
+    }
+
+    .resume-section-title {
+        font-family: var(--font-heading);
+        color: var(--c-cyan);
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .resume-section-title::after {
+        content: '';
+        flex-grow: 1;
+        height: 1px;
+        background: linear-gradient(90deg, rgba(255,255,255,0.1), transparent);
+        margin-left: 1rem;
+    }
+
+    /* Resume Cards */
+    .resume-card {
+        background: var(--c-bg-elevated);
+        border-left: 3px solid var(--c-indigo);
+        padding: 1.5rem 2rem;
+        margin-bottom: 1.5rem;
+        border-radius: 0 8px 8px 0;
+        transition: transform var(--t-fast), background var(--t-fast);
+    }
+
+    .resume-card:hover {
+        background: rgba(255,255,255,0.03);
+        transform: translateX(5px);
+        border-left-color: var(--c-cyan);
+    }
+
+    .resume-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 0.5rem;
+    }
+
+    .resume-card-title {
+        font-family: var(--font-heading);
+        font-size: 1.25rem;
+        color: var(--c-text-main);
+        margin: 0;
+    }
+
+    .resume-card-date {
+        font-family: var(--font-mono);
+        color: var(--c-text-muted);
+        font-size: 0.9rem;
+    }
+
+    .resume-card-subtitle {
+        color: var(--c-primary);
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+
+    /* Skills Pill */
+    .skill-pill {
+        display: inline-block;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        margin: 0 0.5rem 0.5rem 0;
+        color: var(--c-text-main);
+    }
+
+    .skill-pill:hover {
+        background: var(--c-indigo);
+        border-color: var(--c-indigo);
+    }
+
+    @media (max-width: 768px) {
+        .resume-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+        }
+        .resume-card-header {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cinematic-container" style="padding-top: 120px; max-width: 1000px;">
+    
+    <div class="resume-header">
+        <div>
+            <h1 class="mb-2" style="font-size: 3rem; text-transform: uppercase;">Chiranjeeb <span class="text-gradient-primary">Satapathy</span></h1>
+            <p class="text-muted fs-5 mb-0">AI/ML Engineer & Full-Stack Developer</p>
+            <div class="d-flex gap-3 mt-3 text-muted" style="font-family: var(--font-mono); font-size: 0.9rem;">
+                {% if profile.location %}<span><i class="bi bi-geo-alt"></i> {{ profile.location }}</span>{% endif %}
+                {% if profile.website %}<span><i class="bi bi-globe"></i> {{ profile.website }}</span>{% endif %}
+            </div>
+        </div>
+        <div>
+            {% if resume_file and resume_file.file %}
+            <a href="{{ resume_file.file.url }}" target="_blank" class="btn-premium primary">
+                <i class="bi bi-download me-2"></i> DOWNLOAD PDF
+            </a>
+            {% else %}
+            <button class="btn-premium" disabled>
+                <i class="bi bi-file-earmark-x me-2"></i> NO PDF AVAILABLE
+            </button>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section class="resume-section">
+        <h3 class="resume-section-title"><i class="bi bi-person"></i> Professional Summary</h3>
+        <p class="text-muted" style="line-height: 1.8; font-size: 1.1rem;">
+            {{ profile.bio|default:"Dedicated AI/ML Engineer with expertise in building scalable Full-Stack solutions. Passionate about solving complex problems using modern technologies and continuous learning." }}
+        </p>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="resume-section">
+        <h3 class="resume-section-title"><i class="bi bi-lightning"></i> Core Competencies</h3>
+        <div>
+            {% for skill in skills %}
+                <span class="skill-pill">{{ skill.name }}</span>
+            {% empty %}
+                <p class="text-muted">Skills data generating...</p>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- EXPERIENCE / ACHIEVEMENTS (Filtered to Career/Project) -->
+    <section class="resume-section">
+        <h3 class="resume-section-title"><i class="bi bi-briefcase"></i> Experience & Milestones</h3>
+        
+        {% for achievement in achievements %}
+            {% if achievement.category == 'Career' or achievement.category == 'Project' %}
+            <div class="resume-card">
+                <div class="resume-card-header">
+                    <h4 class="resume-card-title">{{ achievement.title }}</h4>
+                    <span class="resume-card-date">{{ achievement.date_achieved|date:"F Y" }}</span>
+                </div>
+                <div class="resume-card-subtitle">{{ achievement.get_category_display }}</div>
+                <p class="text-muted mb-0">
+                    {{ achievement.description }}
+                </p>
+            </div>
+            {% endif %}
+        {% empty %}
+            <p class="text-muted">No experience data recorded.</p>
+        {% endfor %}
+    </section>
+
+    <!-- EDUCATION -->
+    <section class="resume-section">
+        <h3 class="resume-section-title"><i class="bi bi-journal-bookmark"></i> Education</h3>
+        {% for achievement in achievements %}
+            {% if achievement.category == 'Education' %}
+            <div class="resume-card">
+                <div class="resume-card-header">
+                    <h4 class="resume-card-title">{{ achievement.title }}</h4>
+                    <span class="resume-card-date">{{ achievement.date_achieved|date:"Y" }}</span>
+                </div>
+                <p class="text-muted mb-0">
+                    {{ achievement.description }}
+                </p>
+            </div>
+            {% endif %}
+        {% empty %}
+            <p class="text-muted">Education data pending.</p>
+        {% endfor %}
+    </section>
+
+    <!-- CERTIFICATES -->
+    <section class="resume-section">
+        <h3 class="resume-section-title"><i class="bi bi-patch-check"></i> Certifications</h3>
+        {% for cert in certificates %}
+        <div class="resume-card">
+            <div class="resume-card-header">
+                <h4 class="resume-card-title">{{ cert.title }}</h4>
+                <span class="resume-card-date">{{ cert.issue_date|date:"F Y" }}</span>
+            </div>
+            <div class="resume-card-subtitle">{{ cert.organization }}</div>
+        </div>
+        {% empty %}
+            <p class="text-muted">No certifications verified.</p>
+        {% endfor %}
+    </section>
+
+</div>
+{% endblock %}

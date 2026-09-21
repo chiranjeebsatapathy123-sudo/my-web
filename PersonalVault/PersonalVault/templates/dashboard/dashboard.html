@@ -9,7 +9,7 @@
     <div class="row mb-5 align-items-center">
         <div class="col-md-8">
             <h1 class="fw-bold"><span class="gradient-text">Vault Dashboard</span></h1>
-            <p class="mb-0" style="color: var(--text-secondary);">Welcome back, <strong style="color: var(--text-primary);">{{ request.user.first_name|default:request.user.username }}</strong>. Manage your secure vault items and view visitor inquiries.</p>
+            <p class="mb-0" style="color: var(--text-secondary);">Welcome back, <strong style="color: var(--text-primary);">{% if profile and profile.full_name %}{{ profile.full_name }}{% else %}{{ request.user.first_name|default:request.user.username }}{% endif %}</strong>. Manage your secure vault items and view visitor inquiries.</p>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0 d-flex justify-content-md-end gap-2">
             <a href="{% url 'profile' %}" class="btn btn-premium-outline">

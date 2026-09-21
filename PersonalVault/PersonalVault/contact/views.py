@@ -5,14 +5,20 @@ from django.contrib import messages
 from .models import Contact
 from .forms import ContactForm
 
-@login_required
+from django.http import JsonResponse
+
 def contact_view(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Thank you! Your message has been sent successfully. We will get back to you shortly.')
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.headers.get('accept') == 'application/json':
+                return JsonResponse({'success': True, 'message': 'Message sent successfully.'})
+            messages.success(request, 'Thank you! Your message has been sent successfully.')
             return redirect('contact_view')
+        else:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.headers.get('accept') == 'application/json':
+                return JsonResponse({'success': False, 'errors': form.errors})
     else:
         form = ContactForm()
         

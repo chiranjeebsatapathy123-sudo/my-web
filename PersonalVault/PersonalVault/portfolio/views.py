@@ -4,7 +4,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 import requests
 
-from .models import Profile, Project, Snippet
+from .models import Profile, Project, Snippet, Skill, Achievement
 from .forms import ProfileForm, ProjectForm, SnippetForm
 
 from certificates.models import Certificate
@@ -14,26 +14,33 @@ from django.http import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
 
 def home(request):
-    if not request.user.is_authenticated:
-        return render(request, "portfolio/welcome.html")
-
-    profile = Profile.objects.filter(user=request.user).first()
+    # Fetch the primary profile (assuming first user is the owner)
+    profile = Profile.objects.first()
     
-    projects_count = 0
-    certificates_count = 0
-
-    if profile:
-        projects = Project.objects.filter(user=profile.user).order_by('-created_at')[:6]
-        projects_count = Project.objects.filter(user=profile.user).count()
-        certificates_count = Certificate.objects.filter(user=profile.user).count()
-    else:
-        projects = Project.objects.none()
-
-    return render(request, "home.html", {
+    from resume.models import Resume
+    
+    projects = Project.objects.filter(user=profile.user).order_by('-created_at') if profile else Project.objects.none()
+    skills = Skill.objects.filter(user=profile.user) if profile else Skill.objects.none()
+    
+    # Group skills by category for the template
+    categories = {}
+    for skill in skills:
+        if skill.category not in categories:
+            categories[skill.category] = []
+        categories[skill.category].append(skill)
+        
+    achievements = Achievement.objects.filter(user=profile.user).order_by('-date_achieved') if profile else Achievement.objects.none()
+    certificates = Certificate.objects.filter(user=profile.user) if profile else Certificate.objects.none()
+    resume_file = Resume.objects.order_by('-uploaded_at').first()
+    
+    return render(request, "portfolio/home.html", {
         "profile": profile,
         "projects": projects,
-        "projects_count": projects_count,
-        "certificates_count": certificates_count,
+        "skills": skills,
+        "categories": categories,
+        "achievements": achievements,
+        "certificates": certificates,
+        "resume_file": resume_file
     })
 
 @login_required
@@ -70,11 +77,142 @@ def profile(request):
         }
     )
 
-@login_required
 def project_list(request):
-    projects = Project.objects.filter(user=request.user)
+    profile = Profile.objects.first()
+    projects = Project.objects.filter(user=profile.user).order_by('-created_at') if profile else Project.objects.none()
     return render(request, 'portfolio/project_list.html', {
-        'projects': projects
+        'projects': projects,
+        'profile': profile
+    })
+
+def project_detail(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    return render(request, 'portfolio/project_detail.html', {'project': project})
+
+def project_universe(request):
+    """
+    Renders the 3D immersive project universe environment.
+    """
+    return render(request, 'portfolio/project_universe.html')
+
+def project_universe_data(request):
+    """
+    JSON API for the 3D Engine to fetch project nodes.
+    """
+    from django.http import JsonResponse
+    profile = Profile.objects.first()
+    projects = Project.objects.filter(user=profile.user).order_by('-created_at') if profile else []
+    
+    data = []
+    for idx, p in enumerate(projects):
+        # We try to extract categories from skills or description, or just assign dynamically for visuals
+        data.append({
+            'id': p.id,
+            'index': idx + 1,
+            'title': p.title,
+            'description': p.description[:120] + "..." if len(p.description) > 120 else p.description,
+            'url': f"/projects/{p.id}/",
+            'image': p.image.url if p.image else None,
+            'is_featured': getattr(p, 'is_featured', False)
+        })
+        
+    return JsonResponse({'projects': data})
+
+def technical_universe_view(request):
+    return render(request, 'portfolio/technical_universe.html')
+
+def technical_universe_data(request):
+    """
+    Builds the graph data for the 3D Technical Universe.
+    Nodes: Projects, Skills, Domains
+    Links: Project -> Skill, Skill -> Domain
+    """
+    profile = Profile.objects.first()
+    user = profile.user if profile else request.user
+    
+    nodes = []
+    links = []
+    
+    # 1. Add Domains (Categories from Skills)
+    skills = Skill.objects.filter(user=user)
+    domain_names = set([s.category for s in skills])
+    
+    domain_id_map = {}
+    for dom in domain_names:
+        node_id = f"domain_{dom}"
+        domain_id_map[dom] = node_id
+        nodes.append({
+            'id': node_id,
+            'name': dom,
+            'type': 'domain',
+            'val': 30 # visual size
+        })
+        
+    # 2. Add Skills (Technologies)
+    skill_id_map = {}
+    for s in skills:
+        node_id = f"skill_{s.id}"
+        skill_id_map[s.id] = node_id
+        nodes.append({
+            'id': node_id,
+            'name': s.name,
+            'type': 'skill',
+            'val': 20,
+            'proficiency': s.proficiency
+        })
+        # Link Skill -> Domain
+        if s.category in domain_id_map:
+            links.append({
+                'source': node_id,
+                'target': domain_id_map[s.category]
+            })
+            
+    # 3. Add Projects
+    projects = Project.objects.filter(user=user)
+    for p in projects:
+        node_id = f"project_{p.id}"
+        nodes.append({
+            'id': node_id,
+            'name': p.title,
+            'type': 'project',
+            'val': 25,
+            'description': p.description[:100] + "..." if len(p.description) > 100 else p.description,
+            'url': f"/projects/{p.id}/"
+        })
+        
+        # Link Project -> Skills
+        for tech in p.technologies.all():
+            if tech.id in skill_id_map:
+                links.append({
+                    'source': node_id,
+                    'target': skill_id_map[tech.id]
+                })
+
+    return JsonResponse({'nodes': nodes, 'links': links})
+def ai_lab_view(request):
+    return render(request, 'portfolio/ai_lab.html')
+
+def skills_view(request):
+    profile = Profile.objects.first()
+    skills = Skill.objects.filter(user=profile.user) if profile else Skill.objects.none()
+    # Group skills by category for the template
+    categories = {}
+    for skill in skills:
+        if skill.category not in categories:
+            categories[skill.category] = []
+        categories[skill.category].append(skill)
+        
+    return render(request, 'portfolio/skills.html', {
+        'profile': profile,
+        'categories': categories
+    })
+
+def achievements_view(request):
+    profile = Profile.objects.first()
+    achievements = Achievement.objects.filter(user=profile.user).order_by('-date_achieved') if profile else Achievement.objects.none()
+    return render(request, 'portfolio/achievements.html', {
+        'profile': profile,
+        'achievements': achievements
     })
 
 
@@ -357,16 +495,110 @@ def delete_connection(request, pk):
     return redirect('connections')
 
 # --- DEV BLOG ---
-@login_required
+from django.core.paginator import Paginator
+from django.db.models import Q
+from .models import BlogCategory, BlogTag
+
 def blog_view(request):
-    if request.method == 'POST':
+    if request.method == 'POST' and request.user.is_authenticated:
         title = request.POST.get('title')
         content = request.POST.get('content')
-        BlogPost.objects.create(user=request.user, title=title, content=content, is_published=True)
+        excerpt = request.POST.get('excerpt', '')
+        category_id = request.POST.get('category')
+        tags_raw = request.POST.get('tags', '')
+        
+        post = BlogPost.objects.create(
+            user=request.user, 
+            title=title, 
+            content=content,
+            excerpt=excerpt,
+            is_published=True
+        )
+        if category_id:
+            try:
+                post.category = BlogCategory.objects.get(id=category_id)
+            except BlogCategory.DoesNotExist:
+                pass
+        
+        if tags_raw:
+            tag_names = [t.strip() for t in tags_raw.split(',') if t.strip()]
+            for tn in tag_names:
+                tag, _ = BlogTag.objects.get_or_create(name=tn)
+                post.tags.add(tag)
+                
+        if request.FILES.get('cover_image'):
+            post.cover_image = request.FILES['cover_image']
+            
+        post.save()
+        messages.success(request, 'Blog post published!')
         return redirect('blog')
         
-    posts = BlogPost.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'portfolio/blog.html', {'posts': posts})
+    # Public View & Filtering
+    # Show published posts to everyone, but drafts only to the author.
+    if request.user.is_authenticated:
+        base_query = BlogPost.objects.filter(Q(is_published=True) | Q(user=request.user))
+    else:
+        base_query = BlogPost.objects.filter(is_published=True)
+        
+    # Search
+    search_query = request.GET.get('q', '')
+    if search_query:
+        base_query = base_query.filter(
+            Q(title__icontains=search_query) | 
+            Q(content__icontains=search_query) |
+            Q(excerpt__icontains=search_query)
+        )
+        
+    # Category Filter
+    category_slug = request.GET.get('category')
+    if category_slug:
+        base_query = base_query.filter(category__slug=category_slug)
+        
+    # Tag Filter
+    tag_slug = request.GET.get('tag')
+    if tag_slug:
+        base_query = base_query.filter(tags__slug=tag_slug)
+
+    # Featured Article
+    featured_post = base_query.filter(featured=True).first()
+    if not featured_post:
+        featured_post = base_query.order_by('-created_at').first()
+        
+    # Exclude featured from main list to avoid duplication, unless there's pagination/search
+    posts = base_query.order_by('-created_at')
+    if not search_query and not category_slug and not tag_slug and featured_post:
+        posts = posts.exclude(id=featured_post.id)
+
+    paginator = Paginator(posts, 6) # 6 posts per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    categories = BlogCategory.objects.all()
+    
+    context = {
+        'page_obj': page_obj,
+        'featured_post': featured_post,
+        'categories': categories,
+        'search_query': search_query,
+        'current_category': category_slug,
+    }
+    return render(request, 'portfolio/blog.html', context)
+
+def blog_detail(request, slug):
+    if request.user.is_authenticated:
+        post = get_object_or_404(BlogPost, slug=slug)
+    else:
+        post = get_object_or_404(BlogPost, slug=slug, is_published=True)
+        
+    related_posts = BlogPost.objects.filter(
+        is_published=True, 
+        category=post.category
+    ).exclude(id=post.id).order_by('-created_at')[:3]
+    
+    return render(request, 'portfolio/blog_detail.html', {
+        'post': post,
+        'related_posts': related_posts
+    })
 
 @login_required
 def delete_blog(request, pk):

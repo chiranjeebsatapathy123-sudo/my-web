@@ -1,7 +1,37 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% block title %}Match Result | Chiranjeeb Satapathy{% endblock %}
+{% block extra_css %}
+<style>
+    .markdown-body { color: var(--text-primary); line-height: 1.8; font-family: var(--font-body); white-space: pre-wrap; }
+</style>
+{% endblock %}
 {% block content %}
-<h2 class="text-white">Job Match Report</h2>
-<a href="{% url 'job_matcher' %}" class="btn btn-outline-secondary mb-3">Analyze Another</a>
-<div class="glass-card text-light markdown-content" id="md-content">{{ match_report|escapejs }}</div>
-<script>document.getElementById('md-content').innerHTML = marked.parse(document.getElementById('md-content').innerHTML);</script>
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    {% include 'components/go_back.html' with fallback_url='/copilot/matcher/' label="Back to Matcher" %}
+    <a href="{% url 'job_matcher' %}" class="btn btn-sm btn-premium-outline"><i class="bi bi-arrow-repeat me-1"></i> Match Another</a>
+</div>
+<div class="glass-card">
+    <div class="d-flex align-items-center mb-4 pb-3 border-bottom border-secondary justify-content-between">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-bullseye fs-2 text-primary me-3"></i>
+            <div><h3 class="fw-bold mb-0">Job Match Analysis</h3></div>
+        </div>
+        <button class="btn btn-sm btn-premium-outline" onclick="copyToClipboard()"><i class="bi bi-clipboard"></i> Copy</button>
+    </div>
+    <div class="markdown-body p-4 bg-dark rounded border border-secondary" id="matcher-content"></div>
+    <div id="raw-matcher" style="display: none;">{{ match_report|escapejs }}</div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const rawContent = document.getElementById('raw-matcher').textContent;
+        const targetDiv = document.getElementById('matcher-content');
+        if (typeof marked !== 'undefined') targetDiv.innerHTML = marked.parse(rawContent);
+        else targetDiv.innerText = rawContent;
+    });
+    function copyToClipboard() {
+        navigator.clipboard.writeText(document.getElementById('raw-matcher').textContent.trim()).then(() => alert('Copied!'));
+    }
+</script>
 {% endblock %}

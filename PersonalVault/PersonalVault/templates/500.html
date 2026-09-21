@@ -1,0 +1,15 @@
+{% extends 'public_base.html' %}
+{% block title %}500 - System Error{% endblock %}
+
+{% block content %}
+<div class="cinematic-container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh; text-align: center;">
+    <h1 style="font-size: 8rem; color: #ef4444; font-family: var(--font-mono); line-height: 1;">500</h1>
+    <h2 class="mb-4" style="font-size: 2rem; text-transform: uppercase;">System Malfunction</h2>
+    <p class="text-muted mb-5" style="max-width: 500px;">
+        An unexpected error occurred in the primary server core. The AI diagnostic protocols have been initiated.
+    </p>
+    <a href="{% url 'home' %}" class="btn-premium">
+        <i class="bi bi-arrow-clockwise"></i> REBOOT INTERFACE
+    </a>
+</div>
+{% endblock %}

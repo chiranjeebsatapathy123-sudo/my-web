@@ -1,38 +1,66 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block page_title %}Your Cover Letter{% endblock %}
+{% block title %}Cover Letter Result | Chiranjeeb Satapathy{% endblock %}
+
+{% block extra_css %}
+<style>
+    .markdown-body {
+        color: var(--text-primary);
+        line-height: 1.8;
+        font-family: var(--font-body);
+        white-space: pre-wrap;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="row mb-4 animate-fade-in">
-    <div class="col-12 d-flex justify-content-between align-items-center">
-        <h2 class="fw-bold mb-0">Generated Cover Letter <i class="bi bi-check-circle-fill text-success ms-2"></i></h2>
-        <div>
-            <button class="btn btn-premium-outline me-2" onclick="navigator.clipboard.writeText(document.getElementById('raw-text').textContent); alert('Copied to clipboard!');">
-                <i class="bi bi-copy me-2"></i> Copy Text
-            </button>
-            <a href="{% url 'cover_letter' %}" class="btn btn-premium">
-                <i class="bi bi-arrow-left me-2"></i> Back
-            </a>
-        </div>
-    </div>
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    {% include 'components/go_back.html' with fallback_url='/copilot/cover-letter/' label="Back to Generator" %}
+    <a href="{% url 'cover_letter' %}" class="btn btn-sm btn-premium-outline"><i class="bi bi-arrow-repeat me-1"></i> Generate Another</a>
 </div>
 
-<div class="row animate-fade-in" style="animation-delay: 0.1s;">
-    <div class="col-12">
-        <div class="glass-card">
-            <div id="cl-content" class="text-light markdown-content" style="font-size: 1.05rem; line-height: 1.7; white-space: pre-wrap;">
-                {{ cover_letter|escapejs }}
+<div class="glass-card">
+    <div class="d-flex align-items-center mb-4 pb-3 border-bottom border-secondary justify-content-between">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-pen fs-2 text-primary me-3"></i>
+            <div>
+                <h3 class="fw-bold mb-0">Generated Cover Letter</h3>
+                <p class="text-muted mb-0 small">Based on your portfolio data</p>
             </div>
-            <div id="raw-text" class="d-none">{{ cover_letter }}</div>
         </div>
+        <button class="btn btn-sm btn-premium-outline" onclick="copyToClipboard()">
+            <i class="bi bi-clipboard"></i> Copy
+        </button>
+    </div>
+
+    <div class="markdown-body p-4 bg-dark rounded border border-secondary" id="cl-content">
+        <!-- Render Markdown -->
+    </div>
+    
+    <div id="raw-cl" style="display: none;">
+        {{ cover_letter|escapejs }}
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const contentDiv = document.getElementById('cl-content');
-        const rawContent = contentDiv.innerHTML;
-        contentDiv.innerHTML = marked.parse(rawContent);
+    document.addEventListener('DOMContentLoaded', () => {
+        const rawContent = document.getElementById('raw-cl').textContent;
+        const targetDiv = document.getElementById('cl-content');
+        if (typeof marked !== 'undefined') {
+            targetDiv.innerHTML = marked.parse(rawContent);
+        } else {
+            targetDiv.innerText = rawContent;
+        }
     });
+
+    function copyToClipboard() {
+        const rawContent = document.getElementById('raw-cl').textContent.trim();
+        navigator.clipboard.writeText(rawContent).then(() => {
+            alert('Copied to clipboard!');
+        });
+    }
 </script>
 {% endblock %}

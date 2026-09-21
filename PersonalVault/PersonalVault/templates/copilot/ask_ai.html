@@ -1,0 +1,269 @@
+{% extends 'public_base.html' %}
+
+{% block title %}Ask AI | Chiranjeeb Satapathy{% endblock %}
+
+{% block extra_css %}
+<style>
+    .ai-chat-container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: var(--c-bg-elevated);
+        border: var(--border-subtle);
+        border-radius: 16px;
+        box-shadow: var(--shadow-cinematic);
+        display: flex;
+        flex-direction: column;
+        height: 70vh;
+        min-height: 500px;
+        overflow: hidden;
+    }
+
+    .ai-chat-header {
+        padding: 1.5rem 2rem;
+        border-bottom: var(--border-subtle);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .ai-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: var(--c-indigo);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 1.5rem;
+        box-shadow: var(--glow-primary);
+        animation: pulseCore 2s infinite alternate;
+    }
+
+    @keyframes pulseCore {
+        0% { box-shadow: 0 0 10px var(--c-indigo-glow); }
+        100% { box-shadow: 0 0 25px rgba(79, 70, 229, 0.6); }
+    }
+
+    .ai-chat-title {
+        font-family: var(--font-heading);
+        font-size: 1.25rem;
+        margin: 0;
+        color: var(--c-text-main);
+    }
+
+    .ai-chat-subtitle {
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        color: var(--c-cyan);
+    }
+
+    .ai-chat-body {
+        flex: 1;
+        padding: 2rem;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .chat-message {
+        max-width: 80%;
+        display: flex;
+        gap: 1rem;
+    }
+
+    .chat-message.user {
+        align-self: flex-end;
+        flex-direction: row-reverse;
+    }
+
+    .chat-bubble {
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    .chat-message.user .chat-bubble {
+        background: var(--c-indigo);
+        color: #fff;
+        border-bottom-right-radius: 0;
+    }
+
+    .chat-message.ai .chat-bubble {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--c-text-main);
+        border-bottom-left-radius: 0;
+    }
+
+    /* Markdown Styling inside AI bubble */
+    .chat-message.ai .chat-bubble p:last-child { margin-bottom: 0; }
+    .chat-message.ai .chat-bubble ul, .chat-message.ai .chat-bubble ol { margin-bottom: 0.5rem; }
+
+    .ai-chat-input-area {
+        padding: 1.5rem 2rem;
+        border-top: var(--border-subtle);
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        gap: 1rem;
+    }
+
+    .ai-input {
+        flex: 1;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        color: var(--c-text-main);
+        font-family: var(--font-body);
+        transition: all var(--t-fast);
+    }
+
+    .ai-input:focus {
+        outline: none;
+        border-color: var(--c-cyan);
+        box-shadow: 0 0 15px rgba(6, 182, 212, 0.1);
+    }
+
+    .ai-send-btn {
+        background: var(--c-cyan);
+        color: #000;
+        border: none;
+        border-radius: 8px;
+        padding: 0 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all var(--t-fast);
+    }
+
+    .ai-send-btn:hover {
+        background: #fff;
+        transform: translateY(-2px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="cinematic-container" style="padding-top: 120px;">
+    {% include 'components/go_back.html' with fallback_url='/#ai-lab' label="Back to AI Lab" %}
+    
+    <div class="section-header text-center mb-5">
+        <h2 class="section-title justify-content-center">Ask <span class="text-gradient-primary ms-2">Chiranjeeb AI</span></h2>
+        <p class="text-muted mx-auto" style="max-width: 600px;">
+            An intelligent assistant trained on my portfolio, resume, and project data. Ask anything about my experience.
+        </p>
+    </div>
+
+    <div class="ai-chat-container">
+        <div class="ai-chat-header">
+            <div class="ai-avatar"><i class="bi bi-robot"></i></div>
+            <div>
+                <h3 class="ai-chat-title">Chiranjeeb AI</h3>
+                <span class="ai-chat-subtitle">System Online • Ready</span>
+            </div>
+        </div>
+
+        <div class="ai-chat-body" id="chat-body">
+            <div class="chat-message ai">
+                <div class="chat-bubble">
+                    Hello! I am an AI assistant representing Chiranjeeb Satapathy. I have full context on his skills, projects, and career timeline. How can I help you today?
+                </div>
+            </div>
+        </div>
+
+        <div class="ai-chat-input-area">
+            <input type="text" id="chat-input" class="ai-input" placeholder="E.g., What are Chiranjeeb's core skills?" onkeypress="handleEnter(event)">
+            <button id="send-btn" class="ai-send-btn" onclick="sendMessage()">
+                <i class="bi bi-send-fill"></i>
+            </button>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Marked.js for parsing markdown in AI responses -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    const chatBody = document.getElementById('chat-body');
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    function handleEnter(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    function appendMessage(role, content) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-message ${role}`;
+        
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-bubble';
+        
+        if (role === 'ai') {
+            bubble.innerHTML = marked.parse(content);
+        } else {
+            bubble.textContent = content;
+        }
+        
+        msgDiv.appendChild(bubble);
+        chatBody.appendChild(msgDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    function sendMessage() {
+        const msg = chatInput.value.trim();
+        if (!msg) return;
+
+        appendMessage('user', msg);
+        chatInput.value = '';
+        
+        // Show typing indicator
+        const typingId = 'typing-' + Date.now();
+        const typingDiv = document.createElement('div');
+        typingDiv.id = typingId;
+        typingDiv.className = 'chat-message ai';
+        typingDiv.innerHTML = '<div class="chat-bubble"><div class="spinner-grow spinner-grow-sm text-info" role="status"></div></div>';
+        chatBody.appendChild(typingDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        
+        chatInput.disabled = true;
+        sendBtn.disabled = true;
+
+        fetch('{% url "chat" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // csrf_exempt is used on the view, so CSRF token isn't strictly required, 
+                // but good practice.
+            },
+            body: JSON.stringify({ message: msg })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById(typingId).remove();
+            chatInput.disabled = false;
+            sendBtn.disabled = false;
+            chatInput.focus();
+            
+            if (data.error) {
+                appendMessage('ai', 'Error: ' + data.error);
+            } else {
+                appendMessage('ai', data.response);
+            }
+        })
+        .catch(err => {
+            document.getElementById(typingId).remove();
+            chatInput.disabled = false;
+            sendBtn.disabled = false;
+            appendMessage('ai', 'Connection error. Please try again.');
+        });
+    }
+</script>
+{% endblock %}

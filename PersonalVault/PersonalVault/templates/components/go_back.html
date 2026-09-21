@@ -1,0 +1,9 @@
+<!-- templates/components/go_back.html -->
+<div class="go-back-wrapper {{ extra_classes }}">
+    <button type="button" class="btn-premium go-back-btn" 
+            onclick="navigateBack('{{ fallback_url|default:'/' }}')" 
+            aria-label="Go Back">
+        <i class="bi bi-arrow-left"></i> 
+        <span>{{ label|default:"GO BACK" }}</span>
+    </button>
+</div>

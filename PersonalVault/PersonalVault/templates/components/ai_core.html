@@ -1,0 +1,19 @@
+{% load static %}
+<!-- Include CSS once in the parent template -->
+<div class="ai-core-container" id="ai-core-visual">
+    <div class="ai-core idle" id="ai-core-orb">
+        <!-- Optional Inner Icon -->
+        <i class="bi bi-cpu" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255,255,255,0.8); font-size: 1.5rem;"></i>
+    </div>
+    <div class="core-ring ring-1"></div>
+    <div class="core-ring ring-2"></div>
+</div>
+
+<script>
+    function setAICoreState(state) {
+        const orb = document.getElementById('ai-core-orb');
+        if (orb) {
+            orb.className = 'ai-core ' + state; // 'idle', 'thinking', 'responding', 'error'
+        }
+    }
+</script>

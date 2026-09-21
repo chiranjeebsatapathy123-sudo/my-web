@@ -1,123 +1,243 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block page_title %}Mock Interview{% endblock %}
+{% block title %}Mock Interview | Chiranjeeb Satapathy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ai-core.css' %}">
+<style>
+    .chat-window {
+        height: 60vh;
+        min-height: 400px;
+        overflow-y: auto;
+        padding: 1.5rem;
+        background: rgba(0,0,0,0.2);
+        border-radius: 12px;
+        border: 1px solid var(--border-subtle);
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .msg-bubble {
+        max-width: 80%;
+        padding: 1rem 1.2rem;
+        border-radius: 16px;
+        line-height: 1.6;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .msg-ai {
+        align-self: flex-start;
+        background: rgba(79, 70, 229, 0.1);
+        border: 1px solid rgba(79, 70, 229, 0.3);
+        border-bottom-left-radius: 4px;
+    }
+
+    .msg-user {
+        align-self: flex-end;
+        background: rgba(6, 182, 212, 0.1);
+        border: 1px solid rgba(6, 182, 212, 0.3);
+        border-bottom-right-radius: 4px;
+        color: var(--c-cyan);
+    }
+
+    .input-group-premium {
+        display: flex;
+        gap: 0.5rem;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 30px;
+        padding: 0.5rem;
+    }
+    
+    .input-group-premium input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #fff;
+        padding-left: 1rem;
+    }
+    
+    .input-group-premium input:focus {
+        outline: none;
+    }
+    
+    .btn-circle {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-mic { background: rgba(255,255,255,0.05); color: #fff; }
+    .btn-mic:hover { background: rgba(255,255,255,0.1); }
+    .btn-mic.recording { background: var(--c-danger); color: #fff; animation: pulse 1s infinite alternate; }
+    
+    .btn-send { background: var(--c-cyan); color: #000; }
+    .btn-send:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center animate-fade-in h-100">
-    <div class="col-md-10 col-lg-8 d-flex flex-column" style="height: 75vh;">
-        <div class="text-center mb-3">
-            <h3 class="fw-bold text-white mb-1"><i class="bi bi-person-video3 text-danger me-2"></i> AI Mock Interviewer</h3>
-            <p class="text-secondary mb-0">Practice technical questions based on your projects.</p>
-        </div>
-        
-        <div class="glass-card flex-grow-1 d-flex flex-column overflow-hidden position-relative p-0" style="border: 1px solid var(--primary);">
-            <div id="interview-chat" class="p-4 overflow-auto flex-grow-1" style="background: rgba(15, 23, 42, 0.5);">
-                <div class="d-flex mb-4">
-                    <div class="bg-primary rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 45px; height: 45px; min-width: 45px;">
-                        <i class="bi bi-person-video3 text-white fs-4"></i>
+<div class="mb-4">
+    {% include 'components/go_back.html' with fallback_url='/ai-lab/' label="Back to AI Lab" %}
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="glass-card">
+            
+            <div class="d-flex align-items-center justify-content-between mb-4 pb-3 border-bottom border-secondary">
+                <div class="d-flex align-items-center">
+                    <div class="me-3" style="transform: scale(0.6); transform-origin: left center;">
+                        {% include 'components/ai_core.html' %}
                     </div>
-                    <div class="glass-card p-3 rounded-4" style="background: rgba(30, 41, 59, 0.8); border-top-left-radius: 0;">
-                        <p class="mb-0 text-white">Hello! I'm your AI technical interviewer. I've reviewed your projects. Are you ready to begin the mock interview?</p>
+                    <div>
+                        <h3 class="fw-bold mb-0">AI Mock Interview</h3>
+                        <p class="text-muted mb-0 small">Technical recruiter mode</p>
                     </div>
+                </div>
+                <button class="btn btn-sm btn-premium-outline text-danger" onclick="resetInterview()">
+                    <i class="bi bi-arrow-clockwise"></i> Restart
+                </button>
+            </div>
+
+            <div class="chat-window" id="chat-window">
+                <div class="msg-bubble msg-ai">
+                    <div class="fw-bold mb-1 text-primary"><i class="bi bi-robot"></i> Recruiter AI</div>
+                    <div>Hello. I have reviewed your portfolio. Are you ready to begin the technical interview?</div>
                 </div>
             </div>
             
-            <div class="p-3 border-top border-secondary" style="background: rgba(15, 23, 42, 0.8);">
-                <form id="interview-form" class="d-flex align-items-center">
-                    <input type="text" id="interview-input" class="form-control form-control-lg bg-dark text-white border-secondary rounded-pill me-3 px-4" placeholder="Type your response..." required>
-                    <button type="submit" class="btn btn-premium rounded-circle d-flex justify-content-center align-items-center" style="width: 50px; height: 50px; min-width: 50px;">
-                        <i class="bi bi-send-fill fs-5"></i>
+            <form id="chat-form" class="mt-3">
+                <div class="input-group-premium">
+                    <input type="text" id="chat-input" placeholder="Type your answer..." autocomplete="off">
+                    <button type="button" class="btn-circle btn-mic" id="btn-mic" title="Voice Input">
+                        <i class="bi bi-mic"></i>
                     </button>
-                </form>
-            </div>
-        </div>
-        <div class="text-center mt-3">
-            <button id="reset-interview" class="btn btn-sm btn-outline-danger">Restart Interview</button>
+                    <button type="submit" class="btn-circle btn-send" title="Send">
+                        <i class="bi bi-send"></i>
+                    </button>
+                </div>
+            </form>
+            
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('interview-form');
-        const input = document.getElementById('interview-input');
-        const chat = document.getElementById('interview-chat');
-        const resetBtn = document.getElementById('reset-interview');
+    const chatWindow = document.getElementById('chat-window');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const btnMic = document.getElementById('btn-mic');
+    
+    function appendMessage(role, content) {
+        const div = document.createElement('div');
+        div.className = `msg-bubble ${role === 'user' ? 'msg-user' : 'msg-ai'}`;
         
-        const globalCopilot = document.getElementById('ai-copilot-widget');
-        if(globalCopilot) globalCopilot.style.display = 'none';
-
-        function appendMessage(role, text) {
-            const div = document.createElement('div');
-            div.className = `d-flex mb-4 ${role === 'user' ? 'justify-content-end' : ''}`;
-            
-            const avatar = role === 'user' 
-                ? `<div class="bg-secondary rounded-circle d-flex justify-content-center align-items-center ms-3" style="width: 45px; height: 45px; min-width: 45px;"><i class="bi bi-person-fill text-white fs-4"></i></div>`
-                : `<div class="bg-primary rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 45px; height: 45px; min-width: 45px;"><i class="bi bi-person-video3 text-white fs-4"></i></div>`;
-                
-            const content = `<div class="glass-card p-3 rounded-4" style="background: ${role === 'user' ? 'var(--primary)' : 'rgba(30, 41, 59, 0.8)'}; ${role === 'user' ? 'border-top-right-radius: 0;' : 'border-top-left-radius: 0;'} max-width: 80%;">
-                <div class="mb-0 text-white markdown-content">${marked.parse(text)}</div>
-            </div>`;
-            
-            div.innerHTML = role === 'user' ? content + avatar : avatar + content;
-            chat.appendChild(div);
-            chat.scrollTop = chat.scrollHeight;
+        let header = '';
+        if (role === 'ai') {
+            header = `<div class="fw-bold mb-1 text-primary"><i class="bi bi-robot"></i> Recruiter AI</div>`;
+            div.innerHTML = header + marked.parse(content);
+        } else {
+            div.innerText = content;
         }
+        
+        chatWindow.appendChild(div);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+    
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = chatInput.value.trim();
+        if (!msg) return;
+        
+        appendMessage('user', msg);
+        chatInput.value = '';
+        setAICoreState('thinking');
+        
+        try {
+            const res = await fetch('/copilot/interview/api/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: msg })
+            });
+            const data = await res.json();
+            
+            if (data.error) {
+                appendMessage('ai', `**Error:** ${data.error}`);
+                setAICoreState('error');
+            } else {
+                appendMessage('ai', data.response);
+                setAICoreState('responding');
+                setTimeout(() => setAICoreState('idle'), 1500);
+            }
+        } catch (err) {
+            appendMessage('ai', '**Network Error:** Could not connect to AI service.');
+            setAICoreState('error');
+        }
+    });
+    
+    function resetInterview() {
+        if(confirm("Are you sure you want to restart the interview?")) {
+            fetch('/copilot/interview/api/', { method: 'GET' }).then(() => {
+                chatWindow.innerHTML = `
+                <div class="msg-bubble msg-ai">
+                    <div class="fw-bold mb-1 text-primary"><i class="bi bi-robot"></i> Recruiter AI</div>
+                    <div>Hello. I have reviewed your portfolio. Are you ready to begin the technical interview?</div>
+                </div>`;
+                setAICoreState('idle');
+            });
+        }
+    }
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const message = input.value.trim();
-            if(!message) return;
-            
-            appendMessage('user', message);
-            input.value = '';
-            
-            const loadingId = 'loading-' + Date.now();
-            const loadingDiv = document.createElement('div');
-            loadingDiv.id = loadingId;
-            loadingDiv.className = 'd-flex mb-4';
-            loadingDiv.innerHTML = `
-                <div class="bg-primary rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 45px; height: 45px; min-width: 45px;"><i class="bi bi-person-video3 text-white fs-4"></i></div>
-                <div class="glass-card p-3 rounded-4" style="background: rgba(30, 41, 59, 0.8); border-top-left-radius: 0;">
-                    <div class="spinner-grow spinner-grow-sm text-primary" role="status"></div>
-                    <div class="spinner-grow spinner-grow-sm text-primary mx-1" role="status"></div>
-                    <div class="spinner-grow spinner-grow-sm text-primary" role="status"></div>
-                </div>
-            `;
-            chat.appendChild(loadingDiv);
-            chat.scrollTop = chat.scrollHeight;
-            
-            try {
-                const response = await fetch("{% url 'interview_api' %}", {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: message })
-                });
-                const data = await response.json();
-                document.getElementById(loadingId).remove();
-                
-                if (data.error) {
-                    appendMessage('ai', "Error: " + data.error);
-                } else {
-                    appendMessage('ai', data.response);
-                }
-            } catch (error) {
-                document.getElementById(loadingId).remove();
-                appendMessage('ai', "Network error occurred.");
+    // Voice Integration
+    if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        
+        let isRecording = false;
+        
+        recognition.onstart = () => {
+            isRecording = true;
+            btnMic.classList.add('recording');
+        };
+        
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            chatInput.value = transcript;
+            chatForm.dispatchEvent(new Event('submit'));
+        };
+        
+        recognition.onend = () => {
+            isRecording = false;
+            btnMic.classList.remove('recording');
+        };
+        
+        btnMic.addEventListener('click', () => {
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                recognition.start();
             }
         });
-        
-        resetBtn.addEventListener('click', async () => {
-            chat.innerHTML = `<div class="d-flex mb-4">
-                <div class="bg-primary rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 45px; height: 45px; min-width: 45px;">
-                    <i class="bi bi-person-video3 text-white fs-4"></i>
-                </div>
-                <div class="glass-card p-3 rounded-4" style="background: rgba(30, 41, 59, 0.8); border-top-left-radius: 0;">
-                    <p class="mb-0 text-white">Hello! I'm your AI technical interviewer. I've reviewed your projects. Are you ready to begin the mock interview?</p>
-                </div>
-            </div>`;
-            await fetch("{% url 'interview_api' %}");
-        });
-    });
+    } else {
+        btnMic.style.display = 'none'; // Hide if unsupported
+    }
 </script>
 {% endblock %}

@@ -1,0 +1,245 @@
+{% extends 'public_base.html' %}
+{% load static %}
+
+{% block title %}Technical Universe | Developer Ecosystem{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        overflow: hidden;
+    }
+    
+    #universe-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1000;
+        background: radial-gradient(circle at center, #050510 0%, #000005 100%);
+    }
+
+    .cinematic-nav, footer {
+        display: none !important;
+    }
+
+    .universe-hud {
+        position: fixed;
+        z-index: 1010;
+        pointer-events: none;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 2rem;
+    }
+
+    .hud-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        pointer-events: auto;
+    }
+
+    .hud-exit-btn {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #fff;
+        padding: 0.8rem 1.5rem;
+        border-radius: 8px;
+        font-family: var(--font-mono);
+        font-size: 0.9rem;
+        backdrop-filter: blur(10px);
+        cursor: pointer;
+        transition: all var(--t-fast);
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .hud-exit-btn:hover {
+        background: rgba(255,255,255,0.1);
+        border-color: var(--c-cyan);
+        box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+    }
+
+    .hud-search {
+        background: rgba(0,0,0,0.6);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: #fff;
+        padding: 0.8rem 1.5rem;
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        outline: none;
+        width: 300px;
+    }
+
+    .hud-search:focus {
+        border-color: var(--c-cyan);
+        box-shadow: 0 0 15px rgba(6,182,212,0.3);
+    }
+
+    .hud-legend {
+        background: rgba(0,0,0,0.7);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 1rem;
+        border-radius: 12px;
+        backdrop-filter: blur(5px);
+        display: flex;
+        gap: 1rem;
+    }
+    .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #aaa; }
+    .legend-color { width: 12px; height: 12px; border-radius: 50%; }
+
+    .hud-panel {
+        position: absolute;
+        top: 50%;
+        right: 2rem;
+        transform: translateY(-50%);
+        width: 400px;
+        background: rgba(10, 10, 20, 0.85);
+        border: 1px solid rgba(6, 182, 212, 0.4);
+        backdrop-filter: blur(15px);
+        border-radius: 16px;
+        padding: 2rem;
+        pointer-events: auto;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .hud-panel.active {
+        opacity: 1;
+        visibility: visible;
+        right: 3rem;
+    }
+
+    .panel-type {
+        font-family: var(--font-mono);
+        color: var(--c-cyan);
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+    }
+
+    .panel-title {
+        color: #fff;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .panel-desc {
+        color: var(--c-text-muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+    
+    .ai-box {
+        background: rgba(79, 70, 229, 0.1);
+        border: 1px solid rgba(79, 70, 229, 0.4);
+        border-radius: 12px;
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+
+    /* Mobile Fallback */
+    #mobile-fallback {
+        display: none;
+        position: relative;
+        z-index: 2000;
+        min-height: 100vh;
+        background: var(--c-bg);
+        padding: 5rem 1rem;
+        pointer-events: auto;
+    }
+
+    @media (max-width: 768px) {
+        #universe-container, .universe-hud { display: none !important; }
+        #mobile-fallback { display: block; }
+        .cinematic-nav { display: block !important; }
+        body { overflow: auto; }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Loading Screen -->
+<div id="universe-loader" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #000; z-index: 3000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s;">
+    <div class="spinner-border text-info mb-3" role="status"></div>
+    <div style="color: var(--c-cyan); font-family: var(--font-mono); letter-spacing: 2px;">COMPILING GRAPH...</div>
+</div>
+
+<!-- 3D Canvas -->
+<div id="universe-container"></div>
+
+<!-- HUD -->
+<div class="universe-hud">
+    <div class="hud-top">
+        <button class="hud-exit-btn" onclick="window.history.back()" title="Go Back">
+            <i class="bi bi-arrow-left"></i> EXIT UNIVERSE
+        </button>
+        
+        <input type="text" id="universe-search" class="hud-search" placeholder="Search technologies, projects...">
+    </div>
+    
+    <div class="hud-bottom" style="pointer-events: auto;">
+        <div class="hud-legend">
+            <div class="legend-item"><div class="legend-color" style="background: #e11d48;"></div> Domain</div>
+            <div class="legend-item"><div class="legend-color" style="background: #06b6d4;"></div> Project</div>
+            <div class="legend-item"><div class="legend-color" style="background: #10b981;"></div> Technology</div>
+        </div>
+    </div>
+
+    <!-- Node Detail Panel -->
+    <div class="hud-panel" id="node-panel">
+        <button class="btn-close btn-close-white position-absolute top-0 end-0 m-3" onclick="closePanel()"></button>
+        <div class="panel-type" id="panel-type">TYPE</div>
+        <div class="panel-title" id="panel-title">Node Name</div>
+        <div class="panel-desc" id="panel-desc">Description or connections will appear here.</div>
+        
+        <a href="#" id="panel-link" class="btn btn-premium w-100 mb-3" style="display: none;">View Details</a>
+        
+        <div class="ai-box">
+            <div class="d-flex align-items-center mb-2">
+                <i class="bi bi-robot text-primary me-2"></i>
+                <span class="text-white fw-bold small">Ask AI</span>
+            </div>
+            <div id="ai-response" class="text-muted small mb-2" style="display: none;"></div>
+            <div class="input-group input-group-sm">
+                <input type="text" id="ai-input" class="form-control bg-dark text-white border-secondary" placeholder="What is this?">
+                <button class="btn btn-primary" onclick="askUniverseAI()"><i class="bi bi-send"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile 2D Fallback -->
+<div id="mobile-fallback">
+    <div class="container">
+        <h2 class="text-white text-center mb-4"><i class="bi bi-diagram-3 text-cyan me-2"></i>Technical Universe</h2>
+        <p class="text-muted text-center mb-5">The 3D interactive knowledge graph requires a desktop browser. Here is the accessible 2D view of the ecosystem.</p>
+        
+        <!-- Rendered via JS for fallback -->
+        <div id="fallback-content" class="text-white">Loading data...</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://unpkg.com/3d-force-graph"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+    const csrfToken = '{{ csrf_token }}';
+    const apiDataUrl = "{% url 'technical_universe_data' %}";
+    const aiAskUrl = "{% url 'universe_ask_api' %}";
+</script>
+<script src="{% static 'js/three/universe/technicalUniverse.js' %}"></script>
+{% endblock %}

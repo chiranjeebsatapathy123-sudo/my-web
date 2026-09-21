@@ -1,17 +1,48 @@
 {% extends "base.html" %}
+{% load static %}
+{% block title %}Technical Explainer | Chiranjeeb Satapathy{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/ai-core.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center animate-fade-in">
-    <div class="col-md-8 text-center">
-        <i class="bi bi-cpu-fill text-primary" style="font-size: 3rem;"></i>
-        <h3 class="text-white mt-2">Tech Stack Explainer</h3>
-        <p class="text-secondary">Get interview talking points for any project.</p>
-        <form method="post" class="mt-4 text-start">
-            {% csrf_token %}
-            <select name="project_id" class="form-select bg-dark text-white border-secondary mb-3" required>
-                {% for project in projects %}<option value="{{ project.id }}">{{ project.title }}</option>{% endfor %}
-            </select>
-            <button type="submit" class="btn btn-premium w-100" onclick="this.innerHTML='Analyzing...';"><i class="bi bi-magic me-2"></i>Explain Tech Stack</button>
-        </form>
+<div class="mb-4">
+    {% include 'components/go_back.html' with fallback_url='/ai-lab/' label="Back to AI Lab" %}
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="glass-card">
+            
+            <div class="text-center mb-4 pb-4 border-bottom border-secondary">
+                <div class="mb-4">
+                    {% include 'components/ai_core.html' %}
+                </div>
+                <h3 class="fw-bold text-white mb-2">Technical Explainer</h3>
+                <p class="text-secondary mb-0">Ask the AI to explain any complex technical concept.</p>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-danger d-flex align-items-center mb-4" role="alert" style="background: rgba(220, 53, 69, 0.1); border-color: rgba(220, 53, 69, 0.3); color: #ff6b6b;">
+                <i class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2"></i>
+                <div>{{ error }}</div>
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group-premium mb-4">
+                    <label class="form-label text-secondary fw-semibold mb-2">Topic or Concept</label>
+                    <input type="text" name="topic" class="form-control" placeholder="e.g. JWT Authentication, Retrieval Augmented Generation" required style="background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.1); color: var(--text-primary);">
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-premium px-5" onclick="setAICoreState('thinking')">
+                        <i class="bi bi-magic me-2"></i> Explain
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

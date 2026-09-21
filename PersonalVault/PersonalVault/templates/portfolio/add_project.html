@@ -3,6 +3,9 @@
 {% block title %}Add Project{% endblock %}
 
 {% block content %}
+<div class="mb-3">
+    {% include 'components/go_back.html' with fallback_url='/dashboard/' label="Back to Dashboard" %}
+</div>
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <div class="glass-card">

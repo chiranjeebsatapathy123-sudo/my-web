@@ -29,6 +29,7 @@ def dashboard(request):
         "projects": Project.objects.filter(user=request.user).count(),
         "contact_messages": Contact.objects.all().order_by('-sent_at'),
         "leetcode_stats": leetcode_stats,
+        "profile": profile,
     }
 
     return render(request, "dashboard/dashboard.html", context)

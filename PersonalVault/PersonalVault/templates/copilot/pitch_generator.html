@@ -1,12 +1,44 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Pitch Generator | Chiranjeeb Satapathy{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/ai-core.css' %}">{% endblock %}
 {% block content %}
-<div class="text-center animate-fade-in mt-5">
-    <i class="bi bi-megaphone-fill text-danger" style="font-size: 4rem;"></i>
-    <h3 class="text-white mt-3">Elevator Pitch Generator</h3>
-    <p class="text-secondary">Generate 30s, 60s, and 2m pitch scripts about yourself.</p>
-    <form method="post" class="mt-4">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-premium btn-lg" onclick="this.innerHTML='Drafting...';"><i class="bi bi-magic me-2"></i>Generate Pitches</button>
-    </form>
+<div class="mb-4">{% include 'components/go_back.html' with fallback_url='/ai-lab/' label="Back to AI Lab" %}</div>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="glass-card">
+            <div class="text-center mb-4 pb-4 border-bottom border-secondary">
+                <div class="mb-4">{% include 'components/ai_core.html' %}</div>
+                <h3 class="fw-bold text-white mb-2">Pitch Generator</h3>
+                <p class="text-secondary mb-0">Generate elevator pitches based on your verified projects.</p>
+            </div>
+            {% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group-premium mb-4">
+                    <label class="form-label text-secondary fw-semibold mb-2">Select Project</label>
+                    <select name="project_id" class="form-select" required style="background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.1); color: var(--text-primary);">
+                        <option value="">-- Choose a Project --</option>
+                        {% for project in projects %}<option value="{{ project.id }}">{{ project.title }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="form-group-premium mb-4">
+                    <label class="form-label text-secondary fw-semibold mb-2">Pitch Type</label>
+                    <select name="pitch_type" class="form-select" style="background: rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.1); color: var(--text-primary);">
+                        <option value="Elevator Pitch">Elevator Pitch (General)</option>
+                        <option value="Technical Pitch">Technical Pitch (For Engineers)</option>
+                        <option value="Recruiter Pitch">Recruiter Pitch (Value focused)</option>
+                    </select>
+                </div>
+                {% if not projects %}
+                <div class="text-center text-muted mb-4"><p>You need to add a project first.</p></div>
+                {% else %}
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-premium px-5" onclick="setAICoreState('thinking')"><i class="bi bi-megaphone me-2"></i> Generate</button>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

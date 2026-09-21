@@ -47,3 +47,24 @@ def delete_resume(request, pk):
         resume.delete()
         messages.success(request, 'Resume deleted successfully!')
     return redirect('resume_view')
+
+def interactive_resume(request):
+    profile = Profile.objects.first()
+    resume = Resume.objects.order_by('-uploaded_at').first()
+    
+    from portfolio.models import Project, Skill, Achievement
+    from certificates.models import Certificate
+    
+    projects = Project.objects.filter(user=profile.user) if profile else None
+    skills = Skill.objects.filter(user=profile.user) if profile else None
+    achievements = Achievement.objects.filter(user=profile.user).order_by('-date_achieved') if profile else None
+    certificates = Certificate.objects.filter(user=profile.user) if profile else None
+
+    return render(request, 'resume/interactive_resume.html', {
+        'profile': profile,
+        'resume_file': resume,
+        'projects': projects,
+        'skills': skills,
+        'achievements': achievements,
+        'certificates': certificates
+    })

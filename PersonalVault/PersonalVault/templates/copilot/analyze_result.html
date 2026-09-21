@@ -1,35 +1,75 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block page_title %}Analysis Result{% endblock %}
+{% block title %}Analysis Result | Chiranjeeb Satapathy{% endblock %}
+
+{% block extra_css %}
+<style>
+    .markdown-body {
+        color: var(--text-primary);
+        line-height: 1.8;
+    }
+    
+    .markdown-body h1, .markdown-body h2, .markdown-body h3 {
+        color: var(--text-primary);
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--border-subtle);
+        padding-bottom: 0.5rem;
+    }
+
+    .markdown-body ul {
+        list-style-type: disc;
+        padding-left: 2rem;
+    }
+
+    .markdown-body li {
+        margin-bottom: 0.5rem;
+        color: var(--text-muted);
+    }
+
+    .markdown-body strong {
+        color: var(--brand-primary);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="row mb-4 animate-fade-in">
-    <div class="col-12 d-flex justify-content-between align-items-center">
+<div class="mb-4 d-flex justify-content-between align-items-center">
+    {% include 'components/go_back.html' with fallback_url='/copilot/analyze/' label="Back to Analyzer" %}
+    <a href="{% url 'analyze_resume' %}" class="btn btn-sm btn-premium-outline"><i class="bi bi-arrow-repeat me-1"></i> Analyze Another</a>
+</div>
+
+<div class="glass-card">
+    <div class="d-flex align-items-center mb-4 pb-3 border-bottom border-secondary">
+        <i class="bi bi-robot fs-2 text-primary me-3"></i>
         <div>
-            <h2 class="fw-bold mb-0">AI Feedback <i class="bi bi-robot text-info ms-2"></i></h2>
-            <p class="text-secondary mb-0">Analysis for: <span class="text-white">{{ resume.title }}</span></p>
-        </div>
-        <a href="{% url 'analyze_resume' %}" class="btn btn-premium-outline">
-            <i class="bi bi-arrow-left me-2"></i> Analyze Another
-        </a>
-    </div>
-</div>
-
-<div class="row animate-fade-in" style="animation-delay: 0.1s;">
-    <div class="col-12">
-        <div class="glass-card">
-            <div id="analysis-content" class="text-light markdown-content" style="font-size: 1.05rem; line-height: 1.7;">
-                {{ analysis|escapejs }}
-            </div>
+            <h3 class="fw-bold mb-0">AI Resume Analysis</h3>
+            <p class="text-muted mb-0 small">Analysis for: {{ resume.title }}</p>
         </div>
     </div>
-</div>
 
+    <div class="markdown-body p-2" id="analysis-content">
+        <!-- Render Markdown via Marked.js -->
+    </div>
+    
+    <!-- Hidden Raw Output -->
+    <div id="raw-analysis" style="display: none;">
+        {{ analysis|escapejs }}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const contentDiv = document.getElementById('analysis-content');
-        const rawContent = contentDiv.innerHTML;
-        contentDiv.innerHTML = marked.parse(rawContent);
+    document.addEventListener('DOMContentLoaded', () => {
+        const rawContent = document.getElementById('raw-analysis').textContent;
+        const targetDiv = document.getElementById('analysis-content');
+        if (typeof marked !== 'undefined') {
+            targetDiv.innerHTML = marked.parse(rawContent);
+        } else {
+            targetDiv.innerText = rawContent;
+        }
     });
 </script>
 {% endblock %}

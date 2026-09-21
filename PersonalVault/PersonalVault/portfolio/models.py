@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -38,6 +39,8 @@ class Project(models.Model):
     github_link = models.URLField(blank=True)
 
     live_demo = models.URLField(blank=True)
+    
+    technologies = models.ManyToManyField('Skill', blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -63,6 +66,42 @@ class Snippet(models.Model):
     tags = models.CharField(max_length=200, blank=True, help_text="Comma separated tags")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+class Skill(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    category_choices = [
+        ('AI/ML', 'AI/ML'),
+        ('Programming', 'Programming'),
+        ('Web Development', 'Web Development'),
+        ('Databases', 'Databases'),
+        ('Tools', 'Tools'),
+        ('Cloud', 'Cloud'),
+        ('Other', 'Other')
+    ]
+    category = models.CharField(max_length=50, choices=category_choices, default='Programming')
+    proficiency = models.IntegerField(default=50, help_text="0 to 100")
+
+    def __str__(self):
+        return self.name
+
+class Achievement(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    date_achieved = models.DateField()
+    category_choices = [
+        ('Education', 'Education'),
+        ('Project', 'Project'),
+        ('Hackathon', 'Hackathon'),
+        ('Certification', 'Certification'),
+        ('Career', 'Career'),
+        ('Other', 'Other')
+    ]
+    category = models.CharField(max_length=50, choices=category_choices, default='Career')
 
     def __str__(self):
         return self.title
@@ -97,12 +136,65 @@ class Connection(models.Model):
     def __str__(self):
         return self.name
 
+class BlogCategory(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+class BlogTag(models.Model):
+    name = models.CharField(max_length=50)
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
 class BlogPost(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+    excerpt = models.TextField(blank=True)
     content = models.TextField(help_text="Markdown supported")
+    cover_image = models.ImageField(upload_to='blog/', blank=True, null=True)
+    
+    category = models.ForeignKey(BlogCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    tags = models.ManyToManyField(BlogTag, blank=True)
+    
+    reading_time = models.IntegerField(default=1, help_text="Reading time in minutes")
+    featured = models.BooleanField(default=False)
+    
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+            while BlogPost.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+            
+        # Calculate reading time automatically if not explicitly set
+        if self.content:
+            word_count = len(self.content.split())
+            calculated_time = max(1, round(word_count / 200)) # 200 wpm
+            self.reading_time = calculated_time
+            
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
