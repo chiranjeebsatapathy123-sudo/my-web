@@ -3,7 +3,10 @@
 {% block title %}Contact{% endblock %}
 
 {% block content %}
-<div class="container py-4">
+<div class="container py-4 position-relative">
+    <button class="btn btn-outline-secondary mb-4 go-back-btn" onclick="navigateBack('/')">
+        <i class="bi bi-arrow-left me-2"></i> Back to Portfolio
+    </button>
     <div class="row justify-content-center">
         <!-- Main Form Column -->
         <div class="col-lg-6 mb-4">
@@ -22,6 +25,8 @@
                                     <i class="bi bi-person me-1"></i> Full Name
                                 {% elif field.name == 'email' %}
                                     <i class="bi bi-envelope me-1"></i> Email Address
+                                {% elif field.name == 'inquiry_type' %}
+                                    <i class="bi bi-diagram-3 me-1"></i> Inquiry Type
                                 {% elif field.name == 'subject' %}
                                     <i class="bi bi-chat-left-text me-1"></i> Subject
                                 {% elif field.name == 'message' %}

@@ -1,0 +1,681 @@
+{% extends 'public_base.html' %}
+{% load static %}
+
+{% block title %}Recruiter Portal | Chiranjeeb Satapathy{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Global Section Setup */
+    .scroll-section {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 6rem 5% 2rem 5%;
+        position: relative;
+        z-index: 10;
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    /* AI Core Global Widget - Recruiter AI */
+    .ai-core-widget {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 60px;
+        height: 60px;
+        z-index: 1000;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(15, 17, 26, 0.8);
+        border: 2px solid var(--c-primary);
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+        transition: all var(--t-fast);
+        animation: corePulse 3s infinite alternate;
+    }
+    
+    .ai-core-widget:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 40px rgba(99, 102, 241, 0.8);
+        background: var(--c-bg-elevated);
+    }
+
+    .ai-core-label {
+        position: absolute;
+        right: 75px;
+        background: var(--c-bg-elevated);
+        border: 1px solid var(--c-primary);
+        color: var(--c-primary);
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity var(--t-fast);
+        white-space: nowrap;
+    }
+
+    .ai-core-widget:hover .ai-core-label {
+        opacity: 1;
+    }
+
+    @keyframes corePulse {
+        0% { box-shadow: 0 0 10px rgba(99, 102, 241, 0.4); }
+        100% { box-shadow: 0 0 30px rgba(99, 102, 241, 0.8); }
+    }
+
+    /* Quick Actions Panel */
+    .quick-actions {
+        position: fixed;
+        left: 2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        z-index: 900;
+    }
+    .qa-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--c-bg-glass);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        position: relative;
+        text-decoration: none;
+    }
+    .qa-btn:hover {
+        background: var(--c-primary);
+        color: white;
+        border-color: var(--c-primary);
+        box-shadow: var(--glow-primary);
+    }
+    .qa-btn span {
+        position: absolute;
+        left: 60px;
+        background: var(--c-bg-elevated);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-primary);
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.3s ease;
+    }
+    .qa-btn:hover span {
+        opacity: 1;
+        left: 70px;
+    }
+
+    /* Section 1: Hero */
+    #hero {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        opacity: 1;
+        transform: none;
+    }
+    .hero-text { flex: 1; max-width: 600px; }
+    .hero-title { font-size: 4.5rem; line-height: 1; margin: 0 0 1rem; text-transform: uppercase; }
+    .hero-subtitle { font-size: 1.5rem; color: var(--c-primary); font-family: var(--font-mono); margin-bottom: 2rem; }
+    
+    .profile-card {
+        background: var(--c-bg-glass);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: var(--shadow-cinematic);
+        text-align: center;
+        width: 350px;
+    }
+    .profile-card img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 1rem;
+        border: 3px solid var(--c-primary);
+    }
+
+    /* Case Study Grid */
+    .case-study-card {
+        background: var(--c-bg-elevated);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all var(--t-fast);
+    }
+    .case-study-card:hover {
+        border-color: var(--c-indigo);
+        transform: translateY(-5px);
+        box-shadow: var(--glow-primary);
+    }
+    .cs-header { font-family: var(--font-heading); color: var(--c-primary); margin-bottom: 1rem; }
+    .cs-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    @media (max-width: 992px) {
+        #hero { flex-direction: column; text-align: center; }
+        .quick-actions { display: none; }
+        .cs-grid { grid-template-columns: 1fr; }
+        #quick-view-snapshot { display: none !important; }
+    }
+    
+    /* Quick View Snapshot */
+    #quick-view-snapshot {
+        position: fixed;
+        top: 80px;
+        right: 2rem;
+        width: 280px;
+        background: var(--c-bg-glass);
+        border: 1px solid var(--c-primary);
+        border-radius: 12px;
+        padding: 1.5rem;
+        z-index: 900;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        backdrop-filter: blur(10px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Quick View Snapshot -->
+<div id="quick-view-snapshot">
+    <div class="d-flex align-items-center mb-3 border-bottom border-secondary pb-2">
+        <img src="{% if profile.profile_image %}{{ profile.profile_image.url }}{% else %}/media/profile/chiranjeeb_photo.jpg{% endif %}" alt="Profile" class="rounded-circle me-3" style="width: 50px; height: 50px; object-fit: cover;">
+        <div>
+            <h6 class="mb-0 text-white">{{ profile.user.get_full_name|default:"Chiranjeeb Satapathy" }}</h6>
+            <small class="text-primary">Software Engineer</small>
+        </div>
+    </div>
+    
+    <div class="mb-3">
+        <small class="text-uppercase text-muted fw-bold d-block mb-2" style="font-size: 0.7rem;">Top Skills</small>
+        <div class="d-flex flex-wrap gap-1">
+            {% for skill in skills|slice:":5" %}
+                <span class="badge bg-dark border border-secondary" style="font-size: 0.7rem;">{{ skill.name }}</span>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="d-grid gap-2">
+        <a href="{% url 'interactive_resume' %}" class="btn btn-sm btn-outline-info"><i class="bi bi-file-text"></i> Interactive Resume</a>
+        {% if resume_file and resume_file.file %}
+        <a href="{{ resume_file.file.url }}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-download"></i> PDF Resume</a>
+        {% endif %}
+        <a href="/contact/" class="btn btn-sm btn-primary"><i class="bi bi-envelope"></i> Contact</a>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="quick-actions">
+    <a href="#projects" class="qa-btn"><i class="bi bi-briefcase"></i><span>Explore Projects</span></a>
+    <a href="{% url 'technical_universe' %}" class="qa-btn"><i class="bi bi-share"></i><span>Technical Universe</span></a>
+    <a href="{% url 'interactive_resume' %}" class="qa-btn"><i class="bi bi-file-earmark-person"></i><span>Resume</span></a>
+    <a href="/contact/" class="qa-btn"><i class="bi bi-envelope"></i><span>Contact</span></a>
+    <a href="javascript:void(0);" onclick="navigateBack('/')" class="qa-btn text-danger go-back-btn mt-3"><i class="bi bi-box-arrow-left"></i><span>Exit Tour</span></a>
+</div>
+
+<!-- AI Core Widget for Recruiter -->
+<div class="ai-core-widget" id="recruiter-ai-btn" data-bs-toggle="modal" data-bs-target="#aiModal">
+    <div class="ai-core-label">ASK ABOUT CANDIDATE</div>
+    <i class="bi bi-robot fs-4"></i>
+</div>
+
+<!-- SECTION 1: HERO -->
+<section id="hero" class="scroll-section">
+    <div class="hero-text">
+        <h1 class="hero-title">BUILD.<br>ENGINEER.<br>INNOVATE.</h1>
+        <h2 class="hero-subtitle">PROFESSIONAL PORTFOLIO</h2>
+        <p class="text-muted" style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 2rem;">
+            Welcome. This portal is designed specifically for technical evaluators and recruiters to quickly access verified evidence of my engineering capabilities.
+        </p>
+        <div class="d-flex gap-3">
+            <a href="#projects" class="btn-premium primary">EXPLORE EVIDENCE</a>
+            <a href="{% url 'technical_universe' %}" class="btn-premium">TECHNICAL UNIVERSE</a>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="profile-card">
+            <img src="{% if profile.profile_image %}{{ profile.profile_image.url }}{% else %}/media/profile/chiranjeeb_photo.jpg{% endif %}" alt="Chiranjeeb Satapathy">
+            <h3 class="mb-1">{{ profile.user.get_full_name|default:"Chiranjeeb Satapathy" }}</h3>
+            <p class="text-primary mb-3">AI/ML & Full-Stack Engineer</p>
+            {% if profile.location %}<p class="text-muted small"><i class="bi bi-geo-alt"></i> {{ profile.location }}</p>{% endif %}
+            
+            <div class="d-grid gap-2 mt-4">
+                <a href="{% url 'interactive_resume' %}" class="btn btn-outline-light btn-sm">VIEW RESUME</a>
+                <a href="/contact/" class="btn btn-primary btn-sm">CONTACT</a>
+            </div>
+            
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                {% if profile.github %}<a href="{{ profile.github }}" target="_blank" class="text-muted"><i class="bi bi-github"></i></a>{% endif %}
+                {% if profile.linkedin %}<a href="{{ profile.linkedin }}" target="_blank" class="text-muted"><i class="bi bi-linkedin"></i></a>{% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2: PROFESSIONAL SUMMARY -->
+<section id="why" class="scroll-section">
+    <div class="section-header">
+        <h2 class="section-title">Professional <span class="text-gradient-primary ms-2">Summary</span></h2>
+    </div>
+    
+    <div class="row g-4 mt-4 justify-content-center">
+        <div class="col-lg-8">
+            <div class="p-5 bg-glass rounded-4 border border-secondary h-100 fs-5 text-muted" style="line-height: 1.8;">
+                {% if profile.bio %}
+                    {{ profile.bio|linebreaks }}
+                {% else %}
+                    A passionate engineer focused on building robust, scalable software and intelligent systems.
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 2.5: TECHNICAL SNAPSHOT -->
+<section id="technical-snapshot" class="scroll-section">
+    <div class="section-header">
+        <h2 class="section-title">Technical <span class="text-gradient-primary ms-2">Snapshot</span></h2>
+        <p class="text-muted">A categorized view of verified technical proficiencies.</p>
+    </div>
+    
+    <div class="row g-4 mt-2">
+        {% for cat_name, skill_list in categories.items %}
+        <div class="col-md-6 col-lg-4">
+            <div class="p-4 bg-glass rounded-4 border border-secondary h-100">
+                <h5 class="text-uppercase font-monospace text-primary mb-3"><i class="bi bi-hdd-network me-2"></i>{{ cat_name }}</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    {% for skill in skill_list %}
+                        <span class="badge bg-transparent border border-secondary text-light">{{ skill.name }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted">No technologies recorded.</div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- SECTION 3: PROJECT EVIDENCE -->
+<section id="projects" class="scroll-section">
+    <div class="section-header">
+        <h2 class="section-title">Verified <span class="text-gradient-primary ms-2">Evidence</span></h2>
+        <p class="text-muted">Detailed case studies of actual implementations.</p>
+    </div>
+    
+    {% for project in projects|slice:":3" %}
+    <div class="case-study-card">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center">
+                <h3 class="mb-0">{{ project.title }}</h3>
+                <div class="form-check form-switch ms-3" title="Select to compare">
+                    <input class="form-check-input compare-checkbox fs-4" type="checkbox" role="switch" data-id="{{ project.id }}">
+                </div>
+            </div>
+            <div>
+                {% if project.github_link %}<a href="{{ project.github_link }}" class="btn btn-sm btn-outline-secondary me-2"><i class="bi bi-github"></i> Code</a>{% endif %}
+                {% if project.live_demo %}<a href="{{ project.live_demo }}" class="btn btn-sm btn-primary"><i class="bi bi-box-arrow-up-right"></i> Live</a>{% endif %}
+                <a href="{% url 'project_detail' project.id %}" class="btn btn-sm btn-outline-info ms-2">Case Study</a>
+            </div>
+        </div>
+        
+        <div class="cs-grid">
+            <div>
+                <h5 class="cs-header"><i class="bi bi-exclamation-circle me-2"></i>PROBLEM</h5>
+                <p class="text-muted">{{ project.description|truncatewords:30 }}</p>
+                
+                <h5 class="cs-header mt-4"><i class="bi bi-check-circle me-2"></i>SOLUTION</h5>
+                <p class="text-muted">Engineered a robust solution using modern frameworks.</p>
+            </div>
+            <div>
+                <h5 class="cs-header"><i class="bi bi-stack me-2"></i>TECHNOLOGY</h5>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                    {% for tech in project.technologies.all %}
+                        <span class="badge bg-transparent border border-primary text-primary">{{ tech.name }}</span>
+                    {% endfor %}
+                </div>
+                
+                <h5 class="cs-header"><i class="bi bi-robot me-2"></i>AI IMPLEMENTATION</h5>
+                <p class="text-muted">Intelligent core features enhancing the underlying system capabilities.</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+    <div class="text-center mt-4">
+        <a href="{% url 'technical_universe' %}" class="btn-premium primary">EXPLORE TECHNICAL UNIVERSE</a>
+    </div>
+</section>
+
+<!-- SECTION 4: RESUME CENTER -->
+<section id="resume" class="scroll-section">
+    <div class="section-header text-center">
+        <h2 class="section-title justify-content-center">Professional <span class="text-gradient-primary ms-2">Record</span></h2>
+    </div>
+    
+    <div class="text-center p-5 rounded-4" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+        <i class="bi bi-file-earmark-person" style="font-size: 5rem; color: var(--c-cyan);"></i>
+        <h3 class="mt-4 mb-3">Complete Interactive Resume</h3>
+        <p class="text-muted mx-auto mb-4" style="max-width: 500px;">Review structured career history, education, certifications, and skills mapped directly to the Technical Universe.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'interactive_resume' %}" class="btn-premium primary">OPEN FULL RESUME</a>
+            {% if resume_file and resume_file.file %}
+            <a href="{{ resume_file.file.url }}" target="_blank" class="btn-premium"><i class="bi bi-download"></i> PDF</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- SECTION 4.5: CERTIFICATIONS -->
+<section id="certifications" class="scroll-section">
+    <div class="section-header">
+        <h2 class="section-title">Verified <span class="text-gradient-primary ms-2">Certifications</span></h2>
+    </div>
+    
+    <div class="row g-4 mt-2">
+        {% for cert in certificates %}
+        <div class="col-md-6">
+            <div class="p-4 bg-glass rounded-4 border border-secondary h-100 d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h4 class="mb-0 text-white">{{ cert.title }}</h4>
+                    {% if cert.credential_url %}
+                    <a href="{{ cert.credential_url }}" target="_blank" class="btn btn-sm btn-outline-info"><i class="bi bi-patch-check"></i> Verify</a>
+                    {% endif %}
+                </div>
+                <p class="text-primary mb-2">{{ cert.organization }}</p>
+                {% if cert.issue_date %}<p class="text-muted small mb-3"><i class="bi bi-calendar"></i> {{ cert.issue_date|date:"F Y" }}</p>{% endif %}
+                <p class="text-muted mb-0 mt-auto">{{ cert.description }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted">No certifications recorded.</div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- SECTION 4.6: ACHIEVEMENTS -->
+<section id="achievements" class="scroll-section">
+    <div class="section-header">
+        <h2 class="section-title">Milestones & <span class="text-gradient-primary ms-2">Achievements</span></h2>
+    </div>
+    
+    <div class="row g-4 mt-2">
+        {% for ach in achievements %}
+        <div class="col-md-6">
+            <div class="p-4 bg-glass rounded-4 border border-secondary h-100 d-flex gap-3">
+                <div class="fs-1 text-primary"><i class="bi bi-trophy"></i></div>
+                <div>
+                    <h5 class="text-white mb-1">{{ ach.title }}</h5>
+                    {% if ach.date_achieved %}<p class="text-muted small mb-2"><i class="bi bi-calendar"></i> {{ ach.date_achieved|date:"F Y" }}</p>{% endif %}
+                    <p class="text-muted mb-0">{{ ach.description }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center text-muted">No achievements recorded.</div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- SECTION 5: CONTACT -->
+<section id="contact" class="scroll-section" style="padding-bottom: 6rem;">
+    <div class="section-header text-center">
+        <h2 class="section-title justify-content-center">Initiate <span class="text-gradient-primary ms-2">Contact</span></h2>
+    </div>
+    <div class="text-center">
+        <a href="/contact/" class="btn-premium primary px-5 py-3 fs-5">OPEN COMMUNICATION TERMINAL <i class="bi bi-arrow-right ms-2"></i></a>
+    </div>
+</section>
+
+<!-- AI Recruiter Modal -->
+<div class="modal fade" id="aiModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content bg-glass border-primary" style="backdrop-filter: blur(20px);">
+      <div class="modal-header border-bottom border-secondary">
+        <h5 class="modal-title text-white"><i class="bi bi-robot text-primary me-2"></i> Portfolio Assistant</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div id="recruiter-ai-chat" class="mb-4" style="height: 300px; overflow-y: auto;">
+            <div class="p-3 bg-dark rounded-3 mb-3 border border-secondary" style="max-width: 80%;">
+                <p class="mb-0 text-white">Hello. I am the AI assistant for this portfolio. I can provide verified, factual information about Chiranjeeb's experience, projects, and technologies.</p>
+            </div>
+        </div>
+        <div class="d-flex gap-2 mb-3 flex-wrap">
+            <button class="btn btn-sm btn-outline-primary quick-prompt-btn">Show AI/ML projects</button>
+            <button class="btn btn-sm btn-outline-primary quick-prompt-btn">What are his core skills?</button>
+            <button class="btn btn-sm btn-outline-primary quick-prompt-btn">Explain the Technical Universe</button>
+            <button class="btn btn-sm btn-outline-primary quick-prompt-btn">Show certifications</button>
+        </div>
+        <form id="recruiter-ai-form" class="d-flex gap-2">
+            {% csrf_token %}
+            <input type="text" id="recruiter-ai-input" class="form-control" placeholder="Ask about this portfolio..." required>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-send"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Floating Compare Widget -->
+<div id="compare-widget" style="display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1050; background: var(--c-bg-elevated); border: 1px solid var(--c-primary); border-radius: 30px; padding: 0.8rem 1.5rem; box-shadow: 0 10px 25px rgba(0,0,0,0.5); align-items: center; gap: 1rem; backdrop-filter: blur(10px);">
+    <span class="text-white"><span id="compare-count">0</span> Selected (Max 3)</span>
+    <button id="btn-compare" class="btn btn-sm btn-primary rounded-pill px-4">Compare</button>
+    <button id="btn-clear-compare" class="btn btn-sm btn-outline-secondary rounded-pill px-3"><i class="bi bi-x-lg"></i></button>
+</div>
+
+<!-- Compare Modal -->
+<div class="modal fade" id="compareModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content bg-glass border-primary" style="backdrop-filter: blur(20px);">
+      <div class="modal-header border-bottom border-secondary">
+        <h5 class="modal-title text-white"><i class="bi bi-distribute-horizontal text-primary me-2"></i> Project Comparison</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="row g-4" id="compare-results">
+            <!-- Results injected via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener("DOMContentLoaded", (event) => {
+        gsap.registerPlugin(ScrollTrigger);
+        
+        const sections = document.querySelectorAll('.scroll-section');
+        sections.forEach((section, index) => {
+            if(index === 0) return; 
+            
+            gsap.to(section, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                },
+                opacity: 1,
+                y: 0,
+                duration: 1,
+                ease: "power3.out"
+            });
+        });
+
+        // Basic AI Chat Simulation
+        const chatForm = document.getElementById('recruiter-ai-form');
+        const chatInput = document.getElementById('recruiter-ai-input');
+        const chatBox = document.getElementById('recruiter-ai-chat');
+        const quickBtns = document.querySelectorAll('.quick-prompt-btn');
+
+        function addMessage(msg, isUser=true) {
+            const div = document.createElement('div');
+            div.className = `p-3 rounded-3 mb-3 border ${isUser ? 'bg-primary border-primary ms-auto' : 'bg-dark border-secondary'} text-white`;
+            div.style.maxWidth = '80%';
+            div.innerHTML = msg;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        quickBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                chatInput.value = btn.innerText;
+                chatForm.dispatchEvent(new Event('submit'));
+            });
+        });
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const val = chatInput.value;
+            if(!val) return;
+            addMessage(val, true);
+            chatInput.value = '';
+            
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'p-3 bg-dark rounded-3 mb-3 border border-secondary text-white';
+            typingIndicator.style.maxWidth = '80%';
+            typingIndicator.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Processing...';
+            chatBox.appendChild(typingIndicator);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            try {
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                const response = await fetch('/copilot/ask/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: new URLSearchParams({ 'message': val })
+                });
+                const data = await response.json();
+                chatBox.removeChild(typingIndicator);
+                
+                if (data.answer) {
+                    addMessage(data.answer, false);
+                } else if (data.error) {
+                    addMessage("Error: " + data.error, false);
+                }
+            } catch (err) {
+                chatBox.removeChild(typingIndicator);
+                addMessage("Network Error: Could not reach the neural core.", false);
+            }
+        });
+        });
+        
+        // --- Project Comparison Logic ---
+        const checkboxes = document.querySelectorAll('.compare-checkbox');
+        const widget = document.getElementById('compare-widget');
+        const countSpan = document.getElementById('compare-count');
+        const btnCompare = document.getElementById('btn-compare');
+        const btnClear = document.getElementById('btn-clear-compare');
+        
+        let selectedIds = new Set();
+        
+        function updateWidget() {
+            if (!widget) return;
+            countSpan.textContent = selectedIds.size;
+            if (selectedIds.size > 0) {
+                widget.style.display = 'flex';
+                widget.animate([
+                    { transform: 'translate(-50%, 20px)', opacity: 0 },
+                    { transform: 'translate(-50%, 0)', opacity: 1 }
+                ], { duration: 300, fill: 'forwards' });
+            } else {
+                widget.style.display = 'none';
+            }
+        }
+        
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    if (selectedIds.size >= 3) {
+                        e.target.checked = false;
+                        alert("You can compare up to 3 projects max.");
+                        return;
+                    }
+                    selectedIds.add(e.target.dataset.id);
+                } else {
+                    selectedIds.delete(e.target.dataset.id);
+                }
+                updateWidget();
+            });
+        });
+        
+        if (btnClear) {
+            btnClear.addEventListener('click', () => {
+                selectedIds.clear();
+                checkboxes.forEach(cb => cb.checked = false);
+                updateWidget();
+            });
+        }
+        
+        if (btnCompare) {
+            btnCompare.addEventListener('click', async () => {
+                if (selectedIds.size < 2) {
+                    alert("Please select at least 2 projects to compare.");
+                    return;
+                }
+                
+                const ids = Array.from(selectedIds).join(',');
+                
+                try {
+                    const res = await fetch(`/api/projects/compare/?ids=${ids}`);
+                    const data = await res.json();
+                    
+                    if (data.projects) {
+                        const resultsDiv = document.getElementById('compare-results');
+                        resultsDiv.innerHTML = '';
+                        
+                        data.projects.forEach(p => {
+                            const col = document.createElement('div');
+                            col.className = 'col-md-4';
+                            col.innerHTML = `
+                                <div class="p-4 bg-dark rounded-3 h-100 border border-secondary d-flex flex-column">
+                                    <h4 class="text-white mb-3">${p.title}</h4>
+                                    <div class="mb-4">
+                                        ${p.technologies.map(t => `<span class="badge bg-transparent border border-primary text-primary me-1 mb-1">${t}</span>`).join('')}
+                                    </div>
+                                    <p class="text-muted small mb-4">${p.description}</p>
+                                    <div class="mt-auto d-flex gap-2">
+                                        <a href="${p.url}" class="btn btn-sm btn-outline-info w-100">Details</a>
+                                    </div>
+                                </div>
+                            `;
+                            resultsDiv.appendChild(col);
+                        });
+                        
+                        const compareModal = new bootstrap.Modal(document.getElementById('compareModal'));
+                        compareModal.show();
+                    }
+                } catch (err) {
+                    console.error("Comparison Error", err);
+                    alert("Error fetching comparison data.");
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

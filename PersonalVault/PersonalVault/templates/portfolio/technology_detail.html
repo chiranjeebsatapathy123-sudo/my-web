@@ -1,0 +1,94 @@
+{% extends 'public_base.html' %}
+
+{% block title %}{{ skill.name }} | Technical Universe{% endblock %}
+
+{% block content %}
+<div class="cinematic-container position-relative" style="padding-top: 120px; max-width: 1000px;">
+    
+    <button class="btn btn-outline-secondary mb-4 go-back-btn position-absolute" style="top: 80px; left: 15px;" onclick="navigateBack('/technical-universe/')">
+        <i class="bi bi-arrow-left me-2"></i> Back to Universe
+    </button>
+
+    <div class="mt-4 mb-5">
+        <div class="d-flex align-items-center gap-3 mb-2">
+            <h1 class="mb-0" style="font-size: 3rem; text-transform: uppercase;">{{ skill.name }}</h1>
+            <span class="badge bg-success border border-success border-opacity-50 fs-6">Technology</span>
+        </div>
+        <p class="text-muted fs-5 mb-0">Domain: <a href="{% url 'domain_detail' skill.category %}" class="text-info text-decoration-none">{{ skill.category }}</a></p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-8">
+            <h3 class="mb-4 border-bottom border-secondary pb-2"><i class="bi bi-briefcase me-2"></i> Related Projects</h3>
+            {% for project in projects %}
+            <div class="card bg-dark border-secondary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title text-info">{{ project.title }}</h5>
+                    <p class="card-text text-muted">{{ project.description|truncatewords:30 }}</p>
+                    <a href="{% url 'project_detail' project.id %}" class="btn btn-sm btn-outline-info">View Project</a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-muted">No projects associated with this technology.</p>
+            {% endfor %}
+            
+            <h3 class="mt-5 mb-4 border-bottom border-secondary pb-2"><i class="bi bi-journal-text me-2"></i> Related Articles</h3>
+            {% for article in articles %}
+            <div class="card bg-dark border-secondary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <a href="{% url 'blog_detail' article.slug %}" class="btn btn-sm btn-outline-primary">Read Article</a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-muted">No articles associated with this technology.</p>
+            {% endfor %}
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark border-primary mb-4">
+                <div class="card-body">
+                    <h5 class="card-title text-primary"><i class="bi bi-robot me-2"></i> Ask AI</h5>
+                    <p class="small text-muted mb-3">Ask about how {{ skill.name }} is used in this portfolio.</p>
+                    <div class="input-group">
+                        <input type="text" id="ai-question" class="form-control bg-black text-white border-secondary" placeholder="Ask a question...">
+                        <button class="btn btn-primary" onclick="askTechAI()"><i class="bi bi-send"></i></button>
+                    </div>
+                    <div id="ai-response" class="mt-3 text-white small" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    async function askTechAI() {
+        const q = document.getElementById('ai-question').value;
+        if(!q) return;
+        
+        const resBox = document.getElementById('ai-response');
+        resBox.style.display = 'block';
+        resBox.innerHTML = '<div class="spinner-border spinner-border-sm text-primary"></div> Thinking...';
+        
+        try {
+            const res = await fetch("{% url 'universe_ask_api' %}", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    node_id: "skill_{{ skill.id }}",
+                    node_type: "skill",
+                    node_name: "{{ skill.name }}",
+                    question: q
+                })
+            });
+            const data = await res.json();
+            if(data.error) resBox.innerHTML = `<span class="text-danger">${data.error}</span>`;
+            else resBox.innerHTML = marked.parse(data.answer);
+        } catch(e) {
+            resBox.innerHTML = '<span class="text-danger">Failed to fetch answer.</span>';
+        }
+    }
+</script>
+{% endblock %}

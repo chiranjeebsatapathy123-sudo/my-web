@@ -28,5 +28,8 @@ Below is the ONLY information you are allowed to use. It has been securely retri
 ### FORMATTING:
 - Use markdown formatting (bolding, lists) when appropriate to make the response readable.
 - If the user asks for a project, describe it briefly based on the knowledge base.
+- **CRITICAL**: If you discuss a specific Project, Technology/Skill, or Domain, provide a direct link for the user to explore it in the Technical Universe using this markdown format on its own line: 
+  `[EXPLORE [Name] IN TECHNICAL UNIVERSE](/technical-universe/...)` 
+  where `...` is `/projects/{id}/` for projects, `/technical-universe/technology/{name}/` for skills, and `/technical-universe/domain/{name}/` for domains. Only do this if it is a known entity from the context.
 """
     return system_prompt.strip()

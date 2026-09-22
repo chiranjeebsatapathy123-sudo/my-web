@@ -19,9 +19,9 @@ def get_portfolio_context(intents):
         projects = Project.objects.filter(user=profile.user) if profile else []
         project_texts = []
         for p in projects:
-            p_text = f"Title: {p.title}\nDescription: {p.description}\nGitHub: {p.github_link}\nLive Demo: {p.live_demo}"
+            techs = ", ".join([t.name for t in p.technologies.all()])
+            p_text = f"Title: {p.title}\nDescription: {p.description}\nTechnologies: {techs}\nGitHub: {p.github_link}\nLive Demo: {p.live_demo}"
             project_texts.append(p_text)
-            # Send lightweight project cards for UI rendering
             actions.append({
                 "type": "project_card",
                 "id": p.id,
@@ -35,7 +35,15 @@ def get_portfolio_context(intents):
     if 'skills' in intents:
         skills = Skill.objects.filter(user=profile.user) if profile else []
         if skills:
-            context['Skills'] = ", ".join([f"{s.name} ({s.category})" for s in skills])
+            # Group by domain
+            from itertools import groupby
+            from operator import attrgetter
+            sorted_skills = sorted(skills, key=attrgetter('category'))
+            skill_text = []
+            for category, group in groupby(sorted_skills, key=attrgetter('category')):
+                skill_names = [s.name for s in group]
+                skill_text.append(f"Domain: {category} -> Technologies: {', '.join(skill_names)}")
+            context['Skills & Domains'] = "\n".join(skill_text)
 
     if 'certificates' in intents:
         certs = Certificate.objects.filter(user=profile.user) if profile else []
@@ -49,6 +57,15 @@ def get_portfolio_context(intents):
             })
         if cert_texts:
             context['Certificates'] = "\n\n".join(cert_texts)
+
+    # Added Blog Posts logic
+    from portfolio.models import BlogPost
+    blogs = BlogPost.objects.filter(user=profile.user, is_published=True) if profile else []
+    if blogs:
+        blog_texts = []
+        for b in blogs:
+            blog_texts.append(f"Title: {b.title}\nExcerpt: {b.excerpt}\nLink: /blog/{b.slug}/")
+        context['Blog Articles'] = "\n\n".join(blog_texts)
 
     if 'resume' in intents:
         resume_obj = Resume.objects.order_by('-uploaded_at').first()

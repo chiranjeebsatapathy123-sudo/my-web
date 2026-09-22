@@ -33,7 +33,40 @@ def home(request):
     certificates = Certificate.objects.filter(user=profile.user) if profile else Certificate.objects.none()
     resume_file = Resume.objects.order_by('-uploaded_at').first()
     
+    from portfolio.models import BlogPost
+    blogs_count = BlogPost.objects.filter(user=profile.user, is_published=True).count() if profile else 0
+    domains_count = len(categories)
+    
     return render(request, "portfolio/home.html", {
+        "profile": profile,
+        "projects": projects,
+        "skills": skills,
+        "categories": categories,
+        "achievements": achievements,
+        "certificates": certificates,
+        "resume_file": resume_file,
+        "blogs_count": blogs_count,
+        "domains_count": domains_count
+    })
+
+def recruiter_view(request):
+    profile = Profile.objects.first()
+    from resume.models import Resume
+    
+    projects = Project.objects.filter(user=profile.user).order_by('-created_at') if profile else Project.objects.none()
+    skills = Skill.objects.filter(user=profile.user) if profile else Skill.objects.none()
+    
+    categories = {}
+    for skill in skills:
+        if skill.category not in categories:
+            categories[skill.category] = []
+        categories[skill.category].append(skill)
+        
+    achievements = Achievement.objects.filter(user=profile.user).order_by('-date_achieved') if profile else Achievement.objects.none()
+    certificates = Certificate.objects.filter(user=profile.user) if profile else Certificate.objects.none()
+    resume_file = Resume.objects.order_by('-uploaded_at').first()
+    
+    return render(request, "portfolio/recruiter.html", {
         "profile": profile,
         "projects": projects,
         "skills": skills,
@@ -80,14 +113,53 @@ def profile(request):
 def project_list(request):
     profile = Profile.objects.first()
     projects = Project.objects.filter(user=profile.user).order_by('-created_at') if profile else Project.objects.none()
+    
+    tech_filter = request.GET.get('tech')
+    domain_filter = request.GET.get('domain')
+    
+    if tech_filter:
+        projects = projects.filter(technologies__name__iexact=tech_filter)
+    if domain_filter:
+        skills_in_domain = Skill.objects.filter(user=profile.user, category__iexact=domain_filter)
+        projects = projects.filter(technologies__in=skills_in_domain).distinct()
+        
     return render(request, 'portfolio/project_list.html', {
         'projects': projects,
-        'profile': profile
+        'profile': profile,
+        'tech_filter': tech_filter,
+        'domain_filter': domain_filter
     })
 
 def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
     return render(request, 'portfolio/project_detail.html', {'project': project})
+
+def api_compare_projects(request):
+    from django.http import JsonResponse
+    project_ids = request.GET.get('ids', '')
+    if not project_ids:
+        return JsonResponse({'error': 'No project IDs provided'}, status=400)
+        
+    id_list = [int(i) for i in project_ids.split(',') if i.isdigit()]
+    
+    # Restrict to maximum 3 projects for comparison
+    id_list = id_list[:3]
+    
+    projects = Project.objects.filter(id__in=id_list)
+    
+    data = []
+    for p in projects:
+        data.append({
+            'id': p.id,
+            'title': p.title,
+            'description': p.description[:200] + "..." if len(p.description) > 200 else p.description,
+            'technologies': [t.name for t in p.technologies.all()],
+            'has_github': bool(p.github_link),
+            'has_demo': bool(p.live_demo),
+            'url': f"/projects/{p.id}/"
+        })
+        
+    return JsonResponse({'projects': data})
 
 def project_universe(request):
     """
@@ -124,73 +196,158 @@ def technical_universe_view(request):
 def technical_universe_data(request):
     """
     Builds the graph data for the 3D Technical Universe.
-    Nodes: Projects, Skills, Domains
-    Links: Project -> Skill, Skill -> Domain
+    Nodes: Core, Domains, Skills, Projects, Certificates, Articles
     """
+    from django.http import JsonResponse
     profile = Profile.objects.first()
     user = profile.user if profile else request.user
     
     nodes = []
     links = []
     
-    # 1. Add Domains (Categories from Skills)
-    skills = Skill.objects.filter(user=user)
-    domain_names = set([s.category for s in skills])
+    # 0. Central Core
+    core_id = "core_dev"
+    nodes.append({
+        'id': core_id,
+        'name': 'TECHNICAL CORE',
+        'type': 'core',
+        'val': 40
+    })
     
-    domain_id_map = {}
-    for dom in domain_names:
-        node_id = f"domain_{dom}"
-        domain_id_map[dom] = node_id
-        nodes.append({
-            'id': node_id,
-            'name': dom,
-            'type': 'domain',
-            'val': 30 # visual size
-        })
+    # Pre-fetch data
+    skills = list(Skill.objects.filter(user=user))
+    projects = list(Project.objects.filter(user=user))
+    from certificates.models import Certificate
+    certificates = list(Certificate.objects.filter(user=user))
+    from portfolio.models import BlogPost
+    articles = list(BlogPost.objects.filter(user=user, is_published=True))
+    domain_names = set([s.category for s in skills])
+
+    # 1. Domains Cluster
+    if domain_names:
+        cluster_domains_id = "cluster_domains"
+        nodes.append({'id': cluster_domains_id, 'name': f'DOMAINS\n{len(domain_names)}+', 'type': 'domain', 'val': 35})
+        links.append({'source': cluster_domains_id, 'target': core_id})
         
-    # 2. Add Skills (Technologies)
-    skill_id_map = {}
-    for s in skills:
-        node_id = f"skill_{s.id}"
-        skill_id_map[s.id] = node_id
-        nodes.append({
-            'id': node_id,
-            'name': s.name,
-            'type': 'skill',
-            'val': 20,
-            'proficiency': s.proficiency
-        })
-        # Link Skill -> Domain
-        if s.category in domain_id_map:
-            links.append({
-                'source': node_id,
-                'target': domain_id_map[s.category]
+        domain_id_map = {}
+        for dom in domain_names:
+            node_id = f"domain_{dom}"
+            domain_id_map[dom] = node_id
+            nodes.append({'id': node_id, 'name': dom, 'type': 'domain', 'val': 30, 'url': f"/technical-universe/domain/{dom}/"})
+            links.append({'source': node_id, 'target': cluster_domains_id})
+    else:
+        domain_id_map = {}
+        
+    # 2. Skills / Technologies Cluster
+    if skills:
+        cluster_skills_id = "cluster_skills"
+        nodes.append({'id': cluster_skills_id, 'name': f'TECHNOLOGIES\n{len(skills)}+', 'type': 'skill', 'val': 35})
+        links.append({'source': cluster_skills_id, 'target': core_id})
+        
+        skill_id_map = {}
+        for s in skills:
+            node_id = f"skill_{s.id}"
+            skill_id_map[s.id] = node_id
+            nodes.append({
+                'id': node_id, 'name': s.name, 'type': 'skill', 'val': 20,
+                'description': f"Proficiency: {s.proficiency}%",
+                'url': f"/technical-universe/technology/{s.name}/"
             })
+            links.append({'source': node_id, 'target': cluster_skills_id})
             
-    # 3. Add Projects
-    projects = Project.objects.filter(user=user)
-    for p in projects:
-        node_id = f"project_{p.id}"
-        nodes.append({
-            'id': node_id,
-            'name': p.title,
-            'type': 'project',
-            'val': 25,
-            'description': p.description[:100] + "..." if len(p.description) > 100 else p.description,
-            'url': f"/projects/{p.id}/"
-        })
+            # Cross-link to Domain
+            if s.category in domain_id_map:
+                links.append({'source': node_id, 'target': domain_id_map[s.category]})
+    else:
+        skill_id_map = {}
+
+    # 3. Projects Cluster
+    if projects:
+        cluster_projects_id = "cluster_projects"
+        nodes.append({'id': cluster_projects_id, 'name': f'PROJECTS\n{len(projects)}+', 'type': 'project', 'val': 35})
+        links.append({'source': cluster_projects_id, 'target': core_id})
         
-        # Link Project -> Skills
-        for tech in p.technologies.all():
-            if tech.id in skill_id_map:
-                links.append({
-                    'source': node_id,
-                    'target': skill_id_map[tech.id]
-                })
+        for p in projects:
+            node_id = f"project_{p.id}"
+            nodes.append({
+                'id': node_id, 'name': p.title, 'type': 'project', 'val': 25,
+                'description': p.description[:150] + "..." if len(p.description) > 150 else p.description,
+                'url': f"/projects/{p.id}/"
+            })
+            links.append({'source': node_id, 'target': cluster_projects_id})
+            
+            # Cross-link to Skills
+            for tech in p.technologies.all():
+                if tech.id in skill_id_map:
+                    links.append({'source': node_id, 'target': skill_id_map[tech.id]})
+
+    # 4. Certificates Cluster
+    if certificates:
+        cluster_certs_id = "cluster_certificates"
+        nodes.append({'id': cluster_certs_id, 'name': f'CERTIFICATES\n{len(certificates)}+', 'type': 'certificate', 'val': 35})
+        links.append({'source': cluster_certs_id, 'target': core_id})
+        
+        for c in certificates:
+            node_id = f"cert_{c.id}"
+            nodes.append({
+                'id': node_id, 'name': c.title, 'type': 'certificate', 'val': 15,
+                'description': f"Issued by {c.organization}",
+                'url': f"/certificates/"
+            })
+            links.append({'source': node_id, 'target': cluster_certs_id})
+
+    # 5. Articles Cluster
+    if articles:
+        cluster_articles_id = "cluster_articles"
+        nodes.append({'id': cluster_articles_id, 'name': f'ARTICLES\n{len(articles)}+', 'type': 'article', 'val': 35})
+        links.append({'source': cluster_articles_id, 'target': core_id})
+        
+        for a in articles:
+            node_id = f"article_{a.id}"
+            nodes.append({
+                'id': node_id, 'name': a.title, 'type': 'article', 'val': 15,
+                'description': a.excerpt,
+                'url': f"/blog/{a.slug}/"
+            })
+            links.append({'source': node_id, 'target': cluster_articles_id})
+            
+            for tag in a.tags.all():
+                for s in skills:
+                    if tag.name.lower() in s.name.lower() or s.name.lower() in tag.name.lower():
+                        links.append({'source': node_id, 'target': skill_id_map[s.id]})
+                        break
 
     return JsonResponse({'nodes': nodes, 'links': links})
 def ai_lab_view(request):
     return render(request, 'portfolio/ai_lab.html')
+
+def technology_detail_view(request, slug):
+    profile = Profile.objects.first()
+    user = profile.user if profile else request.user
+    
+    skill = get_object_or_404(Skill, user=user, name__iexact=slug)
+    projects = Project.objects.filter(user=user, technologies=skill)
+    from portfolio.models import BlogPost
+    articles = BlogPost.objects.filter(user=user, tags__name__iexact=skill.name, is_published=True)
+    
+    return render(request, 'portfolio/technology_detail.html', {
+        'skill': skill,
+        'projects': projects,
+        'articles': articles
+    })
+
+def domain_detail_view(request, slug):
+    profile = Profile.objects.first()
+    user = profile.user if profile else request.user
+    
+    skills = Skill.objects.filter(user=user, category__iexact=slug)
+    projects = Project.objects.filter(user=user, technologies__in=skills).distinct()
+    
+    return render(request, 'portfolio/domain_detail.html', {
+        'domain_name': slug,
+        'skills': skills,
+        'projects': projects
+    })
 
 def skills_view(request):
     profile = Profile.objects.first()
@@ -362,7 +519,109 @@ def search_view(request):
         'documents': documents
     })
 
-@login_required
+def api_search(request):
+    """
+    Unified Data Layer & Search API for the Command Palette.
+    Returns JSON.
+    """
+    query = request.GET.get('q', '').strip().lower()
+    results = []
+    
+    if not query:
+        return JsonResponse({'results': results})
+        
+    profile = Profile.objects.first()
+    if not profile:
+        return JsonResponse({'results': []})
+        
+    user = profile.user
+    
+    # Search Projects
+    projects = Project.objects.filter(user=user, title__icontains=query) | \
+               Project.objects.filter(user=user, description__icontains=query)
+    for p in projects.distinct():
+        results.append({
+            'id': p.id,
+            'type': 'PROJECT',
+            'title': p.title,
+            'description': (p.description[:80] + '...') if len(p.description) > 80 else p.description,
+            'url': f"/projects/{p.id}/",
+            'icon': 'bi-briefcase'
+        })
+        
+    # Search Skills (Technologies)
+    skills = Skill.objects.filter(user=user, name__icontains=query) | \
+             Skill.objects.filter(user=user, category__icontains=query)
+    for s in skills.distinct():
+        results.append({
+            'id': s.id,
+            'type': 'TECHNOLOGY',
+            'title': s.name,
+            'description': f"Domain: {s.category}",
+            'url': f"/technical-universe/technology/{s.name}/",
+            'icon': 'bi-code-slash'
+        })
+        
+    # Search Domains
+    from django.db.models import Count
+    # distinct categories
+    categories = Skill.objects.filter(user=user, category__icontains=query).values_list('category', flat=True).distinct()
+    for c in categories:
+        results.append({
+            'id': f"dom_{c}",
+            'type': 'DOMAIN',
+            'title': c,
+            'description': "Technology Domain",
+            'url': f"/technical-universe/domain/{c}/",
+            'icon': 'bi-hdd-network'
+        })
+        
+    # Search Certificates
+    from certificates.models import Certificate
+    certs = Certificate.objects.filter(user=user, title__icontains=query) | \
+            Certificate.objects.filter(user=user, organization__icontains=query)
+    for c in certs.distinct():
+        results.append({
+            'id': c.id,
+            'type': 'CERTIFICATE',
+            'title': c.title,
+            'description': f"Issued by {c.organization}",
+            'url': "/certificates/",
+            'icon': 'bi-award'
+        })
+        
+    # Search Blog Posts
+    from portfolio.models import BlogPost
+    blogs = BlogPost.objects.filter(user=user, is_published=True, title__icontains=query) | \
+            BlogPost.objects.filter(user=user, is_published=True, excerpt__icontains=query)
+    for b in blogs.distinct():
+        results.append({
+            'id': b.id,
+            'type': 'BLOG',
+            'title': b.title,
+            'description': (b.excerpt[:80] + '...') if len(b.excerpt) > 80 else b.excerpt,
+            'url': f"/blog/{b.slug}/",
+            'icon': 'bi-journal-text'
+        })
+        
+    # Search Achievements
+    achievements = Achievement.objects.filter(user=user, title__icontains=query)
+    for a in achievements.distinct():
+        results.append({
+            'id': a.id,
+            'type': 'ACHIEVEMENT',
+            'title': a.title,
+            'description': (a.description[:80] + '...') if a.description and len(a.description) > 80 else (a.description or ''),
+            'url': "/achievements/",
+            'icon': 'bi-trophy'
+        })
+
+    # Sort results to have a predictable order or rank them (e.g., exact matches first)
+    # Basic sorting: Projects first, then Tech, etc. is naturally preserved by insertion order.
+    # We could limit to 20 results total for UI performance
+    
+    return JsonResponse({'results': results[:20]})
+
 def export_vault_data(request):
     profile = Profile.objects.filter(user=request.user).first()
     projects = list(Project.objects.filter(user=request.user).values('title', 'description', 'github_link', 'live_demo', 'created_at'))

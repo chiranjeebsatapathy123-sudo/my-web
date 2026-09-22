@@ -107,10 +107,62 @@
 </section>
 
 <section class="project-body">
-    <h2>Overview</h2>
-    <p>{{ project.description }}</p>
+    <div class="mb-5">
+        <h6 class="text-uppercase text-primary font-monospace mb-3"><i class="bi bi-book"></i> Case Study</h6>
+        <h2 class="mt-0">Overview</h2>
+        <div class="fs-5 text-muted" style="line-height: 1.8; white-space: pre-line;">
+            {{ project.description }}
+        </div>
+    </div>
     
-    <!-- We can display more detailed fields here if added to the model later -->
+    <!-- Conditional structured sections could go here if database model adds them later -->
+    <!-- For now, we rely on the user writing markdown or structured text in the description field -->
+    <div class="p-4 bg-dark rounded-3 border border-secondary mb-5">
+        <h4 class="text-white"><i class="bi bi-clipboard-data"></i> Project Metrics & Architecture</h4>
+        <p class="text-muted mb-0">Detailed architecture, problem statement, and performance metrics are consolidated within the primary project description or repository documentation.</p>
+    </div>
+    
+    <div class="row g-4 mt-5">
+        <div class="col-md-6">
+            <h3 class="border-bottom border-secondary pb-2 mb-3"><i class="bi bi-code-slash me-2"></i> Related Technologies</h3>
+            <div class="d-flex flex-wrap gap-2">
+                {% for tech in project.technologies.all %}
+                    <a href="{% url 'technology_detail' tech.name %}" class="btn btn-sm btn-outline-success">{{ tech.name }}</a>
+                {% empty %}
+                    <span class="text-muted">No technologies mapped.</span>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <h3 class="border-bottom border-secondary pb-2 mb-3"><i class="bi bi-diagram-3 me-2"></i> Explore</h3>
+            <p class="text-muted small mb-3">See how this project connects to the rest of the portfolio.</p>
+            <a href="{% url 'technical_universe' %}?focus=project_{{ project.id }}" class="btn btn-outline-info w-100 mb-2">
+                <i class="bi bi-globe me-2"></i> Open in Technical Universe
+            </a>
+            <button class="btn btn-outline-primary w-100" onclick="window.askProjectAI('{{ project.title|escapejs }}')">
+                <i class="bi bi-robot me-2"></i> Ask AI about this project
+            </button>
+        </div>
+    </div>
     
 </section>
+
+{% block extra_js %}
+<script>
+    window.askProjectAI = (projectName) => {
+        // Trigger the global AI assistant to open and pre-fill a query
+        const aiPanel = document.getElementById('ai-assistant-panel');
+        const aiInput = document.getElementById('ai-chat-input');
+        const aiSend = document.getElementById('ai-send-btn');
+        
+        if (aiPanel && aiInput) {
+            aiPanel.classList.add('active');
+            aiInput.value = `Tell me about the project ${projectName}.`;
+            // Trigger the send logic from ai-assistant.js, usually bound to the button
+            if (aiSend) aiSend.click();
+        }
+    };
+</script>
+{% endblock %}
 {% endblock %}

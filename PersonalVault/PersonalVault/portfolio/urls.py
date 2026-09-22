@@ -4,14 +4,19 @@ from . import views
 urlpatterns = [
 
     path('', views.home, name='home'),
+    
+    path('recruiter/', views.recruiter_view, name='recruiter_view'),
 
     path('profile/', views.profile, name='profile'),
 
     path('projects/', views.project_list, name='project_list'),
+    path('api/projects/compare/', views.api_compare_projects, name='api_compare_projects'),
     path('projects/universe/', views.project_universe, name='project_universe'),
     path('api/projects/universe-data/', views.project_universe_data, name='project_universe_data'),
     path('technical-universe/', views.technical_universe_view, name='technical_universe'),
     path('api/technical-universe-data/', views.technical_universe_data, name='technical_universe_data'),
+    path('technical-universe/technology/<str:slug>/', views.technology_detail_view, name='technology_detail'),
+    path('technical-universe/domain/<str:slug>/', views.domain_detail_view, name='domain_detail'),
     path('projects/<int:pk>/', views.project_detail, name='project_detail'),
     path('skills/', views.skills_view, name='skills'),
     path('achievements/', views.achievements_view, name='achievements'),
@@ -22,6 +27,7 @@ urlpatterns = [
     path('projects/<int:pk>/edit/', views.edit_project, name='edit_project'),
     path('projects/<int:pk>/delete/', views.delete_project, name='delete_project'),
     path('search/', views.search_view, name='search'),
+    path('api/search/', views.api_search, name='api_search'),
     path('export/', views.export_vault_data, name='export_vault_data'),
     
     path('secrets/', views.secrets_list, name='secrets'),

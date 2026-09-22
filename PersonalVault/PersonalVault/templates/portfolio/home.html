@@ -173,8 +173,8 @@
             {{ profile.bio|default:"Architecting intelligent, high-performance systems bridging artificial intelligence and modern web technologies." }}
         </p>
         <div class="d-flex gap-3">
-            <a href="#projects" class="btn-premium primary">EXPLORE PROJECTS</a>
-            <a href="#resume" class="btn-premium">VIEW RESUME</a>
+            <a href="{% url 'recruiter_view' %}" class="btn-premium primary" style="background: linear-gradient(135deg, var(--c-indigo), var(--c-primary));"><i class="bi bi-briefcase me-2"></i>FOR RECRUITERS</a>
+            <a href="#projects" class="btn-premium">EXPLORE PROJECTS</a>
         </div>
         <div class="d-flex gap-4 mt-4" style="font-size: 1.5rem;">
             {% if profile.github %}<a href="{{ profile.github }}" target="_blank" class="text-muted"><i class="bi bi-github"></i></a>{% endif %}
@@ -321,18 +321,26 @@
         <h2 class="section-title justify-content-center">Mission <span class="text-gradient-primary ms-2">Metrics</span></h2>
     </div>
     
-    <div class="stats-grid">
+    <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); gap: 3rem;">
         <div>
             <div class="stat-number stat-counter" data-target="{{ projects.count }}">0</div>
             <div class="text-muted font-monospace text-uppercase">Projects</div>
         </div>
         <div>
-            <div class="stat-number stat-counter" data-target="{{ certificates.count }}">0</div>
-            <div class="text-muted font-monospace text-uppercase">Certifications</div>
-        </div>
-        <div>
             <div class="stat-number stat-counter" data-target="{{ skills.count }}">0</div>
             <div class="text-muted font-monospace text-uppercase">Technologies</div>
+        </div>
+        <div>
+            <div class="stat-number stat-counter" data-target="{{ domains_count }}">0</div>
+            <div class="text-muted font-monospace text-uppercase">Domains</div>
+        </div>
+        <div>
+            <div class="stat-number stat-counter" data-target="{{ blogs_count }}">0</div>
+            <div class="text-muted font-monospace text-uppercase">Articles</div>
+        </div>
+        <div>
+            <div class="stat-number stat-counter" data-target="{{ certificates.count }}">0</div>
+            <div class="text-muted font-monospace text-uppercase">Certifications</div>
         </div>
         <div>
             <div class="stat-number stat-counter" data-target="{{ achievements.count }}">0</div>
