@@ -10,24 +10,39 @@ class CertificateForm(forms.ModelForm):
             'title',
             'organization',
             'issue_date',
-            'certificate_image'
+            'certificate_image',
+            'description',
+            'credential_url'
         ]
 
         widgets = {
             'title': forms.TextInput(attrs={
-                'class':'form-control'
+                'class': 'form-control',
+                'placeholder': 'e.g., Deep Learning Specialization / AWS Certified Cloud Practitioner'
             }),
 
             'organization': forms.TextInput(attrs={
-                'class':'form-control'
+                'class': 'form-control',
+                'placeholder': 'e.g., Coursera, DeepLearning.AI / Amazon Web Services'
             }),
 
             'issue_date': forms.DateInput(attrs={
-                'class':'form-control',
-                'type':'date'
+                'class': 'form-control',
+                'type': 'date'
             }),
 
             'certificate_image': forms.FileInput(attrs={
-                'class':'form-control'
+                'class': 'form-control'
+            }),
+
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Brief description of core competencies and verified skills...'
+            }),
+
+            'credential_url': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://coursera.org/verify/... or https://skillsboost.google/...'
             }),
         }

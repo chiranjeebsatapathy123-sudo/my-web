@@ -5,17 +5,14 @@
 
 {% block extra_css %}
 <style>
-    /* Global Section Setup */
+    /* Global Section Setup - Dense, High-Impact Flow */
     .scroll-section {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 6rem 5% 2rem 5%;
+        min-height: auto;
+        padding: 4.5rem 5% 3.5rem 5%;
         position: relative;
         z-index: 10;
         opacity: 0;
-        transform: translateY(50px);
+        transform: translateY(30px);
     }
 
     /* AI Core Global Widget - Recruiter AI */
@@ -241,7 +238,7 @@
 <!-- SECTION 1: HERO -->
 <section id="hero" class="scroll-section">
     <div class="hero-text">
-        <h1 class="hero-title">BUILD.<br>ENGINEER.<br>INNOVATE.</h1>
+        <h1 class="hero-title">BUILD.<br><span class="text-gradient-primary text-shimmer">ENGINEER.</span><br>INNOVATE.</h1>
         <h2 class="hero-subtitle">PROFESSIONAL PORTFOLIO</h2>
         <p class="text-muted" style="font-size: 1.2rem; line-height: 1.6; margin-bottom: 2rem;">
             Welcome. This portal is designed specifically for technical evaluators and recruiters to quickly access verified evidence of my engineering capabilities.
@@ -263,9 +260,9 @@
                 <a href="/contact/" class="btn btn-primary btn-sm">CONTACT</a>
             </div>
             
-            <div class="d-flex justify-content-center gap-3 mt-4">
-                {% if profile.github %}<a href="{{ profile.github }}" target="_blank" class="text-muted"><i class="bi bi-github"></i></a>{% endif %}
-                {% if profile.linkedin %}<a href="{{ profile.linkedin }}" target="_blank" class="text-muted"><i class="bi bi-linkedin"></i></a>{% endif %}
+            <div class="d-flex justify-content-center gap-3 mt-4" style="font-size: 1.3rem;">
+                {% if profile.github %}<a href="{{ profile.github }}" target="_blank" rel="noopener noreferrer" class="text-muted hover-glow" title="GitHub Profile"><i class="bi bi-github"></i></a>{% endif %}
+                {% if profile.linkedin %}<a href="{{ profile.linkedin }}" target="_blank" rel="noopener noreferrer" class="text-muted hover-glow" title="LinkedIn Profile"><i class="bi bi-linkedin"></i></a>{% endif %}
             </div>
         </div>
     </div>
@@ -332,9 +329,9 @@
                 </div>
             </div>
             <div>
-                {% if project.github_link %}<a href="{{ project.github_link }}" class="btn btn-sm btn-outline-secondary me-2"><i class="bi bi-github"></i> Code</a>{% endif %}
-                {% if project.live_demo %}<a href="{{ project.live_demo }}" class="btn btn-sm btn-primary"><i class="bi bi-box-arrow-up-right"></i> Live</a>{% endif %}
-                <a href="{% url 'project_detail' project.id %}" class="btn btn-sm btn-outline-info ms-2">Case Study</a>
+                {% if project.github_link %}<a href="{{ project.github_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-light me-2"><i class="bi bi-github"></i> Code</a>{% endif %}
+                {% if project.live_demo %}<a href="{{ project.live_demo }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-primary me-2"><i class="bi bi-box-arrow-up-right"></i> Live App</a>{% endif %}
+                <a href="{% url 'project_detail' project.id %}" class="btn btn-sm btn-outline-info">Case Study</a>
             </div>
         </div>
         
@@ -362,7 +359,75 @@
     {% endfor %}
     
     <div class="text-center mt-4">
-        <a href="{% url 'technical_universe' %}" class="btn-premium primary">EXPLORE TECHNICAL UNIVERSE</a>
+        <a href="{% url 'project_list' %}" class="btn-premium me-3">
+            <i class="bi bi-collection me-1"></i> VIEW ALL {{ projects.count }} PROJECTS
+        </a>
+        <a href="{% url 'technical_universe' %}" class="btn-premium primary">
+            <i class="bi bi-globe me-1"></i> EXPLORE TECHNICAL UNIVERSE
+        </a>
+    </div>
+
+    <!-- GitHub Verified Repositories Matrix -->
+    <div class="mt-5 p-4 rounded-4" style="background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.08);">
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary flex-wrap gap-2">
+            <div>
+                <h4 class="text-white fw-bold mb-0"><i class="bi bi-github text-cyan me-2"></i>Verified GitHub Production Repositories</h4>
+                <small class="text-muted">Direct evaluator links to source repositories and live deployments</small>
+            </div>
+            <a href="https://github.com/chiranjeebsatapathy123-sudo" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-premium-outline">
+                <i class="bi bi-box-arrow-up-right me-1"></i> GitHub Profile
+            </a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover mb-0" style="background: transparent;">
+                <thead>
+                    <tr class="text-muted small text-uppercase">
+                        <th>Repository</th>
+                        <th>Domain / Technology</th>
+                        <th>Source Code</th>
+                        <th>Live Deployment</th>
+                        <th>Case Study</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for proj in projects|slice:":8" %}
+                    <tr>
+                        <td class="fw-bold text-white align-middle">
+                            <i class="bi bi-folder2 text-primary me-2"></i>{{ proj.title|truncatechars:38 }}
+                        </td>
+                        <td class="align-middle">
+                            {% for t in proj.technologies.all|slice:":3" %}
+                                <span class="badge bg-transparent border border-secondary text-info small me-1">{{ t.name }}</span>
+                            {% endfor %}
+                        </td>
+                        <td class="align-middle">
+                            {% if proj.github_link %}
+                                <a href="{{ proj.github_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-light py-0 px-2" style="font-size: 0.75rem;">
+                                    <i class="bi bi-github me-1"></i> Repo
+                                </a>
+                            {% else %}
+                                <span class="text-muted small">Vault Internal</span>
+                            {% endif %}
+                        </td>
+                        <td class="align-middle">
+                            {% if proj.live_demo %}
+                                <a href="{{ proj.live_demo }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-info py-0 px-2" style="font-size: 0.75rem;">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i> Vercel App
+                                </a>
+                            {% else %}
+                                <span class="text-muted small">Local / Edge</span>
+                            {% endif %}
+                        </td>
+                        <td class="align-middle">
+                            <a href="{% url 'project_detail' proj.id %}" class="text-primary small text-decoration-none">
+                                Review <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>
 

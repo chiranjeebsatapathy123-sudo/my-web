@@ -118,9 +118,11 @@
         <div>
             <h1 class="mb-2" style="font-size: 3rem; text-transform: uppercase;">Chiranjeeb <span class="text-gradient-primary">Satapathy</span></h1>
             <p class="text-muted fs-5 mb-0">AI/ML Engineer & Full-Stack Developer</p>
-            <div class="d-flex gap-3 mt-3 text-muted" style="font-family: var(--font-mono); font-size: 0.9rem;">
+            <div class="d-flex flex-wrap gap-3 mt-3 text-muted" style="font-family: var(--font-mono); font-size: 0.9rem;">
                 {% if profile.location %}<span><i class="bi bi-geo-alt"></i> {{ profile.location }}</span>{% endif %}
-                {% if profile.website %}<span><i class="bi bi-globe"></i> {{ profile.website }}</span>{% endif %}
+                {% if profile.github %}<span><a href="{{ profile.github }}" target="_blank" rel="noopener noreferrer" class="text-muted text-decoration-none"><i class="bi bi-github"></i> GitHub</a></span>{% endif %}
+                {% if profile.linkedin %}<span><a href="{{ profile.linkedin }}" target="_blank" rel="noopener noreferrer" class="text-muted text-decoration-none"><i class="bi bi-linkedin"></i> LinkedIn</a></span>{% endif %}
+                {% if profile.website %}<span><a href="{{ profile.website }}" target="_blank" rel="noopener noreferrer" class="text-muted text-decoration-none"><i class="bi bi-globe"></i> Portfolio</a></span>{% endif %}
             </div>
         </div>
         <div class="d-flex gap-2">
@@ -128,7 +130,7 @@
                 <i class="bi bi-printer me-2"></i> PRINT
             </button>
             {% if resume_file and resume_file.file %}
-            <a href="{{ resume_file.file.url }}" target="_blank" class="btn-premium primary">
+            <a href="{{ resume_file.file.url }}" target="_blank" rel="noopener noreferrer" class="btn-premium primary">
                 <i class="bi bi-download me-2"></i> PDF
             </a>
             {% else %}

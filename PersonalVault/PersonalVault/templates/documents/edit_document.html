@@ -3,6 +3,9 @@
 {% block title %}Edit Document{% endblock %}
 
 {% block content %}
+<div class="mb-3">
+    {% include 'components/go_back.html' with fallback_url='/documents/' label="Back to Documents" %}
+</div>
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <div class="glass-card">
@@ -22,16 +25,32 @@
                             {% elif field.name == 'category' %}
                                 <i class="bi bi-list-task me-1"></i> Category / Type
                             {% elif field.name == 'file' %}
-                                <i class="bi bi-file-earmark me-1"></i> Upload File
+                                <i class="bi bi-file-earmark me-1"></i> Upload Replacement File
                             {% else %}
                                 {{ field.label }}
                             {% endif %}
                         </label>
                         {{ field }}
-                        {% if field.name == 'file' and document.file %}
-                            <div class="mt-2 text-secondary small">
-                                <span>Current File: </span>
-                                <a href="{{ document.file.url }}" target="_blank" class="text-primary text-decoration-none">{{ document.file.name }}</a>
+                        {% if field.name == 'file' %}
+                            {% if document.file %}
+                                <div class="mt-2 text-secondary small">
+                                    <span>Current File: </span>
+                                    <a href="{{ document.file.url }}" target="_blank" rel="noopener noreferrer" class="text-primary text-decoration-none">
+                                        <i class="bi bi-box-arrow-up-right me-1"></i>{{ document.file.name }}
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <div id="file-info-box" class="mt-3 p-3 rounded border border-secondary d-none" style="background: rgba(0,0,0,0.25);">
+                                <div class="d-flex align-items-center gap-3">
+                                    <i id="file-type-icon" class="bi bi-file-earmark-text text-primary fs-3"></i>
+                                    <div class="overflow-hidden">
+                                        <div id="file-name-display" class="fw-bold text-white text-truncate"></div>
+                                        <small id="file-size-display" class="text-secondary"></small>
+                                    </div>
+                                </div>
+                                <div id="doc-preview-img-box" class="mt-2 text-center d-none">
+                                    <img id="doc-preview-img" src="#" alt="Preview" class="img-fluid rounded border border-secondary mt-2" style="max-height: 180px;">
+                                </div>
                             </div>
                         {% endif %}
                         {% if field.help_text %}
@@ -55,4 +74,52 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.querySelector('input[name="file"]');
+    const infoBox = document.getElementById('file-info-box');
+    const nameDisplay = document.getElementById('file-name-display');
+    const sizeDisplay = document.getElementById('file-size-display');
+    const typeIcon = document.getElementById('file-type-icon');
+    const imgBox = document.getElementById('doc-preview-img-box');
+    const previewImg = document.getElementById('doc-preview-img');
+
+    if (fileInput && infoBox) {
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                nameDisplay.textContent = file.name;
+                const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                const sizeKB = (file.size / 1024).toFixed(1);
+                sizeDisplay.textContent = file.size > 1024 * 1024 ? `${sizeMB} MB` : `${sizeKB} KB`;
+
+                if (file.type.startsWith('image/')) {
+                    typeIcon.className = 'bi bi-file-earmark-image text-success fs-3';
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        previewImg.src = event.target.result;
+                        imgBox.classList.remove('d-none');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    imgBox.classList.add('d-none');
+                    if (file.type === 'application/pdf' || file.name.endsWith('.pdf')) {
+                        typeIcon.className = 'bi bi-file-earmark-pdf text-danger fs-3';
+                    } else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+                        typeIcon.className = 'bi bi-file-earmark-word text-primary fs-3';
+                    } else {
+                        typeIcon.className = 'bi bi-file-earmark text-secondary fs-3';
+                    }
+                }
+                infoBox.classList.remove('d-none');
+            } else {
+                infoBox.classList.add('d-none');
+            }
+        });
+    }
+});
+</script>
 {% endblock %}

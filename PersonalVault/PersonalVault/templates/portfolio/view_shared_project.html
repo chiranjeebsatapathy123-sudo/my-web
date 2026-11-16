@@ -1,0 +1,125 @@
+{% extends 'public_base.html' %}
+
+{% block title %}{{ project.title }} (Shared) | Chiranjeeb Satapathy{% endblock %}
+
+{% block extra_css %}
+<style>
+    .shared-hero {
+        position: relative;
+        padding-top: 130px;
+        padding-bottom: 3rem;
+        background: var(--c-bg-dark);
+        border-bottom: var(--border-subtle);
+    }
+
+    .shared-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.4);
+        color: #10b981;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-family: var(--font-mono);
+        font-size: 0.85rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .project-body {
+        max-width: 900px;
+        margin: 3rem auto;
+        padding: 0 1.5rem;
+    }
+
+    .project-image-box {
+        max-height: 480px;
+        overflow: hidden;
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin-bottom: 2.5rem;
+    }
+
+    .project-image-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="shared-hero">
+    <div class="cinematic-container text-center">
+        <div class="shared-badge">
+            <i class="bi bi-shield-check"></i> Encrypted Guest View &bull; Verified Portfolio Asset
+        </div>
+
+        <h1 class="display-4 fw-bold text-white mb-3" style="font-family: var(--font-heading);">{{ project.title }}</h1>
+        <p class="text-secondary mx-auto mb-4" style="max-width: 650px;">
+            This project has been shared securely with you for evaluation, code review, or recruiter inspection.
+        </p>
+
+        <div class="d-flex justify-content-center flex-wrap gap-3">
+            {% if project.github_link %}
+            <a href="{{ project.github_link }}" target="_blank" rel="noopener noreferrer" class="btn-premium">
+                <i class="bi bi-github me-1"></i> GITHUB REPOSITORY
+            </a>
+            {% else %}
+            <a href="https://github.com/chiranjeebsatapathy123-sudo" target="_blank" rel="noopener noreferrer" class="btn-premium">
+                <i class="bi bi-github me-1"></i> GITHUB PROFILE
+            </a>
+            {% endif %}
+
+            {% if project.live_demo %}
+            <a href="{{ project.live_demo }}" target="_blank" rel="noopener noreferrer" class="btn-premium primary">
+                <i class="bi bi-box-arrow-up-right me-1"></i> LAUNCH LIVE DEMO
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="project-body">
+    {% if project.image %}
+    <div class="project-image-box shadow-lg">
+        <img src="{{ project.image.url }}" alt="{{ project.title }}">
+    </div>
+    {% endif %}
+
+    <div class="glass-card p-4 p-md-5 mb-5">
+        <h4 class="text-white fw-bold mb-3 border-bottom border-secondary pb-2">
+            <i class="bi bi-file-earmark-text text-primary me-2"></i>Project Overview & Architecture
+        </h4>
+        <div class="text-light opacity-90 fs-5" style="line-height: 1.8; white-space: pre-line;">
+            {{ project.description }}
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-6">
+            <div class="glass-card h-100 p-4">
+                <h5 class="text-white fw-bold mb-3"><i class="bi bi-cpu text-info me-2"></i>Tech Stack</h5>
+                <div class="d-flex flex-wrap gap-2">
+                    {% for tech in project.technologies.all %}
+                        <span class="badge bg-dark border border-secondary text-info px-3 py-2">{{ tech.name }}</span>
+                    {% empty %}
+                        <span class="text-secondary small">General Full-Stack / Python</span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="glass-card h-100 p-4 d-flex flex-column justify-content-center text-center">
+                <h5 class="text-white fw-bold mb-2"><i class="bi bi-person-circle text-primary me-2"></i>Author</h5>
+                <p class="text-secondary small mb-3">Created and maintained by Chiranjeeb Satapathy.</p>
+                <a href="/" class="btn btn-premium-outline btn-sm mx-auto px-4">
+                    <i class="bi bi-globe me-1"></i> View Full Portfolio
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

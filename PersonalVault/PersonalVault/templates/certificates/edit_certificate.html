@@ -3,6 +3,10 @@
 {% block title %}Edit Certificate{% endblock %}
 
 {% block content %}
+<div class="mb-3">
+    {% include 'components/go_back.html' with fallback_url='/certificates/' label="Back to Certificates" %}
+</div>
+
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <div class="glass-card">
@@ -25,15 +29,27 @@
                                 <i class="bi bi-calendar3 me-1"></i> Issue Date
                             {% elif field.name == 'certificate_image' %}
                                 <i class="bi bi-image me-1"></i> Certificate Image / Copy
+                            {% elif field.name == 'description' %}
+                                <i class="bi bi-file-text me-1"></i> Description / Competencies
+                            {% elif field.name == 'credential_url' %}
+                                <i class="bi bi-link-45deg me-1"></i> Credential Verification URL
                             {% else %}
                                 {{ field.label }}
                             {% endif %}
                         </label>
                         {{ field }}
-                        {% if field.name == 'certificate_image' and certificate.certificate_image %}
-                            <div class="mt-2 text-secondary small">
-                                <span>Current Certificate: </span>
-                                <a href="{{ certificate.certificate_image.url }}" target="_blank" class="text-primary text-decoration-none">{{ certificate.certificate_image.name }}</a>
+                        {% if field.name == 'certificate_image' %}
+                            {% if certificate.certificate_image %}
+                                <div class="mt-2 text-secondary small">
+                                    <span>Current Certificate: </span>
+                                    <a href="{{ certificate.certificate_image.url }}" target="_blank" rel="noopener noreferrer" class="text-primary text-decoration-none">
+                                        <i class="bi bi-box-arrow-up-right me-1"></i>{{ certificate.certificate_image.name }}
+                                    </a>
+                                </div>
+                            {% endif %}
+                            <div id="cert-preview-box" class="mt-3 p-3 text-center rounded border border-secondary d-none" style="background: rgba(0,0,0,0.25);">
+                                <div class="text-secondary small mb-2"><i class="bi bi-eye me-1"></i>New Image Preview:</div>
+                                <img id="cert-preview-img" src="#" alt="Certificate Preview" class="img-fluid rounded shadow" style="max-height: 240px; object-fit: contain;">
                             </div>
                         {% endif %}
                         {% if field.help_text %}
@@ -57,4 +73,30 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const certInput = document.querySelector('input[name="certificate_image"]');
+    const previewBox = document.getElementById('cert-preview-box');
+    const previewImg = document.getElementById('cert-preview-img');
+    if (certInput && previewBox && previewImg) {
+        certInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImg.src = event.target.result;
+                    previewBox.classList.remove('d-none');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewBox.classList.add('d-none');
+                previewImg.src = '#';
+            }
+        });
+    }
+});
+</script>
 {% endblock %}

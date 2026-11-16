@@ -4,30 +4,34 @@
 
 {% block content %}
 <div class="container py-4">
-    <div class="border-bottom border-secondary pb-3 mb-5">
+    <div class="mb-3">
+        {% include 'components/go_back.html' with fallback_url='/projects/' label="Back to Projects" %}
+    </div>
+
+    <div class="border-bottom border-secondary pb-3 mb-4">
         <h2 class="fw-bold text-white mb-1"><i class="bi bi-github text-primary me-2"></i>Import from GitHub</h2>
-        <p class="text-secondary mb-0">Fetch public repositories from any GitHub account and import them directly to your project showcases.</p>
+        <p class="text-secondary mb-0">Fetch public repositories from GitHub and import them directly to your showcase vault.</p>
     </div>
 
     <!-- Search Form Card -->
-    <div class="glass-card mb-5">
+    <div class="glass-card mb-4">
         <form method="GET" action="" class="row align-items-end g-3">
             <div class="col-md-8">
                 <label for="username" class="form-label text-secondary fw-semibold mb-2">
-                    <i class="bi bi-person-circle me-1"></i> GitHub Username
+                    <i class="bi bi-person-circle me-1"></i> GitHub Username or Organization
                 </label>
-                <input type="text" id="username" name="username" class="form-control form-control-lg bg-dark text-white border-secondary" placeholder="Enter GitHub username (e.g. cs28-droid)" value="{{ username|default:'' }}" required>
+                <input type="text" id="username" name="username" class="form-control form-control-lg bg-dark text-white border-secondary" placeholder="Enter GitHub username (e.g. chiranjeebsatapathy123-sudo)" value="{{ username|default:'chiranjeebsatapathy123-sudo' }}" required>
             </div>
             <div class="col-md-4">
                 <button type="submit" class="btn btn-premium btn-lg w-100 py-2.5">
-                    <i class="bi bi-search me-2"></i> Fetch Repositories
+                    <i class="bi bi-cloud-download me-2"></i> Fetch Repositories
                 </button>
             </div>
         </form>
     </div>
 
     {% if error_message %}
-        <div class="alert alert-danger border-0 glass-card text-white mb-5 d-flex align-items-center" role="alert">
+        <div class="alert alert-danger border-0 glass-card text-white mb-4 d-flex align-items-center" role="alert">
             <i class="bi bi-exclamation-triangle-fill text-danger fs-4 me-3"></i>
             <div>{{ error_message }}</div>
         </div>
@@ -62,7 +66,7 @@
                                         <div class="form-check">
                                             {% if repo.exists %}
                                                 <input class="form-check-input" type="checkbox" disabled checked>
-                                                <span class="badge bg-success text-white ms-2" style="font-size: 0.75rem;">Already Imported</span>
+                                                <span class="badge bg-success text-white ms-2" style="font-size: 0.75rem;">Already In Vault</span>
                                             {% else %}
                                                 <input class="form-check-input repo-checkbox" type="checkbox" name="selected_repos" value="{{ repo.name }}" id="check_{{ repo.name }}">
                                             {% endif %}
@@ -70,13 +74,13 @@
                                                 {{ repo.name }}
                                             </label>
                                         </div>
-                                        <a href="{{ repo.html_url }}" target="_blank" class="text-secondary hover-primary fs-4">
+                                        <a href="{{ repo.html_url }}" target="_blank" rel="noopener noreferrer" class="text-secondary hover-primary fs-4" title="Open repository on GitHub">
                                             <i class="bi bi-box-arrow-up-right"></i>
                                         </a>
                                     </div>
                                     
                                     <p class="text-muted small flex-grow-1 mb-3">
-                                        {{ repo.description }}
+                                        {{ repo.description|default:"No description provided on GitHub." }}
                                     </p>
 
                                     <!-- Hidden metadata inputs that get submitted for selected repos -->
@@ -86,7 +90,7 @@
                                     <input type="hidden" name="demo_{{ repo.name }}" value="{{ repo.homepage }}">
 
                                     <div class="mt-auto pt-2 border-top border-secondary d-flex justify-content-between text-secondary small">
-                                        <span><i class="bi bi-link-45deg me-1"></i> {{ repo.html_url|truncatechars:35 }}</span>
+                                        <span><i class="bi bi-github me-1"></i> {{ repo.html_url|truncatechars:35 }}</span>
                                         {% if repo.homepage %}
                                             <span class="text-success"><i class="bi bi-play-circle me-1"></i> Demo Available</span>
                                         {% endif %}
@@ -101,7 +105,7 @@
                             <i class="bi bi-x-circle me-1"></i> Cancel
                         </a>
                         <button type="submit" class="btn btn-premium px-5" id="importBtn" disabled>
-                            <i class="bi bi-cloud-arrow-down me-1"></i> Import Selected
+                            <i class="bi bi-cloud-arrow-down me-1"></i> Import Selected Repositories
                         </button>
                     </div>
                 </form>
@@ -109,14 +113,15 @@
                 <div class="text-center py-5">
                     <i class="bi bi-folder-symlink text-muted display-3 mb-3"></i>
                     <h5 class="text-secondary">No public repositories found</h5>
-                    <p class="text-muted mb-0">This user does not have any public repositories on GitHub.</p>
+                    <p class="text-muted mb-0">This account does not have any public repositories available on GitHub.</p>
                 </div>
             {% endif %}
         </div>
     {% endif %}
 </div>
+{% endblock %}
 
-<!-- Simple JS to handle select-all and import button state -->
+{% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const selectAllCb = document.getElementById('selectAll');

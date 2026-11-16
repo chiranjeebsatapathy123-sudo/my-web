@@ -1,5 +1,4 @@
 from django.conf import settings
-from google import genai
 from portfolio.models import Project, Skill
 
 def ask_about_universe_node(node_id, node_type, node_name, question):
@@ -44,9 +43,11 @@ def ask_about_universe_node(node_id, node_type, node_name, question):
     full_prompt = f"{system_instruction}\n\nContext:\n{context}\n\nUser Question: {question}"
     
     try:
+        from google import genai
         client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash-lite')
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model=model_name,
             contents=full_prompt
         )
         return {"answer": response.text}

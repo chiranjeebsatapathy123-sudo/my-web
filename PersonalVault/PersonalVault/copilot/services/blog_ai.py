@@ -1,5 +1,4 @@
 from django.conf import settings
-from google import genai
 from portfolio.models import BlogPost
 
 def ask_about_article(article_id, question):
@@ -24,9 +23,11 @@ def ask_about_article(article_id, question):
     full_prompt = f"{system_instruction}\n\nArticle Title: {article.title}\n\nArticle Content:\n{article.content}\n\nUser Question: {question}"
     
     try:
+        from google import genai
         client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash-lite')
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model=model_name,
             contents=full_prompt
         )
         return {"answer": response.text}

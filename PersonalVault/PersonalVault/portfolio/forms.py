@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, Project, Snippet
+from .models import Profile, Project, Snippet, Skill
 
 class ProfileForm(forms.ModelForm):
 
@@ -43,8 +43,17 @@ class ProfileForm(forms.ModelForm):
             'website': forms.URLInput(attrs={
                 'class':'form-control'
             }),
+
+            'leetcode_username': forms.TextInput(attrs={
+                'class':'form-control',
+                'placeholder':'e.g. chiranjeeb_dev'
+            }),
+
+            'hackerrank_username': forms.TextInput(attrs={
+                'class':'form-control',
+                'placeholder':'e.g. chiranjeeb_satapathy'
+            }),
         }
-        from .models import Project
 
 class ProjectForm(forms.ModelForm):
     class Meta:
@@ -54,15 +63,57 @@ class ProjectForm(forms.ModelForm):
             'description',
             'image',
             'github_link',
-            'live_demo'
+            'live_demo',
+            'technologies',
         ]
 
         widgets = {
-            'title': forms.TextInput(attrs={'class':'form-control'}),
-            'description': forms.Textarea(attrs={'class':'form-control'}),
-            'github_link': forms.URLInput(attrs={'class':'form-control'}),
-            'live_demo': forms.URLInput(attrs={'class':'form-control'}),
+            'title': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'e.g., AI-Powered Personal Vault & Portfolio'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 5,
+                'placeholder': 'Describe your project, architecture, key features, and implementation...'
+            }),
+            'image': forms.FileInput(attrs={
+                'class': 'form-control'
+            }),
+            'github_link': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://github.com/username/repository'
+            }),
+            'live_demo': forms.URLInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'https://my-app.vercel.app'
+            }),
+            'technologies': forms.SelectMultiple(attrs={
+                'class': 'form-select bg-dark text-white border-secondary',
+                'size': 6
+            }),
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        self.user = user
+        super().__init__(*args, **kwargs)
+        if user:
+            self.fields['technologies'].queryset = Skill.objects.filter(user=user)
+        self.fields['github_link'].required = False
+        self.fields['live_demo'].required = False
+        self.fields['technologies'].required = False
+        self.fields['technologies'].help_text = 'Hold Ctrl (or Cmd on Mac) to select multiple technologies.'
+
+    def clean_github_link(self):
+        link = (self.cleaned_data.get('github_link') or '').strip()
+        if link and self.user:
+            existing = Project.objects.filter(user=self.user, github_link=link)
+            if self.instance and self.instance.pk:
+                existing = existing.exclude(pk=self.instance.pk)
+            if existing.exists():
+                raise forms.ValidationError(f"A project with repository URL '{link}' already exists in your vault. Use Edit to update it.")
+        return link
 
 class SnippetForm(forms.ModelForm):
     class Meta:

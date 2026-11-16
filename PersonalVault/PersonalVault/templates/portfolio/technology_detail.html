@@ -3,58 +3,94 @@
 {% block title %}{{ skill.name }} | Technical Universe{% endblock %}
 
 {% block content %}
-<div class="cinematic-container position-relative" style="padding-top: 120px; max-width: 1000px;">
+<div class="cinematic-container position-relative" style="padding-top: 120px; max-width: 1050px;">
     
-    <button class="btn btn-outline-secondary mb-4 go-back-btn position-absolute" style="top: 80px; left: 15px;" onclick="navigateBack('/technical-universe/')">
-        <i class="bi bi-arrow-left me-2"></i> Back to Universe
-    </button>
+    <div class="mb-4">
+        {% include 'components/go_back.html' with fallback_url='/technical-universe/' label="Back to Universe" %}
+    </div>
 
-    <div class="mt-4 mb-5">
-        <div class="d-flex align-items-center gap-3 mb-2">
-            <h1 class="mb-0" style="font-size: 3rem; text-transform: uppercase;">{{ skill.name }}</h1>
-            <span class="badge bg-success border border-success border-opacity-50 fs-6">Technology</span>
+    <div class="d-flex flex-wrap align-items-center justify-content-between border-bottom border-secondary pb-4 mb-5">
+        <div>
+            <div class="d-flex align-items-center gap-3 mb-2">
+                <h1 class="mb-0 text-white fw-bold" style="font-size: 2.8rem; text-transform: uppercase;">{{ skill.name }}</h1>
+                <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 fs-6 px-3 py-1">Technology</span>
+            </div>
+            <p class="text-secondary fs-5 mb-0">Domain: <a href="{% url 'domain_detail' skill.category %}" class="text-info text-decoration-none fw-semibold"><i class="bi bi-tag me-1"></i>{{ skill.category }}</a></p>
         </div>
-        <p class="text-muted fs-5 mb-0">Domain: <a href="{% url 'domain_detail' skill.category %}" class="text-info text-decoration-none">{{ skill.category }}</a></p>
+        <div class="mt-3 mt-md-0">
+            <span class="badge bg-dark border border-secondary text-secondary px-3 py-2 font-monospace">Proficiency: {{ skill.proficiency }}%</span>
+        </div>
     </div>
 
     <div class="row g-4">
-        <div class="col-md-8">
-            <h3 class="mb-4 border-bottom border-secondary pb-2"><i class="bi bi-briefcase me-2"></i> Related Projects</h3>
+        <div class="col-lg-8">
+            <h3 class="text-white fw-bold mb-4 pb-2 border-bottom border-secondary">
+                <i class="bi bi-briefcase text-info me-2"></i> Verified Projects Using {{ skill.name }}
+            </h3>
             {% for project in projects %}
-            <div class="card bg-dark border-secondary mb-3">
-                <div class="card-body">
-                    <h5 class="card-title text-info">{{ project.title }}</h5>
-                    <p class="card-text text-muted">{{ project.description|truncatewords:30 }}</p>
-                    <a href="{% url 'project_detail' project.id %}" class="btn btn-sm btn-outline-info">View Project</a>
+            <div class="glass-card mb-4 p-4">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="fw-bold text-white mb-0 fs-5">{{ project.title }}</h5>
+                    <span class="text-secondary small">{{ project.created_at|date:"Y" }}</span>
+                </div>
+                <p class="text-secondary small mb-3" style="line-height: 1.6;">{{ project.description|truncatewords:35 }}</p>
+                <div class="d-flex flex-wrap gap-2 align-items-center">
+                    <a href="{% url 'project_detail' project.id %}" class="btn btn-sm btn-premium">
+                        <i class="bi bi-eye me-1"></i> View Project
+                    </a>
+                    {% if project.github_link %}
+                    <a href="{{ project.github_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-premium-outline">
+                        <i class="bi bi-github me-1"></i> GitHub
+                    </a>
+                    {% endif %}
+                    {% if project.live_demo %}
+                    <a href="{{ project.live_demo }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-premium-outline text-success">
+                        <i class="bi bi-box-arrow-up-right me-1"></i> Demo
+                    </a>
+                    {% endif %}
                 </div>
             </div>
             {% empty %}
-            <p class="text-muted">No projects associated with this technology.</p>
+            <div class="glass-card text-center py-5 mb-4">
+                <i class="bi bi-code-slash text-muted display-4 mb-3 d-block"></i>
+                <h5 class="text-secondary">No public projects mapped directly to {{ skill.name }} yet</h5>
+                <p class="text-muted small">Explore other technical nodes or check repository history.</p>
+            </div>
             {% endfor %}
             
-            <h3 class="mt-5 mb-4 border-bottom border-secondary pb-2"><i class="bi bi-journal-text me-2"></i> Related Articles</h3>
+            <h3 class="text-white fw-bold mt-5 mb-4 pb-2 border-bottom border-secondary">
+                <i class="bi bi-journal-code text-primary me-2"></i> Related Dev Articles
+            </h3>
             {% for article in articles %}
-            <div class="card bg-dark border-secondary mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">{{ article.title }}</h5>
-                    <a href="{% url 'blog_detail' article.slug %}" class="btn btn-sm btn-outline-primary">Read Article</a>
+            <div class="glass-card mb-3 p-4 d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="fw-bold text-white mb-1 fs-6">{{ article.title }}</h5>
+                    <small class="text-secondary">{{ article.reading_time }} min read &bull; {{ article.created_at|date:"M d, Y" }}</small>
                 </div>
+                <a href="{% url 'blog_detail' article.slug %}" class="btn btn-sm btn-premium-outline">Read Article</a>
             </div>
             {% empty %}
-            <p class="text-muted">No articles associated with this technology.</p>
+            <div class="glass-card text-center py-4 mb-4">
+                <p class="text-secondary mb-0">No technical blog articles linked with this technology yet.</p>
+            </div>
             {% endfor %}
         </div>
-        <div class="col-md-4">
-            <div class="card bg-dark border-primary mb-4">
-                <div class="card-body">
-                    <h5 class="card-title text-primary"><i class="bi bi-robot me-2"></i> Ask AI</h5>
-                    <p class="small text-muted mb-3">Ask about how {{ skill.name }} is used in this portfolio.</p>
-                    <div class="input-group">
-                        <input type="text" id="ai-question" class="form-control bg-black text-white border-secondary" placeholder="Ask a question...">
-                        <button class="btn btn-primary" onclick="askTechAI()"><i class="bi bi-send"></i></button>
+
+        <div class="col-lg-4">
+            <div class="glass-card p-4 sticky-top" style="top: 100px;">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="rounded-circle bg-primary bg-opacity-25 p-2 me-2 d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                        <i class="bi bi-robot text-primary"></i>
                     </div>
-                    <div id="ai-response" class="mt-3 text-white small" style="display:none;"></div>
+                    <h5 class="text-white fw-bold mb-0">Ask Universe AI</h5>
                 </div>
+                <p class="small text-secondary mb-3">Ask how <strong>{{ skill.name }}</strong> is applied across architecture, performance, or projects in this vault.</p>
+                
+                <div class="input-group mb-2">
+                    <input type="text" id="ai-question" class="form-control bg-dark text-white border-secondary" placeholder="Ask a question..." onkeydown="if(event.key==='Enter') askTechAI();">
+                    <button class="btn btn-premium" onclick="askTechAI()"><i class="bi bi-send"></i></button>
+                </div>
+                <div id="ai-response" class="mt-3 p-3 rounded border border-secondary text-light small d-none" style="background: rgba(0,0,0,0.3); max-height: 320px; overflow-y: auto;"></div>
             </div>
         </div>
     </div>
@@ -65,12 +101,13 @@
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
     async function askTechAI() {
-        const q = document.getElementById('ai-question').value;
+        const qInput = document.getElementById('ai-question');
+        const q = qInput.value.trim();
         if(!q) return;
         
         const resBox = document.getElementById('ai-response');
-        resBox.style.display = 'block';
-        resBox.innerHTML = '<div class="spinner-border spinner-border-sm text-primary"></div> Thinking...';
+        resBox.classList.remove('d-none');
+        resBox.innerHTML = '<div class="d-flex align-items-center gap-2"><div class="spinner-border spinner-border-sm text-primary"></div> <span>Analyzing portfolio context...</span></div>';
         
         try {
             const res = await fetch("{% url 'universe_ask_api' %}", {
@@ -84,10 +121,13 @@
                 })
             });
             const data = await res.json();
-            if(data.error) resBox.innerHTML = `<span class="text-danger">${data.error}</span>`;
-            else resBox.innerHTML = marked.parse(data.answer);
+            if(data.error) {
+                resBox.innerHTML = `<span class="text-danger"><i class="bi bi-exclamation-circle me-1"></i>${data.error}</span>`;
+            } else {
+                resBox.innerHTML = marked.parse(data.answer);
+            }
         } catch(e) {
-            resBox.innerHTML = '<span class="text-danger">Failed to fetch answer.</span>';
+            resBox.innerHTML = '<span class="text-danger"><i class="bi bi-exclamation-triangle me-1"></i>Failed to fetch AI response. Please try again.</span>';
         }
     }
 </script>

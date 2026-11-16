@@ -68,8 +68,17 @@ def edit_certificate(request, pk):
     certificate = get_object_or_404(Certificate, pk=pk, user=request.user)
 
     if request.method == 'POST':
+        old_image = certificate.certificate_image
         form = CertificateForm(request.POST, request.FILES, instance=certificate)
         if form.is_valid():
+            new_image = request.FILES.get('certificate_image')
+            if new_image and old_image:
+                try:
+                    import os
+                    if os.path.isfile(old_image.path) and 'WhatsApp' not in old_image.path:
+                        os.remove(old_image.path)
+                except Exception:
+                    pass
             form.save()
             messages.success(request, 'Certificate updated successfully!')
             return redirect('certificate_list')

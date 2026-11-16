@@ -1,5 +1,4 @@
 from django.conf import settings
-from google import genai
 from .intent import detect_intent
 from .retrieval import get_portfolio_context
 from .prompts import get_system_prompt
@@ -29,6 +28,7 @@ def process_chat_message(user_message, history=None):
         system_prompt = get_system_prompt(context_dict)
         
         # 4. Initialize Gemini
+        from google import genai
         client = genai.Client(api_key=settings.GEMINI_API_KEY)
         
         # 5. Build Content Array for Gemini
@@ -39,8 +39,9 @@ def process_chat_message(user_message, history=None):
         full_prompt = f"{system_prompt}\n\nUser Question: {user_message}\n\nAssistant Response:"
         
         # 6. Generate Response
+        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash-lite')
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model=model_name,
             contents=full_prompt,
         )
         

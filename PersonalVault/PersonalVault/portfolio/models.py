@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 
-from django.db import models
-from django.contrib.auth.models import User
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
@@ -66,6 +63,12 @@ class Snippet(models.Model):
     tags = models.CharField(max_length=200, blank=True, help_text="Comma separated tags")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def tag_list(self):
+        if not self.tags:
+            return []
+        return [t.strip() for t in self.tags.split(',') if t.strip()]
 
     def __str__(self):
         return self.title

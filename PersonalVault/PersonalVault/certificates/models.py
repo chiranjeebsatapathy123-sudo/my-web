@@ -14,5 +14,9 @@ class Certificate(models.Model):
 
     certificate_image = models.ImageField(upload_to='certificates/')
 
+    description = models.TextField(blank=True, default='')
+
+    credential_url = models.URLField(blank=True, default='')
+
     def __str__(self):
         return self.title

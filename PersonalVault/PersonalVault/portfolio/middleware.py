@@ -27,7 +27,10 @@ class TwoFactorMiddleware:
             # Check if 2FA is enabled
             tfa = TwoFactorAuth.objects.filter(user=request.user).first()
             if tfa and tfa.is_enabled and not request.session.get('2fa_verified', False):
-                current_url_name = resolve(request.path_info).url_name
+                try:
+                    current_url_name = resolve(request.path_info).url_name
+                except Exception:
+                    current_url_name = None
                 # Exclude static/media/admin and the 2fa verification/logout urls itself
                 allowed_urls = ['verify_2fa', 'logout', 'setup_2fa']
                 if current_url_name not in allowed_urls and not request.path.startswith('/admin/'):

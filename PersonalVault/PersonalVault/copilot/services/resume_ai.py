@@ -1,6 +1,5 @@
 import os
 from django.conf import settings
-from google import genai
 from resume.models import Resume
 
 def analyze_resume(user, resume_id):
@@ -17,6 +16,7 @@ def analyze_resume(user, resume_id):
         return "Error: Resume file is missing from the server."
         
     try:
+        from google import genai
         client = genai.Client(api_key=settings.GEMINI_API_KEY)
         
         # We assume the file is a PDF or supported format by Gemini
@@ -32,8 +32,9 @@ def analyze_resume(user, resume_id):
             "3. Structure the output clearly in Markdown with headings for: Strengths, Weaknesses, Missing Skills, Job Relevance, and Improvement Suggestions.\n"
         )
         
+        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash-lite')
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model=model_name,
             contents=[uploaded_file, system_instruction]
         )
         return response.text
@@ -55,6 +56,7 @@ def match_job(user, resume_id, job_description):
         return "Error: Resume file is missing from the server."
         
     try:
+        from google import genai
         client = genai.Client(api_key=settings.GEMINI_API_KEY)
         uploaded_file = client.files.upload(file=file_path)
         
@@ -71,8 +73,9 @@ def match_job(user, resume_id, job_description):
         
         full_prompt = f"{system_instruction}\n\nTarget Job Description:\n{job_description}"
         
+        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash-lite')
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model=model_name,
             contents=[uploaded_file, full_prompt]
         )
         return response.text

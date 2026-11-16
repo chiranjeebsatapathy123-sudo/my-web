@@ -9,14 +9,15 @@ class DocumentForm(forms.ModelForm):
 
         widgets = {
             'title': forms.TextInput(attrs={
-                'class':'form-control'
+                'class': 'form-control',
+                'placeholder': 'e.g., Semester 4 Marksheet / Passport Scan / Project Specification'
             }),
 
             'category': forms.Select(attrs={
-                'class':'form-select'
+                'class': 'form-select bg-dark text-white border-secondary'
             }),
 
             'file': forms.FileInput(attrs={
-                'class':'form-control'
+                'class': 'form-control'
             })
         }

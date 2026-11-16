@@ -1,14 +1,124 @@
 {% extends "base.html" %}
+
+{% block title %}Security Audit Log{% endblock %}
+
 {% block content %}
-<div class="glass-card">
-    <h3 class="text-white mb-4"><i class="bi bi-shield-lock text-success me-2"></i>Security Audit Log</h3>
-    <table class="table table-dark table-striped">
-        <thead><tr><th>Time</th><th>Action</th><th>IP Address</th></tr></thead>
-        <tbody>
-            {% for log in logs %}
-            <tr><td>{{ log.timestamp }}</td><td>{{ log.action }}</td><td>{{ log.ip_address }}</td></tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="mb-3">
+    {% include 'components/go_back.html' with fallback_url='/dashboard/' label="Back to Dashboard" %}
 </div>
+
+<div class="glass-card">
+    <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom border-secondary pb-3 mb-4">
+        <div>
+            <h3 class="fw-bold text-white mb-1"><i class="bi bi-shield-check text-success me-2"></i>Security Audit Log</h3>
+            <p class="text-secondary mb-0">Immutable record of authentication, access, and sensitive vault actions.</p>
+        </div>
+        <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
+            <span class="badge bg-secondary text-light px-3 py-2">
+                <i class="bi bi-activity me-1 text-success"></i> <span id="auditCount">{{ logs|length }}</span> Logged Event{{ logs|length|pluralize }}
+            </span>
+        </div>
+    </div>
+
+    {% if logs %}
+    <div class="row mb-3">
+        <div class="col-md-6 col-lg-5">
+            <div class="input-group">
+                <span class="input-group-text bg-secondary border-secondary text-light">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" id="auditSearchInput" class="form-control border-secondary text-white" style="background: rgba(255,255,255,0.05);" placeholder="Filter audit logs by action or IP...">
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-premium w-100 mb-0">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Action</th>
+                    <th>IP Address</th>
+                    <th class="text-end">Status</th>
+                </tr>
+            </thead>
+            <tbody id="auditTableBody">
+                {% for log in logs %}
+                <tr class="audit-row" data-action="{{ log.action|lower }}" data-ip="{{ log.ip_address|default:'unknown'|lower }}">
+                    <td>
+                        <span class="text-light font-monospace small">
+                            <i class="bi bi-clock me-1 text-secondary"></i>{{ log.timestamp|date:"M d, Y H:i:s" }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="fw-semibold text-white">{{ log.action }}</span>
+                    </td>
+                    <td>
+                        <span class="font-monospace small badge bg-dark border border-secondary text-secondary">
+                            <i class="bi bi-hdd-network me-1"></i>{{ log.ip_address|default:"127.0.0.1" }}
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50">
+                            <i class="bi bi-check-circle me-1"></i> Recorded
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+                <tr id="noAuditMatchRow" class="d-none">
+                    <td colspan="4" class="text-center py-5">
+                        <i class="bi bi-search text-muted fs-3 mb-2 d-block"></i>
+                        <h6 class="text-secondary mb-0">No audit events match your search</h6>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-shield-slash text-muted display-3 mb-3 d-block"></i>
+        <h4 class="text-white">No Security Events Recorded</h4>
+        <p class="text-secondary mb-0">Audit events will be logged as system actions and authentications take place.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('auditSearchInput');
+    const rows = document.querySelectorAll('.audit-row');
+    const noMatch = document.getElementById('noAuditMatchRow');
+    const countDisplay = document.getElementById('auditCount');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const action = row.getAttribute('data-action') || '';
+                const ip = row.getAttribute('data-ip') || '';
+
+                if (!query || action.includes(query) || ip.includes(query)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            if (countDisplay) countDisplay.textContent = visibleCount;
+            if (noMatch) {
+                if (visibleCount === 0 && rows.length > 0) {
+                    noMatch.classList.remove('d-none');
+                } else {
+                    noMatch.classList.add('d-none');
+                }
+            }
+        });
+    }
+});
+</script>
 {% endblock %}

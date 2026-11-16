@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="mb-3">
-    {% include 'components/go_back.html' with fallback_url='/dashboard/' label="Back to Dashboard" %}
+    {% include 'components/go_back.html' with fallback_url='/projects/' label="Back to Projects" %}
 </div>
 <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -30,11 +30,19 @@
                                 <i class="bi bi-github me-1"></i> GitHub Repository URL
                             {% elif field.name == 'live_demo' %}
                                 <i class="bi bi-box-arrow-up-right me-1"></i> Live Demo URL
+                            {% elif field.name == 'technologies' %}
+                                <i class="bi bi-cpu me-1"></i> Associated Technologies / Tech Stack
                             {% else %}
                                 {{ field.label }}
                             {% endif %}
                         </label>
                         {{ field }}
+                        {% if field.name == 'image' %}
+                            <div id="project-preview-box" class="mt-3 p-3 text-center rounded border border-secondary d-none" style="background: rgba(0,0,0,0.25);">
+                                <div class="text-secondary small mb-2"><i class="bi bi-eye me-1"></i>Image Preview:</div>
+                                <img id="project-preview-img" src="#" alt="Project Preview" class="img-fluid rounded shadow" style="max-height: 240px; object-fit: contain;">
+                            </div>
+                        {% endif %}
                         {% if field.help_text %}
                             <div class="form-text text-muted small mt-1">{{ field.help_text }}</div>
                         {% endif %}
@@ -56,4 +64,30 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imgInput = document.querySelector('input[name="image"]');
+    const previewBox = document.getElementById('project-preview-box');
+    const previewImg = document.getElementById('project-preview-img');
+    if (imgInput && previewBox && previewImg) {
+        imgInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    previewImg.src = event.target.result;
+                    previewBox.classList.remove('d-none');
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewBox.classList.add('d-none');
+                previewImg.src = '#';
+            }
+        });
+    }
+});
+</script>
 {% endblock %}

@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container py-4">
-    <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom border-secondary pb-3 mb-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom border-secondary pb-3 mb-4">
         <div>
             <h2 class="fw-bold text-white mb-1"><i class="bi bi-folder2-open text-primary me-2"></i>My Documents Vault</h2>
             <p class="text-secondary mb-0">Browse, filter, and access your secure personal documents and files.</p>
@@ -17,6 +17,29 @@
     </div>
 
     {% if documents %}
+        <!-- Filter Toolbar -->
+        <div class="row g-3 mb-4 align-items-center">
+            <div class="col-lg-4 col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-secondary border-secondary text-light">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" id="docSearchInput" class="form-control border-secondary text-white" style="background: rgba(255,255,255,0.05);" placeholder="Search documents...">
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-7">
+                <div class="d-flex flex-wrap gap-2 justify-content-md-end align-items-center">
+                    <span class="text-secondary small me-1">Category:</span>
+                    <button type="button" class="btn btn-sm btn-premium doc-filter-btn active" data-category="all">All</button>
+                    <button type="button" class="btn btn-sm btn-premium-outline doc-filter-btn" data-category="Resume">Resume</button>
+                    <button type="button" class="btn btn-sm btn-premium-outline doc-filter-btn" data-category="Certificate">Certificate</button>
+                    <button type="button" class="btn btn-sm btn-premium-outline doc-filter-btn" data-category="Marksheet">Marksheet</button>
+                    <button type="button" class="btn btn-sm btn-premium-outline doc-filter-btn" data-category="ID Proof">ID Proof</button>
+                    <button type="button" class="btn btn-sm btn-premium-outline doc-filter-btn" data-category="Other">Other</button>
+                </div>
+            </div>
+        </div>
+
         <div class="glass-card p-4">
             <div class="table-responsive">
                 <table class="table table-premium w-100 mb-0">
@@ -28,12 +51,12 @@
                             <th class="text-end">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="documentsTableBody">
                         {% for doc in documents %}
-                            <tr>
+                            <tr class="doc-row" data-title="{{ doc.title|lower }}" data-category="{{ doc.category }}">
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="rounded bg-secondary p-2 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+                                        <div class="rounded bg-secondary p-2 me-3 d-flex align-items-center justify-content-center" style="width: 42px; height: 42px; min-width: 42px;">
                                             {% if doc.category == 'Resume' %}
                                                 <i class="bi bi-file-earmark-person-fill text-warning fs-4"></i>
                                             {% elif doc.category == 'Certificate' %}
@@ -47,7 +70,10 @@
                                             {% endif %}
                                         </div>
                                         <div>
-                                            <span class="fw-bold text-white">{{ doc.title }}</span>
+                                            <span class="fw-bold text-white d-block">{{ doc.title }}</span>
+                                            {% if doc.file %}
+                                                <small class="text-secondary">{{ doc.file.name|slice:":40" }}</small>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </td>
@@ -59,9 +85,11 @@
                                 </td>
                                 <td class="text-end">
                                     <div class="d-flex justify-content-end gap-2">
-                                        <a href="{{ doc.file.url }}" target="_blank" class="btn btn-premium btn-sm py-2 px-3" title="Open File">
-                                            <i class="bi bi-box-arrow-up-right me-1"></i> Open
-                                        </a>
+                                        {% if doc.file %}
+                                            <a href="{{ doc.file.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-premium btn-sm py-2 px-3" title="Open File">
+                                                <i class="bi bi-box-arrow-up-right me-1"></i> Open
+                                            </a>
+                                        {% endif %}
                                         {% if user.is_authenticated and doc.user == user %}
                                             <a href="{% url 'summarize_document' doc.id %}" class="btn btn-premium btn-sm py-2 px-3" title="AI Summarize">
                                                 <i class="bi bi-robot me-1 text-info"></i> Summarize
@@ -80,6 +108,13 @@
                                 </td>
                             </tr>
                         {% endfor %}
+                        <tr id="noDocsMatchRow" class="d-none">
+                            <td colspan="4" class="text-center py-5">
+                                <i class="bi bi-search text-muted fs-2 mb-2 d-block"></i>
+                                <h6 class="text-secondary mb-1">No documents match your filter</h6>
+                                <p class="text-muted small mb-0">Try clearing the search box or selecting 'All' categories.</p>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -96,4 +131,66 @@
         </div>
     {% endif %}
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('docSearchInput');
+    const filterButtons = document.querySelectorAll('.doc-filter-btn');
+    const docRows = document.querySelectorAll('.doc-row');
+    const noMatchRow = document.getElementById('noDocsMatchRow');
+
+    let currentCategory = 'all';
+    let currentQuery = '';
+
+    function applyFilters() {
+        let visibleCount = 0;
+
+        docRows.forEach(row => {
+            const title = row.getAttribute('data-title') || '';
+            const category = row.getAttribute('data-category') || '';
+
+            const matchesCategory = (currentCategory === 'all' || category.toLowerCase() === currentCategory.toLowerCase());
+            const matchesQuery = (!currentQuery || title.includes(currentQuery) || category.toLowerCase().includes(currentQuery));
+
+            if (matchesCategory && matchesQuery) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        if (noMatchRow) {
+            if (visibleCount === 0 && docRows.length > 0) {
+                noMatchRow.classList.remove('d-none');
+            } else {
+                noMatchRow.classList.add('d-none');
+            }
+        }
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            currentQuery = e.target.value.toLowerCase().trim();
+            applyFilters();
+        });
+    }
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterButtons.forEach(b => {
+                b.classList.remove('btn-premium', 'active');
+                b.classList.add('btn-premium-outline');
+            });
+            this.classList.remove('btn-premium-outline');
+            this.classList.add('btn-premium', 'active');
+
+            currentCategory = this.getAttribute('data-category');
+            applyFilters();
+        });
+    });
+});
+</script>
 {% endblock %}

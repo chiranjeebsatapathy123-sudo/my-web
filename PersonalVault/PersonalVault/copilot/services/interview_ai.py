@@ -1,5 +1,4 @@
 from django.conf import settings
-from google import genai
 from portfolio.models import Project
 
 def process_interview_message(user, user_message, history):
@@ -34,9 +33,11 @@ def process_interview_message(user, user_message, history):
     full_prompt = f"{system_instruction}\n\nInterview History:\n{history_text}\n\nUser: {user_message}\nRecruiter:"
     
     try:
+        from google import genai
         client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash-lite')
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model=model_name,
             contents=full_prompt
         )
         return {"answer": response.text}

@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container py-4">
-    <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom border-secondary pb-3 mb-5">
+    <div class="d-flex flex-wrap justify-content-between align-items-center border-bottom border-secondary pb-3 mb-4">
         <div>
             <h2 class="fw-bold text-white mb-1"><i class="bi bi-patch-check text-success me-2"></i>Credentials & Certificates</h2>
             <p class="text-secondary mb-0">Browse and manage verified training achievements and educational degrees.</p>
@@ -16,72 +16,216 @@
         {% endif %}
     </div>
 
-    <div class="row g-4">
-        {% for certificate in certificates %}
-            <div class="col-md-6 col-lg-4">
-                <div class="glass-card h-100 d-flex flex-column p-0 overflow-hidden">
-                    {% if certificate.certificate_image %}
-                        <div style="height: 220px; overflow: hidden;" class="position-relative border-bottom border-secondary">
-                            <img src="{{ certificate.certificate_image.url }}" class="w-100 h-100" style="object-fit: cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-                            {% if user.is_authenticated and certificate.user == user %}
-                                <div class="position-absolute top-0 end-0 p-2 d-flex gap-2" style="z-index: 10;">
-                                    <a href="{% url 'edit_certificate' certificate.id %}" class="btn btn-premium btn-sm py-1 px-2 shadow-lg" title="Edit Certificate">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                    <form action="{% url 'delete_certificate' certificate.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this certificate?');" style="display:inline;">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-danger-premium btn-sm py-1 px-2 shadow-lg" title="Delete Certificate">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-                                    </form>
+    {% if certificates %}
+        <!-- Dynamic Filter & Search Toolbar -->
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-6 col-lg-5 mb-2 mb-md-0">
+                <div class="input-group">
+                    <span class="input-group-text bg-secondary border-secondary text-light">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" id="certSearchInput" class="form-control border-secondary text-white" style="background: rgba(255,255,255,0.05);" placeholder="Filter by title or organization...">
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-7 text-md-end text-secondary small">
+                Showing <span id="certCount" class="fw-bold text-white">{{ certificates|length }}</span> verified certificate{{ certificates|length|pluralize }}
+            </div>
+        </div>
+
+        <div class="row g-4" id="certificatesGrid">
+            {% for certificate in certificates %}
+                <div class="col-md-6 col-lg-4 cert-card-col" data-title="{{ certificate.title|lower }}" data-org="{{ certificate.organization|lower }}">
+                    <div class="glass-card h-100 d-flex flex-column p-0 overflow-hidden">
+                        {% if certificate.certificate_image %}
+                            <div style="height: 220px; overflow: hidden; cursor: pointer;" class="position-relative border-bottom border-secondary cert-preview-trigger" data-title="{{ certificate.title }}" data-org="{{ certificate.organization }}" data-date="{{ certificate.issue_date|date:'F d, Y' }}" data-img="{{ certificate.certificate_image.url }}">
+                                <img src="{{ certificate.certificate_image.url }}" alt="{{ certificate.title }}" class="w-100 h-100" style="object-fit: cover; transition: transform 0.5s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+                                <div class="position-absolute bottom-0 start-0 w-100 p-2 text-center text-white small" style="background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);">
+                                    <i class="bi bi-zoom-in me-1"></i> Click to enlarge
                                 </div>
-                            {% endif %}
-                        </div>
-                    {% else %}
-                        <div style="height: 220px; background-color: var(--bg-secondary);" class="d-flex align-items-center justify-content-center border-bottom border-secondary position-relative">
-                            <i class="bi bi-patch-check text-muted display-2"></i>
-                            {% if user.is_authenticated and certificate.user == user %}
-                                <div class="position-absolute top-0 end-0 p-2 d-flex gap-2" style="z-index: 10;">
-                                    <a href="{% url 'edit_certificate' certificate.id %}" class="btn btn-premium btn-sm py-1 px-2 shadow-lg" title="Edit Certificate">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                    <form action="{% url 'delete_certificate' certificate.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this certificate?');" style="display:inline;">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-danger-premium btn-sm py-1 px-2 shadow-lg" title="Delete Certificate">
-                                            <i class="bi bi-trash3"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    
-                    <div class="p-4 d-flex flex-column flex-grow-1">
-                        <h4 class="text-white fw-bold mb-2">{{ certificate.title }}</h4>
-                        <div class="mb-3">
-                            <div class="text-secondary small mb-1"><i class="bi bi-building me-2"></i><strong>Organization:</strong> {{ certificate.organization }}</div>
-                            <div class="text-secondary small"><i class="bi bi-calendar3 me-2"></i><strong>Issued Date:</strong> {{ certificate.issue_date|date:"F d, Y" }}</div>
-                        </div>
+                                {% if user.is_authenticated and certificate.user == user %}
+                                    <div class="position-absolute top-0 end-0 p-2 d-flex gap-2" style="z-index: 10;" onclick="event.stopPropagation();">
+                                        <a href="{% url 'edit_certificate' certificate.id %}" class="btn btn-premium btn-sm py-1 px-2 shadow-lg" title="Edit Certificate">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <form action="{% url 'delete_certificate' certificate.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this certificate?');" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger-premium btn-sm py-1 px-2 shadow-lg" title="Delete Certificate">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div style="height: 220px; background-color: var(--bg-secondary);" class="d-flex align-items-center justify-content-center border-bottom border-secondary position-relative">
+                                <i class="bi bi-patch-check text-muted display-2"></i>
+                                {% if user.is_authenticated and certificate.user == user %}
+                                    <div class="position-absolute top-0 end-0 p-2 d-flex gap-2" style="z-index: 10;">
+                                        <a href="{% url 'edit_certificate' certificate.id %}" class="btn btn-premium btn-sm py-1 px-2 shadow-lg" title="Edit Certificate">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <form action="{% url 'delete_certificate' certificate.id %}" method="POST" onsubmit="return confirm('Are you sure you want to permanently delete this certificate?');" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger-premium btn-sm py-1 px-2 shadow-lg" title="Delete Certificate">
+                                                <i class="bi bi-trash3"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
                         
-                        <div class="d-grid mt-auto pt-3 border-top border-secondary">
-                            <a href="{{ certificate.certificate_image.url }}" target="_blank" class="btn btn-premium-outline py-2">
-                                <i class="bi bi-fullscreen me-1"></i> View Full Certificate
-                            </a>
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                            <h4 class="text-white fw-bold mb-2 fs-5">{{ certificate.title }}</h4>
+                            <div class="mb-3">
+                                <div class="text-secondary small mb-1"><i class="bi bi-building me-2"></i><strong>Organization:</strong> {{ certificate.organization }}</div>
+                                <div class="text-secondary small mb-2"><i class="bi bi-calendar3 me-2"></i><strong>Issued Date:</strong> {{ certificate.issue_date|date:"F d, Y" }}</div>
+                                {% if certificate.description %}
+                                    <p class="text-muted small mb-2" style="line-height: 1.5;">{{ certificate.description }}</p>
+                                {% endif %}
+                                {% if certificate.credential_url %}
+                                    <div><a href="{{ certificate.credential_url }}" target="_blank" rel="noopener noreferrer" class="text-info small text-decoration-none"><i class="bi bi-patch-check-fill me-1"></i> Verify Credential Online</a></div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="d-grid gap-2 mt-auto pt-3 border-top border-secondary">
+                                {% if certificate.certificate_image %}
+                                    <button type="button" class="btn btn-premium cert-preview-trigger" data-title="{{ certificate.title }}" data-org="{{ certificate.organization }}" data-date="{{ certificate.issue_date|date:'F d, Y' }}" data-img="{{ certificate.certificate_image.url }}">
+                                        <i class="bi bi-arrows-fullscreen me-1"></i> Quick View
+                                    </button>
+                                    <a href="{{ certificate.certificate_image.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-premium-outline py-1 small">
+                                        <i class="bi bi-box-arrow-up-right me-1"></i> Open Original
+                                    </a>
+                                {% else %}
+                                    <span class="btn btn-premium-outline py-2 disabled text-muted">
+                                        <i class="bi bi-image me-1"></i> No Image Available
+                                    </span>
+                                {% endif %}
+                            </div>
                         </div>
                     </div>
                 </div>
+            {% endfor %}
+        </div>
+
+        <div id="noMatchAlert" class="col-12 text-center py-5 d-none">
+            <i class="bi bi-search text-muted display-4 mb-3"></i>
+            <h5 class="text-secondary">No certificates match your search</h5>
+            <p class="text-muted small">Try searching with a different title or organization name.</p>
+        </div>
+
+    {% else %}
+        <div class="col-12 text-center py-5 glass-card">
+            <i class="bi bi-award text-muted display-2 mb-3"></i>
+            <h4 class="text-secondary">No certificates uploaded yet</h4>
+            {% if user.is_authenticated %}
+                <p class="text-muted">Click the button above to upload your first certificate.</p>
+            {% else %}
+                <p class="text-muted">The user hasn't added any certificate records to their vault yet.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+<!-- Certificate Lightbox Modal -->
+<div class="modal fade" id="certLightboxModal" tabindex="-1" aria-labelledby="certLightboxModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content glass-card p-0 border border-secondary" style="background: rgba(18, 22, 34, 0.95); backdrop-filter: blur(16px);">
+            <div class="modal-header border-bottom border-secondary px-4 py-3">
+                <div>
+                    <h5 class="modal-title fw-bold text-white mb-0" id="certLightboxModalLabel">Certificate Viewer</h5>
+                    <small id="certLightboxSubtitle" class="text-secondary"></small>
+                </div>
+                <button type="button" class="btn-close" style="filter: invert(1);" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        {% empty %}
-            <div class="col-12 text-center py-5">
-                <i class="bi bi-award text-muted display-2 mb-3"></i>
-                <h4 class="text-secondary">No certificates uploaded yet</h4>
-                {% if user.is_authenticated %}
-                    <p class="text-muted">Click the button above to upload your first certificate.</p>
-                {% else %}
-                    <p class="text-muted">The user hasn't added any certificate records to their vault yet.</p>
-                {% endif %}
+            <div class="modal-body p-3 text-center">
+                <img id="certLightboxImage" src="#" alt="Certificate Preview" class="img-fluid rounded border border-secondary shadow-lg" style="max-height: 70vh; object-fit: contain;">
             </div>
-        {% endfor %}
+            <div class="modal-footer border-top border-secondary px-4 py-2 d-flex justify-content-between">
+                <span id="certLightboxDate" class="text-secondary small"></span>
+                <div class="d-flex gap-2">
+                    <a id="certLightboxOriginalLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-premium-outline btn-sm">
+                        <i class="bi bi-box-arrow-up-right me-1"></i> Open Original
+                    </a>
+                    <button type="button" class="btn btn-premium btn-sm px-3" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Search & Filter
+    const searchInput = document.getElementById('certSearchInput');
+    const cards = document.querySelectorAll('.cert-card-col');
+    const countDisplay = document.getElementById('certCount');
+    const noMatchAlert = document.getElementById('noMatchAlert');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title') || '';
+                const org = card.getAttribute('data-org') || '';
+
+                if (!query || title.includes(query) || org.includes(query)) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (countDisplay) {
+                countDisplay.textContent = visibleCount;
+            }
+            if (noMatchAlert) {
+                if (visibleCount === 0 && cards.length > 0) {
+                    noMatchAlert.classList.remove('d-none');
+                } else {
+                    noMatchAlert.classList.add('d-none');
+                }
+            }
+        });
+    }
+
+    // Lightbox modal logic
+    const lightboxTriggers = document.querySelectorAll('.cert-preview-trigger');
+    const modalEl = document.getElementById('certLightboxModal');
+    let certModal = null;
+    if (modalEl && typeof bootstrap !== 'undefined') {
+        certModal = new bootstrap.Modal(modalEl);
+    }
+
+    const modalTitle = document.getElementById('certLightboxModalLabel');
+    const modalSubtitle = document.getElementById('certLightboxSubtitle');
+    const modalImage = document.getElementById('certLightboxImage');
+    const modalDate = document.getElementById('certLightboxDate');
+    const modalOriginalLink = document.getElementById('certLightboxOriginalLink');
+
+    lightboxTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function() {
+            const title = this.getAttribute('data-title');
+            const org = this.getAttribute('data-org');
+            const date = this.getAttribute('data-date');
+            const imgUrl = this.getAttribute('data-img');
+
+            if (modalTitle) modalTitle.textContent = title;
+            if (modalSubtitle) modalSubtitle.textContent = org ? 'Issued by ' + org : '';
+            if (modalDate) modalDate.innerHTML = date ? '<i class="bi bi-calendar3 me-1"></i> Issued: ' + date : '';
+            if (modalImage) modalImage.src = imgUrl;
+            if (modalOriginalLink) modalOriginalLink.href = imgUrl;
+
+            if (certModal) {
+                certModal.show();
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

@@ -1,5 +1,4 @@
 from django.conf import settings
-from google import genai
 
 def generate_explanation(topic):
     """
@@ -22,9 +21,11 @@ def generate_explanation(topic):
     full_prompt = f"{system_instruction}\n\nTopic/Question:\n{topic}"
     
     try:
+        from google import genai
         client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash-lite')
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model=model_name,
             contents=full_prompt
         )
         return response.text

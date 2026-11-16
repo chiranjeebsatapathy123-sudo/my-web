@@ -4,13 +4,14 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 import requests
 
-from .models import Profile, Project, Snippet, Skill, Achievement
+from .models import Profile, Project, Snippet, Skill, Achievement, JobApplication, Connection
 from .forms import ProfileForm, ProjectForm, SnippetForm
 
 from certificates.models import Certificate
 from documents.models import Document
+from resume.models import Resume
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.core.serializers.json import DjangoJSONEncoder
 
 def home(request):
@@ -94,6 +95,7 @@ def profile(request):
         if form.is_valid():
 
             form.save()
+            messages.success(request, 'Profile updated successfully!')
 
             return redirect('profile')
 
@@ -155,7 +157,9 @@ def api_compare_projects(request):
             'description': p.description[:200] + "..." if len(p.description) > 200 else p.description,
             'technologies': [t.name for t in p.technologies.all()],
             'has_github': bool(p.github_link),
+            'github_link': p.github_link or '',
             'has_demo': bool(p.live_demo),
+            'live_demo': p.live_demo or '',
             'url': f"/projects/{p.id}/"
         })
         
@@ -375,24 +379,17 @@ def achievements_view(request):
 
 @login_required
 def add_project(request):
-
     if request.method == "POST":
-
-        form = ProjectForm(request.POST, request.FILES)
-
+        form = ProjectForm(request.POST, request.FILES, user=request.user)
         if form.is_valid():
-
             project = form.save(commit=False)
-
             project.user = request.user
-
             project.save()
-
+            form.save_m2m()
             messages.success(request, 'Project added successfully!')
             return redirect('project_list')
-
     else:
-        form = ProjectForm()
+        form = ProjectForm(user=request.user)
 
     return render(request,
                   'portfolio/add_project.html',
@@ -404,13 +401,22 @@ def edit_project(request, pk):
     project = get_object_or_404(Project, pk=pk, user=request.user)
 
     if request.method == "POST":
-        form = ProjectForm(request.POST, request.FILES, instance=project)
+        old_image = project.image
+        form = ProjectForm(request.POST, request.FILES, instance=project, user=request.user)
         if form.is_valid():
+            new_image = request.FILES.get('image')
+            if new_image and old_image:
+                try:
+                    import os
+                    if os.path.isfile(old_image.path) and '_showcase.png' not in old_image.path and 'Screenshot_' not in old_image.path:
+                        os.remove(old_image.path)
+                except Exception:
+                    pass
             form.save()
             messages.success(request, 'Project updated successfully!')
             return redirect('project_list')
     else:
-        form = ProjectForm(instance=project)
+        form = ProjectForm(instance=project, user=request.user)
 
     return render(request, 'portfolio/edit_project.html', {
         'form': form,
@@ -476,15 +482,26 @@ def import_github_projects(request):
             github_link = request.POST.get(f"link_{repo_name}")
             live_demo = request.POST.get(f"demo_{repo_name}")
             
-            if github_link and not Project.objects.filter(user=request.user, github_link=github_link).exists():
-                Project.objects.create(
-                    user=request.user,
-                    title=title or repo_name,
-                    description=description or '',
-                    github_link=github_link,
-                    live_demo=live_demo or ''
-                )
-                imported_count += 1
+            if github_link:
+                existing_proj = Project.objects.filter(user=request.user, github_link=github_link).first()
+                if existing_proj:
+                    if title:
+                        existing_proj.title = title
+                    if description and description != 'No description provided.':
+                        existing_proj.description = description
+                    if live_demo:
+                        existing_proj.live_demo = live_demo
+                    existing_proj.save()
+                    imported_count += 1
+                else:
+                    Project.objects.create(
+                        user=request.user,
+                        title=title or repo_name,
+                        description=description or '',
+                        github_link=github_link,
+                        live_demo=live_demo or ''
+                    )
+                    imported_count += 1
                 
         if imported_count > 0:
             messages.success(request, f"Successfully imported {imported_count} projects from GitHub!")
@@ -622,10 +639,17 @@ def api_search(request):
     
     return JsonResponse({'results': results[:20]})
 
+@login_required
 def export_vault_data(request):
     profile = Profile.objects.filter(user=request.user).first()
     projects = list(Project.objects.filter(user=request.user).values('title', 'description', 'github_link', 'live_demo', 'created_at'))
     certificates = list(Certificate.objects.filter(user=request.user).values('title', 'organization', 'issue_date'))
+    skills = list(Skill.objects.filter(user=request.user).values('name', 'category', 'proficiency'))
+    snippets = list(Snippet.objects.filter(user=request.user).values('title', 'language', 'code_content', 'tags'))
+    achievements = list(Achievement.objects.filter(user=request.user).values('title', 'description', 'date_achieved', 'category'))
+    jobs = list(JobApplication.objects.filter(user=request.user).values('company', 'position', 'status', 'applied_date', 'notes'))
+    connections = list(Connection.objects.filter(user=request.user).values('name', 'role', 'company', 'linkedin_url', 'notes'))
+    documents = list(Document.objects.filter(user=request.user).values('title', 'category', 'uploaded_at'))
     
     data = {
         'profile': {
@@ -633,9 +657,18 @@ def export_vault_data(request):
             'location': profile.location if profile else '',
             'github': profile.github if profile else '',
             'linkedin': profile.linkedin if profile else '',
+            'website': profile.website if profile else '',
+            'leetcode': profile.leetcode_username if profile else '',
+            'hackerrank': profile.hackerrank_username if profile else '',
         },
         'projects': projects,
-        'certificates': certificates
+        'certificates': certificates,
+        'skills': skills,
+        'snippets': snippets,
+        'achievements': achievements,
+        'jobs': jobs,
+        'connections': connections,
+        'documents': documents,
     }
     
     response = HttpResponse(
@@ -720,11 +753,13 @@ def jobs_view(request):
         company = request.POST.get('company')
         position = request.POST.get('position')
         status = request.POST.get('status')
-        JobApplication.objects.create(user=request.user, company=company, position=position, status=status)
+        notes = request.POST.get('notes', '')
+        JobApplication.objects.create(user=request.user, company=company, position=position, status=status, notes=notes)
         return redirect('jobs')
         
     jobs = JobApplication.objects.filter(user=request.user)
-    return render(request, 'portfolio/jobs.html', {'jobs': jobs})
+    statuses = ['Applied', 'Interviewing', 'Offer', 'Rejected']
+    return render(request, 'portfolio/jobs.html', {'jobs': jobs, 'statuses': statuses})
 
 @login_required
 def delete_job(request, pk):
@@ -1009,6 +1044,13 @@ def setup_2fa(request):
     svg_data = stream.getvalue().decode('utf-8')
     
     if request.method == 'POST':
+        action = request.POST.get('action')
+        if action == 'disable':
+            tfa.is_enabled = False
+            tfa.save()
+            messages.success(request, 'Two-factor authentication has been disabled.')
+            return redirect('setup_2fa')
+            
         token = request.POST.get('token')
         if totp.verify(token):
             tfa.is_enabled = True

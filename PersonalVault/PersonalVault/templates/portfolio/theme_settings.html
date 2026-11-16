@@ -1,17 +1,130 @@
 {% extends "base.html" %}
+
+{% block title %}Theme Customizer{% endblock %}
+
 {% block content %}
-<div class="row justify-content-center animate-fade-in"><div class="col-md-6 glass-card">
-    <h3 class="text-white"><i class="bi bi-palette text-warning me-2"></i>Theme Engine</h3>
-    <form method="post" class="mt-4">{% csrf_token %}
-        <div class="mb-3">
-            <label class="text-secondary">Primary Color</label>
-            <input type="color" name="primary_color" class="form-control form-control-color bg-dark w-100" value="{{ pref.primary_color }}">
+<div class="mb-3">
+    {% include 'components/go_back.html' with fallback_url='/dashboard/' label="Back to Dashboard" %}
+</div>
+
+<div class="row justify-content-center animate-fade-in">
+    <div class="col-lg-8">
+        <div class="glass-card">
+            <div class="border-bottom border-secondary pb-3 mb-4">
+                <h3 class="fw-bold text-white mb-1"><i class="bi bi-palette text-warning me-2"></i>Theme Engine & Appearance</h3>
+                <p class="text-secondary mb-0">Personalize your workspace palette, primary accent tones, and ambient backdrop.</p>
+            </div>
+
+            <!-- Quick Theme Presets -->
+            <div class="mb-4">
+                <label class="form-label text-secondary small fw-semibold mb-2">Curated Vault Presets</label>
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="button" class="btn btn-sm btn-premium-outline theme-preset-btn" data-primary="#06b6d4" data-bg="#0b0f19">
+                        <span class="rounded-circle d-inline-block me-1" style="width: 12px; height: 12px; background: #06b6d4;"></span> Cyber Cyan
+                    </button>
+                    <button type="button" class="btn btn-sm btn-premium-outline theme-preset-btn" data-primary="#6366f1" data-bg="#0f172a">
+                        <span class="rounded-circle d-inline-block me-1" style="width: 12px; height: 12px; background: #6366f1;"></span> Deep Indigo
+                    </button>
+                    <button type="button" class="btn btn-sm btn-premium-outline theme-preset-btn" data-primary="#10b981" data-bg="#061a14">
+                        <span class="rounded-circle d-inline-block me-1" style="width: 12px; height: 12px; background: #10b981;"></span> Emerald Matrix
+                    </button>
+                    <button type="button" class="btn btn-sm btn-premium-outline theme-preset-btn" data-primary="#f59e0b" data-bg="#181205">
+                        <span class="rounded-circle d-inline-block me-1" style="width: 12px; height: 12px; background: #f59e0b;"></span> Solar Amber
+                    </button>
+                    <button type="button" class="btn btn-sm btn-premium-outline theme-preset-btn" data-primary="#a855f7" data-bg="#140b26">
+                        <span class="rounded-circle d-inline-block me-1" style="width: 12px; height: 12px; background: #a855f7;"></span> Electric Violet
+                    </button>
+                </div>
+            </div>
+
+            <form method="post" id="themeForm">
+                {% csrf_token %}
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group-premium p-3 rounded border border-secondary" style="background: rgba(0,0,0,0.2);">
+                            <label class="form-label text-white fw-semibold mb-2">
+                                <i class="bi bi-brush me-1 text-primary"></i> Primary Accent Color
+                            </label>
+                            <div class="d-flex align-items-center gap-3">
+                                <input type="color" id="primaryColorInput" name="primary_color" class="form-control form-control-color bg-dark border-secondary p-1" style="width: 60px; height: 42px; border-radius: 8px;" value="{{ pref.primary_color|default:'#06b6d4' }}">
+                                <span id="primaryColorHex" class="font-monospace text-secondary small">{{ pref.primary_color|default:'#06b6d4' }}</span>
+                            </div>
+                            <small class="text-secondary d-block mt-2">Drives buttons, active indicators, and radiant glow borders.</small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group-premium p-3 rounded border border-secondary" style="background: rgba(0,0,0,0.2);">
+                            <label class="form-label text-white fw-semibold mb-2">
+                                <i class="bi bi-circle-half me-1 text-info"></i> Background Tone
+                            </label>
+                            <div class="d-flex align-items-center gap-3">
+                                <input type="color" id="bgColorInput" name="bg_color" class="form-control form-control-color bg-dark border-secondary p-1" style="width: 60px; height: 42px; border-radius: 8px;" value="{{ pref.bg_color|default:'#0b0f19' }}">
+                                <span id="bgColorHex" class="font-monospace text-secondary small">{{ pref.bg_color|default:'#0b0f19' }}</span>
+                            </div>
+                            <small class="text-secondary d-block mt-2">Base ambience for the sidebar, viewport backdrop, and card fills.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Preview Card -->
+                <div class="mb-4 p-4 rounded-3 border border-secondary" id="themePreviewContainer" style="background: {{ pref.bg_color|default:'#0b0f19' }}; transition: all 0.3s ease;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-secondary small text-uppercase font-monospace">Live Preview</span>
+                        <span class="badge" id="previewBadge" style="background: {{ pref.primary_color|default:'#06b6d4' }}; color: #000;">Active Badge</span>
+                    </div>
+                    <h5 class="text-white fw-bold mb-2">Vault Preview Card</h5>
+                    <p class="text-secondary small mb-3">This shows how your accent color and background tint pair together in cards.</p>
+                    <button type="button" class="btn btn-sm text-white" id="previewButton" style="background: {{ pref.primary_color|default:'#06b6d4' }}; border: none;">Sample Action</button>
+                </div>
+
+                <div class="d-flex justify-content-end gap-3 pt-3 border-top border-secondary">
+                    <a href="{% url 'dashboard' %}" class="btn btn-premium-outline px-4">Cancel</a>
+                    <button type="submit" class="btn btn-premium px-5">
+                        <i class="bi bi-check-circle me-1"></i> Save Theme
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="mb-3">
-            <label class="text-secondary">Background Tint</label>
-            <input type="color" name="bg_color" class="form-control form-control-color bg-dark w-100" value="{{ pref.bg_color }}">
-        </div>
-        <button type="submit" class="btn btn-premium w-100">Save Theme</button>
-    </form>
-</div></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const primaryInput = document.getElementById('primaryColorInput');
+    const primaryHex = document.getElementById('primaryColorHex');
+    const bgInput = document.getElementById('bgColorInput');
+    const bgHex = document.getElementById('bgColorHex');
+    const previewContainer = document.getElementById('themePreviewContainer');
+    const previewBadge = document.getElementById('previewBadge');
+    const previewButton = document.getElementById('previewButton');
+
+    function updatePreview() {
+        const pColor = primaryInput.value;
+        const bColor = bgInput.value;
+
+        if (primaryHex) primaryHex.textContent = pColor;
+        if (bgHex) bgHex.textContent = bColor;
+
+        if (previewContainer) previewContainer.style.background = bColor;
+        if (previewBadge) previewBadge.style.background = pColor;
+        if (previewButton) previewButton.style.background = pColor;
+    }
+
+    if (primaryInput) primaryInput.addEventListener('input', updatePreview);
+    if (bgInput) bgInput.addEventListener('input', updatePreview);
+
+    document.querySelectorAll('.theme-preset-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const p = this.getAttribute('data-primary');
+            const b = this.getAttribute('data-bg');
+            if (primaryInput) primaryInput.value = p;
+            if (bgInput) bgInput.value = b;
+            updatePreview();
+        });
+    });
+});
+</script>
 {% endblock %}

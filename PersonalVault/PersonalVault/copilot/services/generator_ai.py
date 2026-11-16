@@ -1,6 +1,9 @@
 from django.conf import settings
-from google import genai
 from portfolio.models import Profile, Project
+
+def get_client():
+    from google import genai
+    return genai.Client(api_key=settings.GEMINI_API_KEY)
 
 def get_base_context(user):
     """Retrieves verified context for the user."""
@@ -38,9 +41,10 @@ def generate_cover_letter(user, job_description):
     full_prompt = f"{system_instruction}\n\nTarget Job Description:\n{job_description}"
     
     try:
-        client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        client = get_client()
+        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash-lite')
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model=model_name,
             contents=full_prompt
         )
         return response.text
@@ -69,9 +73,10 @@ def generate_project_idea(user, domain, difficulty):
     full_prompt = f"{system_instruction}\n\nRequested Domain: {domain}\nRequested Difficulty: {difficulty}"
     
     try:
-        client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        client = get_client()
+        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash-lite')
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model=model_name,
             contents=full_prompt
         )
         return response.text
@@ -100,9 +105,10 @@ def generate_pitch(user, project_id, pitch_type):
     )
     
     try:
-        client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        client = get_client()
+        model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash-lite')
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model=model_name,
             contents=system_instruction
         )
         return response.text

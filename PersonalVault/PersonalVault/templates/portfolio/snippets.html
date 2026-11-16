@@ -4,42 +4,68 @@
 {% block page_title %}Snippets Knowledge Base{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold text-white mb-0"><i class="bi bi-code-square text-primary me-2"></i>Code Snippets</h2>
-    <a href="{% url 'add_snippet' %}" class="btn btn-premium"><i class="bi bi-plus-lg me-1"></i> Add Snippet</a>
+<div class="d-flex flex-wrap justify-content-between align-items-center border-bottom border-secondary pb-3 mb-4">
+    <div>
+        <h2 class="fw-bold text-white mb-1"><i class="bi bi-code-square text-primary me-2"></i>Code Snippets</h2>
+        <p class="text-secondary mb-0">Personal repository of reusable functions, algorithms, and dev cheatsheets.</p>
+    </div>
+    <a href="{% url 'add_snippet' %}" class="btn btn-premium mt-2 mt-md-0"><i class="bi bi-plus-lg me-1"></i> Add Snippet</a>
 </div>
 
-<div class="row g-4">
+{% if snippets %}
+<!-- Search & Filter Bar -->
+<div class="row mb-4 align-items-center">
+    <div class="col-md-6 col-lg-5 mb-2 mb-md-0">
+        <div class="input-group">
+            <span class="input-group-text bg-secondary border-secondary text-light">
+                <i class="bi bi-search"></i>
+            </span>
+            <input type="text" id="snippetSearchInput" class="form-control border-secondary text-white" style="background: rgba(255,255,255,0.05);" placeholder="Search by title, language, or tags...">
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-7 text-md-end text-secondary small">
+        Showing <span id="snippetCount" class="fw-bold text-white">{{ snippets|length }}</span> snippet{{ snippets|length|pluralize }}
+    </div>
+</div>
+
+<div class="row g-4" id="snippetsGrid">
     {% for snippet in snippets %}
-    <div class="col-md-6 col-lg-4">
+    <div class="col-md-6 col-lg-4 snippet-card-col" data-title="{{ snippet.title|lower }}" data-lang="{{ snippet.language|lower }}" data-tags="{{ snippet.tags|lower }}">
         <div class="glass-card h-100 d-flex flex-column">
             <div class="d-flex justify-content-between align-items-start mb-3">
-                <h5 class="fw-bold text-white mb-0">{{ snippet.title }}</h5>
+                <h5 class="fw-bold text-white mb-0 fs-6">{{ snippet.title }}</h5>
                 {% if snippet.language %}
-                <span class="badge-premium mb-0 py-1 px-2" style="font-size: 0.75rem;">{{ snippet.language }}</span>
+                <span class="badge bg-secondary text-info border border-secondary mb-0 py-1 px-2" style="font-size: 0.75rem;">{{ snippet.language }}</span>
                 {% endif %}
             </div>
             
-            {% if snippet.tags %}
-            <div class="mb-3">
-                {% for tag in snippet.tags.split %}
-                <span class="tech-tag">{{ tag }}</span>
+            {% if snippet.tag_list %}
+            <div class="mb-3 d-flex flex-wrap gap-1">
+                {% for tag in snippet.tag_list %}
+                <span class="badge bg-dark border border-secondary text-secondary small">{{ tag }}</span>
                 {% endfor %}
             </div>
             {% endif %}
 
-            <div class="code-preview flex-grow-1 p-3 rounded mb-4" style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--card-border); overflow: hidden; max-height: 150px; position: relative;">
-                <pre class="mb-0 text-secondary" style="font-size: 0.85rem;"><code>{{ snippet.code_content|truncatechars:150 }}</code></pre>
-                <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 50px; background: linear-gradient(transparent, rgba(15, 23, 42, 0.9));"></div>
+            <div class="code-preview flex-grow-1 p-3 rounded mb-3 position-relative" style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); max-height: 140px; overflow: hidden;">
+                <pre class="mb-0 text-secondary" style="font-size: 0.82rem; font-family: monospace;"><code>{{ snippet.code_content|truncatechars:180 }}</code></pre>
+                <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 40px; background: linear-gradient(transparent, rgba(15, 23, 42, 0.95));"></div>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-auto border-top border-secondary pt-3">
-                <small class="text-muted"><i class="bi bi-clock me-1"></i>{{ snippet.created_at|date:"M d, Y" }}</small>
-                <div>
-                    <a href="{% url 'edit_snippet' snippet.pk %}" class="btn btn-sm btn-premium-outline me-2"><i class="bi bi-pencil"></i></a>
+                <button type="button" class="btn btn-sm btn-premium-outline view-snippet-btn" data-title="{{ snippet.title }}" data-lang="{{ snippet.language }}" data-code="{{ snippet.code_content|escape }}">
+                    <i class="bi bi-arrows-angle-expand me-1"></i> Expand
+                </button>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-premium-outline copy-snippet-btn" data-code="{{ snippet.code_content|escape }}" title="Copy Code">
+                        <i class="bi bi-clipboard"></i>
+                    </button>
+                    <a href="{% url 'edit_snippet' snippet.pk %}" class="btn btn-sm btn-premium-outline" title="Edit Snippet">
+                        <i class="bi bi-pencil"></i>
+                    </a>
                     <form action="{% url 'delete_snippet' snippet.pk %}" method="POST" class="d-inline">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-danger-premium" onclick="return confirm('Are you sure you want to delete this snippet?');">
+                        <button type="submit" class="btn btn-sm btn-danger-premium" onclick="return confirm('Are you sure you want to permanently delete this snippet?');" title="Delete">
                             <i class="bi bi-trash"></i>
                         </button>
                     </form>
@@ -47,13 +73,148 @@
             </div>
         </div>
     </div>
-    {% empty %}
-    <div class="col-12 text-center py-5 glass-card">
-        <i class="bi bi-code-slash text-muted display-1 mb-3"></i>
-        <h3 class="text-white">Your Knowledge Base is Empty</h3>
-        <p class="text-secondary mb-4">Start saving reusable code, terminal commands, or markdown notes.</p>
-        <a href="{% url 'add_snippet' %}" class="btn btn-premium"><i class="bi bi-plus-lg me-1"></i> Create First Snippet</a>
-    </div>
     {% endfor %}
 </div>
+
+<div id="noSnippetMatch" class="col-12 text-center py-5 d-none">
+    <i class="bi bi-search text-muted display-4 mb-3"></i>
+    <h5 class="text-secondary">No snippets match your search</h5>
+    <p class="text-muted small">Try searching with a different term, language, or keyword tag.</p>
+</div>
+
+<!-- Modal for full snippet viewing -->
+<div class="modal fade" id="snippetModal" tabindex="-1" aria-labelledby="snippetModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content glass-card p-0 border border-secondary" style="background: rgba(18, 22, 34, 0.95); backdrop-filter: blur(16px);">
+            <div class="modal-header border-bottom border-secondary px-4 py-3">
+                <div>
+                    <h5 class="modal-title fw-bold text-white mb-0" id="snippetModalLabel">Code Snippet</h5>
+                    <span id="snippetModalLang" class="badge bg-secondary text-info mt-1"></span>
+                </div>
+                <button type="button" class="btn-close" style="filter: invert(1);" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="position-relative">
+                    <button id="modalCopyBtn" type="button" class="btn btn-sm btn-premium-outline position-absolute top-0 end-0 m-2" title="Copy to clipboard">
+                        <i class="bi bi-clipboard me-1"></i> Copy
+                    </button>
+                    <pre class="p-3 rounded bg-dark border border-secondary text-light mb-0" style="max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 0.9rem;"><code id="snippetModalCode"></code></pre>
+                </div>
+            </div>
+            <div class="modal-footer border-top border-secondary px-4 py-2">
+                <button type="button" class="btn btn-premium btn-sm px-4" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="col-12 text-center py-5 glass-card">
+    <i class="bi bi-code-slash text-muted display-1 mb-3"></i>
+    <h3 class="text-white">Your Knowledge Base is Empty</h3>
+    <p class="text-secondary mb-4">Start saving reusable code, terminal commands, or markdown notes.</p>
+    <a href="{% url 'add_snippet' %}" class="btn btn-premium"><i class="bi bi-plus-lg me-1"></i> Create First Snippet</a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Search filtering
+    const searchInput = document.getElementById('snippetSearchInput');
+    const cards = document.querySelectorAll('.snippet-card-col');
+    const countDisplay = document.getElementById('snippetCount');
+    const noMatchAlert = document.getElementById('noSnippetMatch');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title') || '';
+                const lang = card.getAttribute('data-lang') || '';
+                const tags = card.getAttribute('data-tags') || '';
+
+                if (!query || title.includes(query) || lang.includes(query) || tags.includes(query)) {
+                    card.style.display = '';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (countDisplay) countDisplay.textContent = visibleCount;
+            if (noMatchAlert) {
+                if (visibleCount === 0 && cards.length > 0) {
+                    noMatchAlert.classList.remove('d-none');
+                } else {
+                    noMatchAlert.classList.add('d-none');
+                }
+            }
+        });
+    }
+
+    // Modal expand
+    const modalEl = document.getElementById('snippetModal');
+    let snippetModal = null;
+    if (modalEl && typeof bootstrap !== 'undefined') {
+        snippetModal = new bootstrap.Modal(modalEl);
+    }
+    const modalTitle = document.getElementById('snippetModalLabel');
+    const modalLang = document.getElementById('snippetModalLang');
+    const modalCode = document.getElementById('snippetModalCode');
+    const modalCopyBtn = document.getElementById('modalCopyBtn');
+    let currentModalCode = '';
+
+    document.querySelectorAll('.view-snippet-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const title = this.getAttribute('data-title');
+            const lang = this.getAttribute('data-lang');
+            const code = this.getAttribute('data-code');
+            currentModalCode = code;
+
+            if (modalTitle) modalTitle.textContent = title;
+            if (modalLang) {
+                modalLang.textContent = lang || 'Code';
+                modalLang.style.display = lang ? 'inline-block' : 'none';
+            }
+            if (modalCode) modalCode.textContent = code;
+            if (modalCopyBtn) modalCopyBtn.innerHTML = '<i class="bi bi-clipboard me-1"></i> Copy';
+
+            if (snippetModal) snippetModal.show();
+        });
+    });
+
+    if (modalCopyBtn) {
+        modalCopyBtn.addEventListener('click', function() {
+            if (currentModalCode) {
+                navigator.clipboard.writeText(currentModalCode).then(() => {
+                    modalCopyBtn.innerHTML = '<i class="bi bi-check-lg text-success me-1"></i> Copied!';
+                    setTimeout(() => {
+                        modalCopyBtn.innerHTML = '<i class="bi bi-clipboard me-1"></i> Copy';
+                    }, 2000);
+                });
+            }
+        });
+    }
+
+    // Direct card copy buttons
+    document.querySelectorAll('.copy-snippet-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const code = this.getAttribute('data-code');
+            if (code) {
+                navigator.clipboard.writeText(code).then(() => {
+                    const originalHtml = btn.innerHTML;
+                    btn.innerHTML = '<i class="bi bi-check-lg text-success"></i>';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                    }, 2000);
+                });
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

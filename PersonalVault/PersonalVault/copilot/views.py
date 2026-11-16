@@ -2,7 +2,6 @@ import json
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
-from google import genai
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from portfolio.models import Profile, Project
@@ -180,6 +179,7 @@ def optimize_snippet_api(request):
             if not code:
                 return JsonResponse({'error': 'Code is required'}, status=400)
                 
+            from google import genai
             client = genai.Client(api_key=settings.GEMINI_API_KEY)
             
             prompt = f"You are an expert software engineer. "
@@ -196,8 +196,9 @@ def optimize_snippet_api(request):
                 
             prompt += f"\n\nCode:\n{code}"
             
+            model_name = getattr(settings, 'GEMINI_MODEL', 'gemini-3.5-flash-lite')
             response = client.models.generate_content(
-                model='gemini-2.0-flash',
+                model=model_name,
                 contents=prompt
             )
             
