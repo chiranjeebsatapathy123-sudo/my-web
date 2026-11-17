@@ -940,133 +940,284 @@
   </main>
   <!-- END: Hero Section -->
 
-<!-- BEGIN: About Section (ScrollExpandMedia Component) -->
-  <section class="relative w-full bg-[#0D0D0D] text-white" id="about" style="min-height: 200vh;">
-    <div class="sticky top-0 w-full h-[100dvh] overflow-hidden flex flex-col items-center justify-start z-10">
-      <!-- Background Ambient with dynamic opacity: 1 - scrollProgress (Previous Starry Night Castle Background) -->
-      <div id="sem-bg-img"
-        class="absolute inset-0 z-0 h-full w-full pointer-events-none transition-opacity duration-150 ease-out"
-        style="will-change: opacity; transform: translateZ(0);">
-        <img src="/static/assets/about_starry_castle_hq.jpg" alt="Monochrome Starry Night Castle Background"
-          class="w-full h-full object-cover object-center" />
-        <div class="absolute inset-0 bg-black/25"></div>
+<!-- BEGIN: About Section (Architectural Identity & Engineering DNA) -->
+  <section class="relative w-full bg-[#08090D] text-white py-24 md:py-32 overflow-hidden scroll-mt-20 border-b border-white/5" id="about">
+    <!-- Ambient Neural Quantum Mesh & Glow Core -->
+    <div class="absolute inset-0 pointer-events-none -z-10">
+      <div class="absolute -top-40 left-1/4 w-[500px] h-[500px] rounded-full bg-cyan-500/10 blur-[140px]"></div>
+      <div class="absolute top-1/3 -right-20 w-[450px] h-[450px] rounded-full bg-emerald-500/10 blur-[130px]"></div>
+      <div class="absolute -bottom-40 left-1/3 w-[550px] h-[550px] rounded-full bg-indigo-500/10 blur-[150px]"></div>
+      <!-- Subtle Precision Telemetry Grid -->
+      <div class="absolute inset-0 opacity-20"
+        style="background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px); background-size: 32px 32px;"></div>
+    </div>
+
+    <div class="max-w-[1400px] mx-auto px-6 md:px-14 relative z-10">
+
+      <!-- Section Header with High-Tech Telemetry Pill -->
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 pb-8 border-b border-white/10">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-emerald-500/40 bg-emerald-500/10 text-[10px] font-mono uppercase tracking-widest text-emerald-400 mb-4 shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>SYSTEM ARCHITECT &bull; SDE &bull; BHUBANESWAR, IN &bull; 20.2961&deg; N</span>
+          </div>
+          <h2 class="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white">
+            ARCHITECTURAL IDENTITY &amp; ENGINEERING DNA
+          </h2>
+        </div>
+        <p class="text-xs md:text-sm font-mono text-neutral-400 uppercase tracking-widest max-w-md leading-relaxed">
+          BRIDGING DETERMINISTIC COMPUTATIONAL LOGIC, DISTRIBUTED BACKEND SYSTEMS, AND DEEP LEARNING INFERENCE WITH SUB-MILLISECOND RIGOR.
+        </p>
       </div>
 
-      <!-- Centered Interactive Stage Container (Exact from React Component) -->
-      <div class="container mx-auto flex flex-col items-center justify-start relative z-10 w-full h-full">
-        <div class="flex flex-col items-center justify-center w-full h-[100dvh] relative">
+      <!-- Bento Grid Suite -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 mb-12">
 
-          <!-- Expanding Media Card (Closed state: 300px x 400px, expands on scroll) -->
-          <div id="sem-media-container"
-            class="absolute z-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden shadow-2xl transition-none bg-[#07090E]"
-            style="width: 300px; height: 400px; max-width: 95vw; max-height: 85vh; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9); border: 1px solid rgba(255,255,255,0.35); will-change: width, height; backface-visibility: hidden;">
-            <!-- Media Image Container: fits 100% of the box without any letterboxing or cropping -->
-            <div
-              class="relative w-full h-full overflow-hidden rounded-xl flex items-center justify-center bg-[#07090E]">
-              <!-- Crisp Base Image (GPU accelerated) -->
-              <img id="sem-media-img" src="/static/assets/about_floating_light_hq.png"
-                alt="Chiranjeeb Satapathy - Data Science Engineer &amp; Full-Stack Developer"
-                class="w-full h-full object-cover rounded-xl transition-none"
-                style="transform: scale(1.02) translateZ(0); transform-origin: center; backface-visibility: hidden;" />
-              <!-- Pre-blurred Layer for 120 FPS GPU-accelerated Unblur (fades out opacity smoothly on scroll) -->
-              <img id="sem-media-blur" src="/static/assets/about_floating_light_hq.png" alt="" aria-hidden="true"
-                class="absolute inset-0 w-full h-full object-cover rounded-xl transition-none pointer-events-none"
-                style="filter: blur(18px); transform: scale(1.08) translateZ(0); transform-origin: center; opacity: 1; will-change: opacity; backface-visibility: hidden;" />
-              <!-- Subtle Gradient Overlay: protects top/bottom legibility while keeping the center 100% transparent -->
-              <div id="sem-media-overlay"
-                class="absolute inset-0 bg-gradient-to-b from-black/75 via-transparent to-black/85 rounded-xl transition-opacity duration-150 pointer-events-none">
+        <!-- Column 1 (Left 6-cols): The Engineer Profile & Academic Rigor -->
+        <div class="lg:col-span-6 flex flex-col gap-6">
+
+          <!-- Card 1A: Executive Profile & Systems Philosophy -->
+          <div class="card-interactive p-6 sm:p-8 rounded-3xl bg-[#0D0F17]/90 border border-white/10 backdrop-blur-2xl shadow-2xl relative overflow-hidden flex-1">
+            <div class="absolute top-0 right-0 p-4 text-[9px] font-mono text-neutral-500 tracking-widest select-none">
+              MOD://PROFILE_EXEC_01
+            </div>
+
+            <div class="flex items-center gap-4 mb-6">
+              <div class="relative w-14 h-14 rounded-2xl overflow-hidden border border-emerald-500/50 bg-black shadow-lg flex-shrink-0">
+                <img src="/static/assets/chiranjeeb_cutout.png" onerror="this.src='/media/profile/chiranjeeb_photo.jpg';" alt="Chiranjeeb Satapathy"
+                  class="w-full h-full object-cover object-top">
+                <div class="absolute bottom-0 inset-x-0 h-1.5 bg-emerald-500"></div>
+              </div>
+              <div>
+                <h3 class="text-xl sm:text-2xl font-black uppercase text-white tracking-tight">Chiranjeeb Satapathy</h3>
+                <p class="text-xs font-mono text-emerald-400 uppercase tracking-wider mt-0.5">
+                  B.Tech CSE &bull; AI/ML &amp; Systems Developer
+                </p>
+              </div>
+            </div>
+
+            <!-- Core Statement -->
+            <blockquote class="border-l-2 border-emerald-500 pl-4 py-1 mb-6">
+              <p class="text-xs sm:text-sm font-mono text-neutral-200 leading-relaxed uppercase tracking-wide">
+                "CODE IS THE SPECIFICATION OF THOUGHT; SYSTEMS ARE ARCHITECTED TO MAKE FAILURE IMPOSSIBLE AND EXECUTION INEVITABLE."
+              </p>
+            </blockquote>
+
+            <p class="text-xs sm:text-[13px] text-neutral-300 leading-relaxed mb-6 font-normal">
+              Computer Science &amp; Engineering undergraduate at <strong class="text-white">ITER, Siksha 'O' Anusandhan</strong> (Class of 2028). I engineer full-stack platforms, design predictive machine learning inference pipelines (PyTorch, YOLOv8), and master algorithmic computational problems with <span class="text-emerald-400 font-mono font-bold">340+ LeetCode solutions</span>.
+            </p>
+
+            <!-- Academic Foundations Hierarchy -->
+            <div class="space-y-3 pt-4 border-t border-white/10">
+              <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 block mb-2 font-bold">
+                ACADEMIC PEDIGREE &bull; VERIFIED MILESTONES
+              </span>
+
+              <div class="flex items-start gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/5">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 mt-1.5 flex-shrink-0"></span>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-xs font-bold uppercase text-white tracking-wide">ITER, Siksha 'O' Anusandhan University</h4>
+                    <span class="text-[10px] font-mono text-emerald-400">2024 &ndash; 2028</span>
+                  </div>
+                  <p class="text-[11px] text-neutral-400 font-mono">B.Tech in Computer Science &amp; Engineering (CSE)</p>
+                </div>
               </div>
 
-              <!-- Minimal Aesthetic About Info - Perimeter Layout with Empty Center -->
-              <div id="sem-media-content"
-                class="absolute inset-0 z-20 flex flex-col justify-between p-5 sm:p-7 md:p-9 pointer-events-none opacity-0 transition-all duration-300 select-none">
-                <!-- Top Perimeter: Refined Monochrome Headline -->
-                <div
-                  class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-white/10 pb-3">
-                  <h3
-                    class="text-xs sm:text-sm md:text-base font-extrabold uppercase tracking-tight text-white max-w-xl">
-                    "CODE IS THE MEDIUM THROUGH WHICH HUMAN INTENTION BECOMES MECHANICAL REALITY."
-                  </h3>
-                  <span class="text-[10px] font-mono tracking-wider uppercase text-neutral-400 shrink-0">
-                    BHUBANESWAR, ODISHA, INDIA
-                  </span>
+              <div class="flex items-start gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/5">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 mt-1.5 flex-shrink-0"></span>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-xs font-bold uppercase text-white tracking-wide">St. Xavier's High School, Kedargouri</h4>
+                    <span class="text-[10px] font-mono text-neutral-400">Higher Secondary</span>
+                  </div>
+                  <p class="text-[11px] text-neutral-400 font-mono">Senior High School &bull; Science Discipline</p>
                 </div>
+              </div>
 
-                <!-- Center Zone: COMPLETELY OPEN & EMPTY - 100% unobscured view of artwork -->
-                <div class="flex-1 pointer-events-none min-h-[140px] md:min-h-[200px]"></div>
-
-                <!-- Bottom Perimeter: Disciplines, About Summary & Monochrome CTAs -->
-                <div class="pt-3 border-t border-white/10 flex flex-col md:flex-row md:items-end justify-between gap-4">
-                  <!-- About Me Summary & Disciplines -->
-                  <div class="max-w-xl space-y-2">
-                    <div class="flex items-center gap-2.5">
-                      <span class="text-[10px] font-bold tracking-widest uppercase text-neutral-300">DISCIPLINE &amp;
-                        FOCUS</span>
-                      <div class="h-px bg-white/15 w-6"></div>
-                      <span class="text-[10px] font-mono tracking-widest uppercase text-neutral-400">DATA SCIENCE &bull;
-                        FULL-STACK &bull; AI &amp; MACHINE LEARNING</span>
-                    </div>
-                    <p
-                      class="text-xs sm:text-[12px] font-medium leading-relaxed tracking-wider uppercase text-neutral-300">
-                      I am a Computer Science & Engineering (CSE) student at ITER, SOA University. I build full-stack
-                      applications, explore AI and machine learning, and develop practical software products that solve
-                      real problems.
-                    </p>
+              <div class="flex items-start gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/5">
+                <span class="w-2 h-2 rounded-full bg-amber-400 mt-1.5 flex-shrink-0"></span>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-xs font-bold uppercase text-white tracking-wide">Carmel School, Bhadrak</h4>
+                    <span class="text-[10px] font-mono text-amber-400 font-bold">86.0% ICSE</span>
                   </div>
-
-                  <!-- Monochrome Action Buttons -->
-                  <div class="flex items-center gap-3 shrink-0 pt-1 md:pt-0">
-                    <a href="javascript:void(0)" onclick="openContactModal()"
-                      class="pointer-events-auto px-5 py-2.5 rounded-full bg-white text-black hover:bg-neutral-200 text-xs font-bold tracking-wider uppercase transition-all duration-200 inline-flex items-center gap-2">
-                      <span>GET IN TOUCH</span>
-                      <svg class="w-3.5 h-3.5 text-black" fill="none" stroke="currentColor" stroke-width="2"
-                        viewBox="0 0 24 24">
-                        <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"></path>
-                      </svg>
-                    </a>
-                    <a href="#skills"
-                      class="pointer-events-auto px-5 py-2.5 rounded-full border border-neutral-500 hover:border-white text-white text-xs font-bold tracking-wider uppercase transition-all duration-200">
-                      SKILLS &amp; TECH
-                    </a>
-                  </div>
+                  <p class="text-[11px] text-neutral-400 font-mono">Secondary High School &bull; Mathematics &amp; Sciences</p>
                 </div>
               </div>
             </div>
 
-            <!-- Card Subtitles (Translate Outward) -->
-            <div class="flex flex-col items-center text-center relative z-10 mt-4 pointer-events-none">
-              <p id="sem-date"
-                class="text-xl md:text-2xl text-neutral-300 font-semibold tracking-wider uppercase transition-none drop-shadow">
-                EDUCATION &amp; FOUNDATIONS
-              </p>
-              <p id="sem-scroll-prompt"
-                class="text-neutral-400 font-medium text-xs tracking-widest uppercase transition-none mt-1 drop-shadow">
-                SCROLL TO EXPAND
-              </p>
+            <!-- Hackathon Honor Tags -->
+            <div class="flex flex-wrap gap-2 mt-5 pt-4 border-t border-white/10">
+              <span class="px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-[10px] font-mono font-bold uppercase text-amber-400">
+                🏆 SOA Ideathon Finalist
+              </span>
+              <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold uppercase text-emerald-400">
+                🚀 Smart India Hackathon Contender
+              </span>
+              <span class="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[10px] font-mono font-bold uppercase text-cyan-400">
+                ☁️ Google Cloud Hackathon
+              </span>
             </div>
-          </div>
 
-          <!-- Splitting Title Header (ABOUT translates left, ME translates right) -->
-          <div
-            class="flex items-center justify-center text-center gap-2 sm:gap-4 w-full relative z-10 pointer-events-none flex-col"
-            style="will-change: transform; backface-visibility: hidden;">
-            <h2 id="sem-title-first"
-              class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tight transition-none drop-shadow-2xl"
-              style="will-change: transform, opacity;">
-              ABOUT
-            </h2>
-            <h2 id="sem-title-rest"
-              class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white uppercase tracking-tight transition-none drop-shadow-2xl"
-              style="will-change: transform, opacity;">
-              ME
-            </h2>
           </div>
 
         </div>
+
+        <!-- Column 2 (Right 6-cols): Interactive Live Developer IDE Specimen Terminal -->
+        <div class="lg:col-span-6 flex flex-col gap-6">
+
+          <div class="card-interactive rounded-3xl bg-[#090A10] border border-white/15 shadow-2xl overflow-hidden flex flex-col h-full">
+
+            <!-- IDE Title Bar & Window Controls -->
+            <div class="px-5 py-3.5 bg-black/60 border-b border-white/10 flex items-center justify-between flex-wrap gap-2">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+                <span class="ml-2 text-[10px] font-mono uppercase text-neutral-400 tracking-wider">
+                  ANTIGRAVITY // COMPILER V4.2
+                </span>
+              </div>
+
+              <!-- Interactive Tabs -->
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="switchAboutIDETab('engineer', this)"
+                  class="about-ide-tab active px-3 py-1 rounded-lg text-[10px] font-mono uppercase tracking-wider transition bg-white/10 text-white font-bold border border-white/20">
+                  engineer.ts
+                </button>
+                <button type="button" onclick="switchAboutIDETab('architecture', this)"
+                  class="about-ide-tab px-3 py-1 rounded-lg text-[10px] font-mono uppercase tracking-wider transition text-neutral-400 hover:text-white border border-transparent">
+                  stack.yaml
+                </button>
+                <button type="button" onclick="switchAboutIDETab('telemetry', this)"
+                  class="about-ide-tab px-3 py-1 rounded-lg text-[10px] font-mono uppercase tracking-wider transition text-neutral-400 hover:text-white border border-transparent">
+                  metrics.json
+                </button>
+              </div>
+            </div>
+
+            <!-- Code Viewer Stage -->
+            <div class="p-5 sm:p-6 font-mono text-xs sm:text-[13px] leading-relaxed flex-1 overflow-x-auto bg-[#07080D] text-neutral-300">
+              <pre id="about-ide-code" class="select-text whitespace-pre"><code class="text-neutral-300"><span class="text-indigo-400">import</span> { SoftwareEngineer, Degree } <span class="text-indigo-400">from</span> <span class="text-emerald-300">'@chiranjeeb/core'</span>;
+
+<span class="text-neutral-500">// B.Tech Computer Science & Engineering</span>
+<span class="text-indigo-400">export const</span> <span class="text-amber-300">candidate</span>: SoftwareEngineer = {
+  <span class="text-cyan-300">name</span>: <span class="text-emerald-300">"Chiranjeeb Satapathy"</span>,
+  <span class="text-cyan-300">degree</span>: <span class="text-emerald-300">"B.Tech in Computer Science & Engineering"</span>,
+  <span class="text-cyan-300">institution</span>: <span class="text-emerald-300">"ITER, Siksha 'O' Anusandhan, Bhubaneswar"</span>,
+  <span class="text-cyan-300">graduation</span>: <span class="text-amber-400">2028</span>,
+  <span class="text-cyan-300">algorithmicMastery</span>: <span class="text-emerald-300">"340+ LeetCode Solutions (Optimal Complexity)"</span>,
+  <span class="text-cyan-300">specialization</span>: [
+    <span class="text-emerald-300">"Distributed Full-Stack Systems"</span>,
+    <span class="text-emerald-300">"Real-Time Computer Vision & ML (YOLOv8)"</span>,
+    <span class="text-emerald-300">"Low-Latency REST API Microservices"</span>
+  ],
+  <span class="text-cyan-300">industryInternships</span>: [
+    <span class="text-emerald-300">"InAmigos Foundation (Full-Stack Engineer)"</span>,
+    <span class="text-emerald-300">"IBM SkillsBuild & BharatCares (AICTE AI Scholar)"</span>,
+    <span class="text-emerald-300">"CTTC MSME Bhubaneswar (Core Software Engineer)"</span>,
+    <span class="text-emerald-300">"InternPe (Backend Developer)"</span>
+  ],
+  <span class="text-cyan-300">availability</span>: <span class="text-emerald-400 font-bold">"OPEN_FOR_CAMPUS_PLACEMENTS_&_SDE_ROLES"</span>
+};</code></pre>
+            </div>
+
+            <!-- Terminal Execution & Action Deck -->
+            <div class="px-5 py-4 bg-black/80 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="runAboutDiagnostic()"
+                  class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-mono font-bold uppercase tracking-wider transition flex items-center gap-1.5 shadow-lg shadow-emerald-500/20">
+                  <span>▶</span>
+                  <span>RUN TELEMETRY DIAGNOSTIC</span>
+                </button>
+                <button type="button" onclick="copyAboutCode()"
+                  class="px-3.5 py-2 rounded-xl border border-white/20 hover:border-white text-white text-xs font-mono uppercase tracking-wider transition">
+                  📋 COPY
+                </button>
+              </div>
+              <div class="text-[10px] font-mono text-neutral-400 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>STATUS: READY FOR INTERVIEW</span>
+              </div>
+            </div>
+
+            <!-- Diagnostic Output Console (Expands on Diagnostic Run) -->
+            <div id="about-diagnostic-console" class="hidden px-5 py-3.5 bg-[#05060A] border-t border-emerald-500/30 text-[11px] font-mono text-emerald-400 space-y-1">
+              <div>[SYSTEM]:: Initializing sub-millisecond architecture evaluation...</div>
+              <div class="text-neutral-300">&gt; Algorithmic Speed: 340+ LeetCode problems verified.</div>
+              <div class="text-neutral-300">&gt; Academic Standing: ITER SOA B.Tech CSE Class of 2028 | Carmel School 86%.</div>
+              <div class="text-neutral-300">&gt; Repositories: 12 production GitHub repositories compiled.</div>
+              <div class="text-emerald-300 font-bold">&gt;&gt; DIAGNOSTIC PASS: Candidate optimal for SDE &amp; AI engineering roles.</div>
+            </div>
+
+          </div>
+
+        </div>
+
       </div>
+
+      <!-- Bottom Metric Telemetry Row (4 Impact Metrics) -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+
+        <div class="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl">
+          <div class="text-3xl sm:text-4xl font-black font-mono text-white mb-1">340+</div>
+          <div class="text-[10px] font-mono uppercase tracking-wider text-emerald-400 font-bold">LeetCode Algorithmic Mastery</div>
+          <p class="text-[11px] text-neutral-400 mt-1">Data structures, greedy, DP &amp; graph optimizations.</p>
+        </div>
+
+        <div class="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl">
+          <div class="text-3xl sm:text-4xl font-black font-mono text-white mb-1">12</div>
+          <div class="text-[10px] font-mono uppercase tracking-wider text-cyan-400 font-bold">GitHub Production Repositories</div>
+          <p class="text-[11px] text-neutral-400 mt-1">Full-stack web architectures, APIs &amp; ML engines.</p>
+        </div>
+
+        <div class="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl">
+          <div class="text-3xl sm:text-4xl font-black font-mono text-white mb-1">04</div>
+          <div class="text-[10px] font-mono uppercase tracking-wider text-indigo-400 font-bold">Industry Internships</div>
+          <p class="text-[11px] text-neutral-400 mt-1">IBM SkillsBuild, InAmigos, CTTC MSME, InternPe.</p>
+        </div>
+
+        <div class="card-interactive p-5 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-xl">
+          <div class="text-3xl sm:text-4xl font-black font-mono text-white mb-1">08</div>
+          <div class="text-[10px] font-mono uppercase tracking-wider text-amber-400 font-bold">Verified Accreditations</div>
+          <p class="text-[11px] text-neutral-400 mt-1">IBM Analytics, Google Cloud, Meta Full-Stack.</p>
+        </div>
+
+      </div>
+
+      <!-- Recruiter Fast-Action Bar -->
+      <div class="p-6 rounded-3xl bg-gradient-to-r from-emerald-500/10 via-cyan-500/10 to-indigo-500/10 border border-white/15 backdrop-blur-2xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-white text-black flex items-center justify-center font-black text-xl flex-shrink-0 shadow-lg">
+            ⚡
+          </div>
+          <div>
+            <h4 class="text-base sm:text-lg font-black uppercase text-white tracking-tight">EVALUATING FOR TECHNICAL PLACEMENTS &amp; SDE ROLES?</h4>
+            <p class="text-xs font-mono text-neutral-300">Download the official ATS-tailored resume or inspect verified accreditations on LinkedIn.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3 shrink-0 flex-wrap">
+          <a href="/media/resume/chiranjeeb_resume.pdf" target="_blank"
+            class="px-5 py-2.5 rounded-full bg-white text-black hover:bg-neutral-200 text-xs font-bold font-mono tracking-wider uppercase transition-all shadow-lg inline-flex items-center gap-2">
+            <span>RESUME (PDF)</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          </a>
+          <a href="#linkedin-dossier"
+            class="px-5 py-2.5 rounded-full border border-white/20 hover:border-white text-white text-xs font-bold font-mono tracking-wider uppercase transition-all">
+            LINKEDIN DOSSIER ↗
+          </a>
+          <button type="button" onclick="openContactModal()"
+            class="px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-bold font-mono tracking-wider uppercase transition-all">
+            OUTREACH &bull; INTERVIEW
+          </button>
+        </div>
+      </div>
+
     </div>
   </section>
-  <!-- END: About Section (ScrollExpandMedia Component) -->
+<!-- END: About Section -->
 
   <!-- BEGIN: Experience Section ("Where I've Been" — Horizontal Cinematic Installation) -->
   <section class="relative w-full bg-[#070709] text-white overflow-visible" data-purpose="experience-section"
@@ -3452,7 +3603,7 @@
     // ==========================================
     const cpCommands = [
       { title: 'Jump to Hero', category: 'Navigation', action: () => window.location.hash = '#home' },
-      { title: 'Jump to About Me (ScrollExpandMedia)', category: 'Navigation', action: () => window.location.hash = '#about' },
+      { title: 'Jump to About Me (Architectural Identity)', category: 'Navigation', action: () => window.location.hash = '#about' },
       { title: 'Jump to Journey (Where I’ve Been)', category: 'Navigation', action: () => window.location.hash = '#experience' },
       { title: 'Jump to Featured Projects (FlexCarousel)', category: 'Navigation', action: () => window.location.hash = '#projects' },
       { title: 'Jump to 3D Engineering Reel (WorksWheel)', category: 'Navigation', action: () => window.location.hash = '#landing-pages' },
@@ -4226,6 +4377,101 @@
       };
       if (typeof showToast === 'function') {
         showToast(`Lens FX: ${modeNames[mode] || mode.toUpperCase()}`);
+      }
+    }
+
+    // ABOUT IDE SPECIMEN TABS
+    const aboutIDECodes = {
+      engineer: `<span class="text-indigo-400">import</span> { SoftwareEngineer, Degree } <span class="text-indigo-400">from</span> <span class="text-emerald-300">'@chiranjeeb/core'</span>;
+
+<span class="text-neutral-500">// B.Tech Computer Science & Engineering</span>
+<span class="text-indigo-400">export const</span> <span class="text-amber-300">candidate</span>: SoftwareEngineer = {
+  <span class="text-cyan-300">name</span>: <span class="text-emerald-300">"Chiranjeeb Satapathy"</span>,
+  <span class="text-cyan-300">degree</span>: <span class="text-emerald-300">"B.Tech in Computer Science & Engineering"</span>,
+  <span class="text-cyan-300">institution</span>: <span class="text-emerald-300">"ITER, Siksha 'O' Anusandhan, Bhubaneswar"</span>,
+  <span class="text-cyan-300">graduation</span>: <span class="text-amber-400">2028</span>,
+  <span class="text-cyan-300">algorithmicMastery</span>: <span class="text-emerald-300">"340+ LeetCode Solutions (Optimal Complexity)"</span>,
+  <span class="text-cyan-300">specialization</span>: [
+    <span class="text-emerald-300">"Distributed Full-Stack Systems"</span>,
+    <span class="text-emerald-300">"Real-Time Computer Vision & ML (YOLOv8)"</span>,
+    <span class="text-emerald-300">"Low-Latency REST API Microservices"</span>
+  ],
+  <span class="text-cyan-300">industryInternships</span>: [
+    <span class="text-emerald-300">"InAmigos Foundation (Full-Stack Engineer)"</span>,
+    <span class="text-emerald-300">"IBM SkillsBuild & BharatCares (AICTE AI Scholar)"</span>,
+    <span class="text-emerald-300">"CTTC MSME Bhubaneswar (Core Software Engineer)"</span>,
+    <span class="text-emerald-300">"InternPe (Backend Developer)"</span>
+  ],
+  <span class="text-cyan-300">availability</span>: <span class="text-emerald-400 font-bold">"OPEN_FOR_CAMPUS_PLACEMENTS_&_SDE_ROLES"</span>
+};`,
+
+      architecture: `<span class="text-neutral-500"># Distributed Systems & ML Inference Architecture</span>
+<span class="text-indigo-400">version</span>: <span class="text-emerald-300">"4.2"</span>
+<span class="text-indigo-400">stack</span>:
+  <span class="text-cyan-300">backend</span>:
+    <span class="text-cyan-300">framework</span>: <span class="text-emerald-300">"Django REST Framework & Node.js"</span>
+    <span class="text-cyan-300">persistence</span>: <span class="text-emerald-300">"PostgreSQL & SQLite Engine"</span>
+    <span class="text-cyan-300">containerization</span>: <span class="text-emerald-300">"Docker Engine & Vercel Edge"</span>
+  <span class="text-cyan-300">machine_learning</span>:
+    <span class="text-cyan-300">models</span>: [<span class="text-emerald-300">"YOLOv8x-seg"</span>, <span class="text-emerald-300">"PyTorch Neural Nets"</span>, <span class="text-emerald-300">"OpenCV Pipelines"</span>]
+    <span class="text-cyan-300">inference_latency</span>: <span class="text-amber-400">"&lt; 25ms Real-Time Inference"</span>
+  <span class="text-cyan-300">frontend</span>:
+    <span class="text-cyan-300">technologies</span>: [<span class="text-emerald-300">"TailwindCSS"</span>, <span class="text-emerald-300">"React / ES6+"</span>, <span class="text-emerald-300">"WebGL / 3D Canvas"</span>]
+<span class="text-indigo-400">status</span>: <span class="text-emerald-400 font-bold">"PRODUCTION_READY"</span>`,
+
+      telemetry: `{
+  <span class="text-cyan-300">"developer"</span>: <span class="text-emerald-300">"Chiranjeeb Satapathy"</span>,
+  <span class="text-cyan-300">"degrees"</span>: {
+    <span class="text-cyan-300">"btech"</span>: <span class="text-emerald-300">"B.Tech CSE @ ITER Siksha 'O' Anusandhan (2024-2028)"</span>,
+    <span class="text-cyan-300">"icse_class_10"</span>: <span class="text-emerald-300">"Carmel School Bhadrak (86%)"</span>,
+    <span class="text-cyan-300">"high_school"</span>: <span class="text-emerald-300">"St. Xavier's High School Kedargouri"</span>
+  },
+  <span class="text-cyan-300">"metrics"</span>: {
+    <span class="text-cyan-300">"leetcode_solved"</span>: <span class="text-amber-400">340</span>,
+    <span class="text-cyan-300">"github_repositories"</span>: <span class="text-amber-400">12</span>,
+    <span class="text-cyan-300">"verified_certifications"</span>: <span class="text-amber-400">8</span>,
+    <span class="text-cyan-300">"industry_internships"</span>: <span class="text-amber-400">4</span>
+  },
+  <span class="text-cyan-300">"hackathons"</span>: [
+    <span class="text-emerald-300">"SOA Ideathon Finalist"</span>,
+    <span class="text-emerald-300">"Smart India Hackathon Contender"</span>,
+    <span class="text-emerald-300">"Google Cloud Hackathon Contender"</span>
+  ]
+}`
+    };
+
+    function switchAboutIDETab(tabName, btn) {
+      const codeEl = document.getElementById('about-ide-code');
+      const tabs = document.querySelectorAll('.about-ide-tab');
+      if (!codeEl || !aboutIDECodes[tabName]) return;
+
+      if (typeof playAudioClick === 'function') playAudioClick(1100, 0.02);
+
+      codeEl.innerHTML = `<code>${aboutIDECodes[tabName]}</code>`;
+
+      tabs.forEach(t => {
+        t.className = 'about-ide-tab px-3 py-1 rounded-lg text-[10px] font-mono uppercase tracking-wider transition text-neutral-400 hover:text-white border border-transparent';
+      });
+      if (btn) {
+        btn.className = 'about-ide-tab active px-3 py-1 rounded-lg text-[10px] font-mono uppercase tracking-wider transition bg-white/10 text-white font-bold border border-white/20';
+      }
+    }
+
+    function runAboutDiagnostic() {
+      const consoleEl = document.getElementById('about-diagnostic-console');
+      if (!consoleEl) return;
+      if (typeof playAudioClick === 'function') playAudioClick(1400, 0.035);
+      consoleEl.classList.remove('hidden');
+      if (typeof showToast === 'function') showToast('System Diagnostic: All candidate parameters verified 100%.');
+    }
+
+    function copyAboutCode() {
+      const codeEl = document.getElementById('about-ide-code');
+      if (!codeEl) return;
+      const text = codeEl.innerText;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text);
+        if (typeof showToast === 'function') showToast('Engineering specification copied to clipboard.');
       }
     }
 
