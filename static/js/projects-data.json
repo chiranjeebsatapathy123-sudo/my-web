@@ -1,0 +1,285 @@
+[
+  {
+    "id": "12",
+    "title": "AgroFedly",
+    "subtitle": "AI Agriculture & Supply Chain Intelligence",
+    "description": "Enterprise-grade agricultural intelligence and produce supply chain management system integrating machine learning models for crop disease detection and predictive price analytics.",
+    "image": "/media/projects/agrofedly_showcase.png",
+    "src": "/media/projects/agrofedly_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/AgroFedly",
+    "link": "https://agro-fedly.vercel.app",
+    "stats": "YOLOv8 Detection \u2022 Django REST \u2022 Vercel Edge",
+    "tools": [
+      "Python",
+      "Django",
+      "Machine Learning",
+      "Docker",
+      "Vercel"
+    ],
+    "deliverables": [
+      "YOLOv8 crop disease classification",
+      "Predictive pricing volatility engine",
+      "Decoupled Django REST API",
+      "Real-time inventory monitoring"
+    ]
+  },
+  {
+    "id": "13",
+    "title": "MediStock Pro",
+    "subtitle": "Healthcare & Pharmaceutical Inventory Intelligence",
+    "description": "Comprehensive pharmaceutical inventory and hospital supply chain management platform designed to eliminate drug shortages and streamline clinic dispensing workflows.",
+    "image": "/media/projects/medistock_showcase.png",
+    "src": "/media/projects/medistock_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/medi-stock",
+    "link": "https://medi-stock-nu.vercel.app",
+    "stats": "Real-Time Stock Alerts \u2022 Batch Expiry Tracking \u2022 RESTful Architecture",
+    "tools": [
+      "Python",
+      "JavaScript",
+      "REST APIs",
+      "Docker",
+      "Vercel"
+    ],
+    "deliverables": [
+      "Threshold alerting and automated reorders",
+      "Batch expiry tracking & clinic audit logs",
+      "Role-based authentication",
+      "Sub-100ms API response latency"
+    ]
+  },
+  {
+    "id": "15",
+    "title": "Real-Time Emotion AI",
+    "subtitle": "Computer Vision & Micro-Expression Classifier",
+    "description": "Deep learning computer vision pipeline capable of detecting human faces and classifying emotional micro-expressions in real-time through live web camera video feeds.",
+    "image": "/media/projects/real_emotion_showcase.png",
+    "src": "/media/projects/real_emotion_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/real_emotion",
+    "link": "https://real-emotion.vercel.app",
+    "stats": "60 FPS Video Stream \u2022 OpenCV & CNNs \u2022 7 Emotion Classes",
+    "tools": [
+      "Python",
+      "OpenCV",
+      "TensorFlow",
+      "Deep Learning",
+      "PyTorch"
+    ],
+    "deliverables": [
+      "Haar Cascade & CNN multi-face detection",
+      "Sub-20ms inference latency for 7 classes",
+      "Interactive webcam feed overlay",
+      "Confidence score telemetry"
+    ]
+  },
+  {
+    "id": "14",
+    "title": "Margdarshak AI (Nirmit)",
+    "subtitle": "Agentic Regional Language Learning",
+    "description": "Agentic, personalized educational guidance platform engineered to deliver multilingual STEM learning in vernacular Indian regional dialects using Google Gemini APIs.",
+    "image": "/media/projects/nirmit_showcase.png",
+    "src": "/media/projects/nirmit_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/nirmit",
+    "link": "https://nirmit-edu.vercel.app",
+    "stats": "Google Gemini 2.5/3.5 \u2022 Multilingual NLP \u2022 FastAPI Microservice",
+    "tools": [
+      "Python",
+      "FastAPI",
+      "Gemini API",
+      "Docker",
+      "Machine Learning"
+    ],
+    "deliverables": [
+      "Autonomous Gemini agent for personalized learning",
+      "Adaptive difficulty assessment engine",
+      "High-throughput asynchronous backend",
+      "Vernacular STEM translation"
+    ]
+  },
+  {
+    "id": "16",
+    "title": "Life RPG",
+    "subtitle": "Gamified Habit & Productivity Progression",
+    "description": "Life RPG turns real-world daily activities and engineering habits into an immersive role-playing quest game with experience points, stat attributes, and rank badges.",
+    "image": "/media/projects/rpm_game_showcase.png",
+    "src": "/media/projects/rpm_game_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/Rpm_Game",
+    "link": "https://rpm-game.vercel.app",
+    "stats": "XP Mathematical Model \u2022 Canvas Graphics \u2022 Offline Storage",
+    "tools": [
+      "JavaScript",
+      "HTML5/CSS3",
+      "Game Development",
+      "Vercel"
+    ],
+    "deliverables": [
+      "Custom XP and level progression mechanics",
+      "Interactive canvas quest animations",
+      "Offline localStorage persistence",
+      "Daily habit streak tracking"
+    ]
+  },
+  {
+    "id": "17",
+    "title": "NextGen E-Commerce",
+    "subtitle": "Cloud Storefront & Payment Architecture",
+    "description": "High-concurrency modern e-commerce storefront designed with decoupled frontend-backend architecture, persistent cart state, and order tracking.",
+    "image": "/media/projects/ecommerce_showcase.png",
+    "src": "/media/projects/ecommerce_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/e-commerce",
+    "link": "https://e-commerce-gray-beta-20.vercel.app",
+    "stats": "Decoupled REST API \u2022 Reactive Cart \u2022 Mobile-First UX",
+    "tools": [
+      "JavaScript",
+      "Node.js",
+      "REST APIs",
+      "Docker",
+      "Vercel"
+    ],
+    "deliverables": [
+      "Sub-second product catalog search",
+      "Reactive shopping cart state machine",
+      "Node.js REST API with automated notifications",
+      "Vercel Edge network deployment"
+    ]
+  },
+  {
+    "id": "7",
+    "title": "CampusConnect",
+    "subtitle": "Academic Discussion & Student Forum",
+    "description": "Academic discussion platform engineered for university students to exchange course materials, verify study solutions, and collaborate on engineering projects.",
+    "image": "/media/projects/student_forum_showcase.png",
+    "src": "/media/projects/student_forum_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/student-forum",
+    "link": "https://student-forum-fvxs.vercel.app",
+    "stats": "Django 5 Architecture \u2022 ACID PostgreSQL \u2022 Zero Bottlenecks",
+    "tools": [
+      "Python",
+      "Django",
+      "PostgreSQL",
+      "HTML5/CSS3",
+      "REST APIs"
+    ],
+    "deliverables": [
+      "Threaded discussion hierarchy with markdown",
+      "Upvoting algorithms & reputation badges",
+      "Django ORM query optimization",
+      "Role-based moderation tools"
+    ]
+  },
+  {
+    "id": "8",
+    "title": "AtmosphereIQ",
+    "subtitle": "Meteorological Radar & Telemetry",
+    "description": "Interactive meteorological radar and telemetry platform that aggregates multi-city weather sensor metrics, historical forecast models, and humidity trends.",
+    "image": "/media/projects/weather_dashboard_showcase.png",
+    "src": "/media/projects/weather_dashboard_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/weather-dashboard",
+    "link": "https://weather-dashboard-lkf1.vercel.app",
+    "stats": "Chart.js Visuals \u2022 Geospatial Radar \u2022 OpenWeather Integration",
+    "tools": [
+      "JavaScript",
+      "Python",
+      "Chart.js",
+      "REST APIs"
+    ],
+    "deliverables": [
+      "Dynamic Chart.js temperature radar",
+      "Real-time OpenWeatherMap API geospatial integration",
+      "Auto-detect geolocation",
+      "Dark-mode cybernetic dashboard"
+    ]
+  },
+  {
+    "id": "9",
+    "title": "ZenFlow",
+    "subtitle": "Agile Productivity & Team Collaboration",
+    "description": "Enterprise agile productivity system that empowers distributed software engineering teams with sprint telemetry, kanban workflows, and focus timers.",
+    "image": "/media/projects/zenflow_showcase.png",
+    "src": "/media/projects/zenflow_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/ZenFlow",
+    "link": "https://zen-flow-two.vercel.app",
+    "stats": "TypeScript Next.js \u2022 Drag & Drop Kanban \u2022 Pomodoro Soundscape",
+    "tools": [
+      "TypeScript",
+      "React",
+      "Next.js",
+      "TailwindCSS",
+      "Vercel"
+    ],
+    "deliverables": [
+      "Drag-and-drop Kanban state machine",
+      "Pomodoro cognitive focus timer with soundscape",
+      "TypeScript type-safe architecture",
+      "Sprint burndown task analytics"
+    ]
+  },
+  {
+    "id": "18",
+    "title": "EcoFuture",
+    "subtitle": "Environmental Intelligence & Green Tech",
+    "description": "Environmental advocacy and sustainability platform dedicated to global climate analytics, carbon footprint calculation, and renewable initiative funding.",
+    "image": "/media/projects/ecofuture_showcase.png",
+    "src": "/media/projects/ecofuture_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/Eco-future",
+    "link": "https://eco-future-rosy.vercel.app",
+    "stats": "Carbon Offset Calculator \u2022 Sustainability Analytics \u2022 Green Tech UI",
+    "tools": [
+      "JavaScript",
+      "HTML5/CSS3",
+      "Vercel"
+    ],
+    "deliverables": [
+      "Interactive carbon offset calculator",
+      "Global renewable initiative discovery feed",
+      "High-performance static rendering",
+      "Mobile-first responsive design"
+    ]
+  },
+  {
+    "id": "19",
+    "title": "Thiranex 2.0",
+    "subtitle": "Autonomous Workflow & Developer Automation",
+    "description": "Continuous workflow monitoring and autonomous task management for engineering teams. Integrates developer tools, milestone roadmaps, and release monitoring.",
+    "image": "/media/projects/thiranex2_showcase.png",
+    "src": "/media/projects/thiranex2_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/thiranex2",
+    "link": "https://thiranex2-taupe.vercel.app",
+    "stats": "Continuous Release Telemetry \u2022 Git Activity Logger \u2022 Automation",
+    "tools": [
+      "JavaScript",
+      "HTML5/CSS3",
+      "Git & GitHub",
+      "Vercel"
+    ],
+    "deliverables": [
+      "Continuous release telemetry & sprint dashboard",
+      "Automated git activity logger",
+      "Decoupled responsive UI with fluid transitions",
+      "Automated Vercel staging"
+    ]
+  },
+  {
+    "id": "11",
+    "title": "PersonalVault",
+    "subtitle": "Encrypted Cloud & Autonomous AI Portfolio",
+    "description": "All-in-one personal cloud platform and cinematic developer portfolio featuring AES-256 secret vaulting, interactive 3D WebGL universes, and integrated Gemini AI Copilot.",
+    "image": "/media/projects/cloudvault_showcase.png",
+    "src": "/media/projects/cloudvault_showcase.png",
+    "href": "https://github.com/chiranjeebsatapathy123-sudo/my-web",
+    "link": "https://thiranex3-iota.vercel.app/",
+    "stats": "AES-256 Encryption \u2022 Three.js Cosmos \u2022 Gemini 3.5 Copilot",
+    "tools": [
+      "Python",
+      "Django",
+      "JavaScript",
+      "Gemini API",
+      "Three.js"
+    ],
+    "deliverables": [
+      "AES-256 encrypted secret vault with 2FA",
+      "Interactive Three.js particle cosmos background",
+      "Full-stack Django 5 architecture",
+      "Autonomous Gemini AI Copilot"
+    ]
+  }
+]
