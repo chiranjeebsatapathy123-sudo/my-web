@@ -65,7 +65,7 @@ export function initScrollExpandMedia() {
     // Fully expanded size matching large viewport deck
     const maxWByViewport = window.innerWidth * 0.96;
     const endW = Math.min(maxWByViewport, 1420);
-    const endH = Math.min(window.innerHeight * 0.88, 860);
+    const endH = Math.min(window.innerHeight * 0.93, 940);
 
     const currentW = startW + progress * (endW - startW);
     const currentH = startH + progress * (endH - startH);
