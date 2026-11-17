@@ -1086,265 +1086,188 @@
 
             <!-- Fully Expanded Command Deck (Reveals when progress >= 0.68) -->
             <div id="sem-media-content"
-              class="absolute inset-0 z-20 flex flex-col justify-between p-5 sm:p-7 md:p-8 pointer-events-none opacity-0 transition-all duration-300 select-none overflow-y-auto sem-custom-scroll bg-[#070914]/95 backdrop-blur-3xl rounded-3xl border border-cyan-500/30 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_20px_60px_rgba(0,0,0,0.8)]">
+              class="absolute inset-0 z-20 flex flex-col justify-between p-4 sm:p-6 md:p-7 pointer-events-none opacity-0 transition-all duration-300 select-none bg-[#070914]/95 backdrop-blur-3xl rounded-3xl border border-cyan-400/40 shadow-[0_25px_80px_rgba(0,0,0,0.95),0_0_50px_rgba(6,182,212,0.25)] overflow-hidden">
               
-              <!-- Top Header: Executive Holographic Identification Bar -->
-              <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-white/10 shrink-0">
-                <!-- Candidate Avatar & Identity -->
-                <div class="flex items-center gap-3.5">
-                  <div class="relative w-12 h-12 rounded-2xl overflow-hidden border-2 border-cyan-400/80 bg-black flex-shrink-0 shadow-[0_0_20px_rgba(6,182,212,0.4)]">
+              <!-- Ambient Subtle Scanline -->
+              <div class="cyber-scanline pointer-events-none opacity-30"></div>
+
+              <!-- Top Header: Executive Compact Identification Bar -->
+              <div class="flex items-center justify-between pb-3 border-b border-white/10 shrink-0">
+                <!-- Left: Candidate Avatar & Info -->
+                <div class="flex items-center gap-3">
+                  <div class="relative w-11 h-11 rounded-xl overflow-hidden border-2 border-cyan-400/80 bg-black flex-shrink-0 shadow-[0_0_15px_rgba(6,182,212,0.5)]">
                     <img src="/static/assets/chiranjeeb_cutout.png" onerror="this.src='/media/profile/chiranjeeb_photo.jpg';" alt="Chiranjeeb Satapathy" class="w-full h-full object-cover object-top">
                     <div class="absolute bottom-0 inset-x-0 h-1 bg-gradient-to-r from-cyan-400 to-emerald-400"></div>
                   </div>
                   <div>
                     <div class="flex items-center gap-2 flex-wrap">
-                      <h3 class="text-lg sm:text-xl font-black uppercase tracking-tight text-white flex items-center gap-2">
-                        <span>CHIRANJEEB SATAPATHY</span>
-                      </h3>
-                      <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/50 text-[9px] font-mono font-bold uppercase text-emerald-300 shadow-sm flex items-center gap-1">
+                      <h3 class="text-base sm:text-lg font-black uppercase tracking-tight text-white">CHIRANJEEB SATAPATHY</h3>
+                      <span class="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-400/50 text-[8.5px] font-mono font-bold uppercase text-emerald-300 flex items-center gap-1 shadow-sm">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                         <span>READY FOR PLACEMENT</span>
                       </span>
                     </div>
-                    <p class="text-[10.5px] font-mono text-neutral-400 uppercase tracking-wider mt-0.5">
-                      B.Tech in Computer Science &amp; Engineering &bull; <strong class="text-neutral-200">ITER, Siksha 'O' Anusandhan</strong> &bull; Class of 2028
+                    <p class="text-[10px] font-mono text-neutral-400 uppercase tracking-wider mt-0.5">
+                      B.Tech in Computer Science &bull; <strong class="text-white">ITER, SOA University</strong> &bull; Class of 2028
                     </p>
                   </div>
                 </div>
 
-                <!-- Live Dynamic Telemetry Specimen Chips -->
-                <div class="flex items-center gap-2 text-[10px] font-mono flex-wrap">
-                  <div class="px-3 py-1 rounded-xl bg-white/[0.04] border border-cyan-400/30 text-cyan-300 flex items-center gap-1.5 shadow-sm">
-                    <span>⚡</span> <span class="font-bold">340+ LEETCODE</span>
-                  </div>
-                  <div class="px-3 py-1 rounded-xl bg-amber-500/10 border border-amber-400/40 text-amber-300 font-bold flex items-center gap-1.5 shadow-sm">
-                    <span>🎓</span> <span>ICSE 86.0%</span>
-                  </div>
-                  <div class="px-3 py-1 rounded-xl bg-emerald-500/10 border border-emerald-400/40 text-emerald-300 flex items-center gap-1.5 shadow-sm">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                    <span>LIVE 60FPS</span>
-                  </div>
+                <!-- Right: Quick Status Chips -->
+                <div class="flex items-center gap-2 text-[9.5px] font-mono">
+                  <span class="hidden sm:inline-flex px-2.5 py-1 rounded-lg bg-amber-500/10 border border-amber-400/40 text-amber-300 font-bold">
+                    🎓 ICSE 86.0%
+                  </span>
+                  <span class="px-2.5 py-1 rounded-lg bg-cyan-500/10 border border-cyan-400/40 text-cyan-300 font-bold flex items-center gap-1">
+                    <span>⚡ 340+ LEETCODE</span>
+                  </span>
                 </div>
               </div>
 
-              <!-- Main Center Zone: Split Holographic Engineering Architecture -->
-              <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 my-auto overflow-y-auto sem-custom-scroll py-3">
+              <!-- Main Center Stage: Two Symmetrical 3D Halves -->
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 my-auto py-2 items-center">
                 
-                <!-- Left Column (6 cols): Philosophy, Glowing Pathway & Verified Milestones -->
-                <div class="lg:col-span-6 flex flex-col justify-between space-y-3.5">
+                <!-- Left Half (6 cols): Verified Identity & Academic Pedigree (Short & Punchy) -->
+                <div class="lg:col-span-6 flex flex-col justify-between space-y-3">
                   
-                  <!-- Architecture Maxim Quote Card -->
-                  <div class="p-3.5 rounded-2xl bg-white/[0.02] border border-white/10 border-l-4 border-l-cyan-400 shadow-sm">
-                    <p class="text-xs sm:text-[12.5px] font-mono text-neutral-200 leading-relaxed uppercase tracking-wide">
-                      "CODE IS THE SPECIFICATION OF THOUGHT; SYSTEMS ARE ARCHITECTED TO MAKE FAILURE IMPOSSIBLE AND EXECUTION INEVITABLE."
+                  <!-- Architectural Quote Block -->
+                  <div class="p-3 rounded-xl bg-white/[0.02] border border-white/10 border-l-2 border-l-cyan-400">
+                    <p class="text-xs font-mono text-neutral-200 leading-relaxed uppercase tracking-wide">
+                      "GOOD SOFTWARE IS PREDICTABLE. GREAT SOFTWARE FEELS INEVITABLE."
                     </p>
-                    <span class="block text-[9px] font-mono uppercase tracking-widest text-cyan-400 mt-1.5 font-bold">
-                      &mdash; SOFTWARE ARCHITECTURE MAXIM
+                  </div>
+
+                  <!-- Verified Academic Foundations (Compact Timeline) -->
+                  <div class="space-y-1.5">
+                    <div class="text-[9.5px] font-mono uppercase tracking-widest text-neutral-400 flex items-center justify-between px-1">
+                      <span>VERIFIED ACADEMIC PEDIGREE</span>
+                      <span class="text-emerald-400 font-bold">RECORDS PASS</span>
+                    </div>
+
+                    <!-- ITER SOA -->
+                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-emerald-500/50 transition">
+                      <div class="flex items-center gap-2.5 min-w-0">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#10b981] shrink-0"></span>
+                        <div class="min-w-0">
+                          <h4 class="text-xs font-bold uppercase text-white truncate">ITER, Siksha 'O' Anusandhan University</h4>
+                          <p class="text-[10px] font-mono text-neutral-400">B.Tech in Computer Science &amp; Engineering (CSE)</p>
+                        </div>
+                      </div>
+                      <span class="text-[9.5px] font-mono font-bold text-emerald-400 shrink-0 ml-2">2024 &ndash; 2028</span>
+                    </div>
+
+                    <!-- St. Xavier's -->
+                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-cyan-500/50 transition">
+                      <div class="flex items-center gap-2.5 min-w-0">
+                        <span class="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee] shrink-0"></span>
+                        <div class="min-w-0">
+                          <h4 class="text-xs font-bold uppercase text-white truncate">St. Xavier's High School, Kedargouri</h4>
+                          <p class="text-[10px] font-mono text-neutral-400">Higher Secondary &bull; Science Discipline</p>
+                        </div>
+                      </div>
+                      <span class="text-[9.5px] font-mono text-neutral-400 shrink-0 ml-2">Senior High</span>
+                    </div>
+
+                    <!-- Carmel School -->
+                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-amber-500/50 transition">
+                      <div class="flex items-center gap-2.5 min-w-0">
+                        <span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] shrink-0"></span>
+                        <div class="min-w-0">
+                          <h4 class="text-xs font-bold uppercase text-white truncate">Carmel School, Bhadrak</h4>
+                          <p class="text-[10px] font-mono text-neutral-400">Secondary High School &bull; Mathematics &amp; Sciences</p>
+                        </div>
+                      </div>
+                      <span class="text-[9.5px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-400/30 shrink-0 ml-2">86.0% ICSE</span>
+                    </div>
+                  </div>
+
+                  <!-- Hackathon & Internship Compact Honors -->
+                  <div class="flex flex-wrap gap-1.5 pt-1">
+                    <span class="px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-[9px] font-mono font-bold uppercase text-amber-300">
+                      🏆 SOA Ideathon Finalist
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-[9px] font-mono font-bold uppercase text-emerald-300">
+                      ⚡ Smart India Hackathon
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full bg-cyan-500/10 border border-cyan-400/30 text-[9px] font-mono font-bold uppercase text-cyan-300">
+                      ☁️ Google Cloud Hackathon
+                    </span>
+                    <span class="px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-400/30 text-[9px] font-mono font-bold uppercase text-indigo-300">
+                      💼 IBM AICTE Scholar
                     </span>
                   </div>
 
-                  <!-- Glowing Vertical Cyber Pathway (Academic Foundations) -->
-                  <div class="space-y-2">
-                    <div class="flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-neutral-400 px-1 font-semibold">
-                      <span>ACADEMIC FOUNDATION &bull; PEDIGREE</span>
-                      <span class="text-emerald-400">VERIFIED RECORDS</span>
-                    </div>
-
-                    <!-- Pathway Container with glowing vertical circuit line -->
-                    <div class="relative pl-5 space-y-2.5 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-emerald-400 before:via-cyan-400 before:to-amber-400">
-                      
-                      <!-- Milestone 1: ITER SOA University -->
-                      <div class="relative group p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-emerald-500/50 transition">
-                        <span class="absolute -left-5 top-3.5 w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_10px_#10b981] border-2 border-black"></span>
-                        <div class="flex items-center justify-between">
-                          <h4 class="text-xs font-bold uppercase text-white tracking-wide">ITER, Siksha 'O' Anusandhan University</h4>
-                          <span class="text-[9.5px] font-mono font-bold text-emerald-400">2024 &ndash; 2028</span>
-                        </div>
-                        <p class="text-[11px] font-mono text-neutral-400 mt-0.5">B.Tech in Computer Science &amp; Engineering (CSE)</p>
-                      </div>
-
-                      <!-- Milestone 2: St. Xavier's High School -->
-                      <div class="relative group p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-cyan-500/50 transition">
-                        <span class="absolute -left-5 top-3.5 w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee] border-2 border-black"></span>
-                        <div class="flex items-center justify-between">
-                          <h4 class="text-xs font-bold uppercase text-white tracking-wide">St. Xavier's High School, Kedargouri</h4>
-                          <span class="text-[9.5px] font-mono text-neutral-400">Higher Secondary</span>
-                        </div>
-                        <p class="text-[11px] font-mono text-neutral-400 mt-0.5">Senior High School &bull; Science Discipline</p>
-                      </div>
-
-                      <!-- Milestone 3: Carmel School, Bhadrak -->
-                      <div class="relative group p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-amber-500/50 transition">
-                        <span class="absolute -left-5 top-3.5 w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_10px_#f59e0b] border-2 border-black"></span>
-                        <div class="flex items-center justify-between">
-                          <h4 class="text-xs font-bold uppercase text-white tracking-wide">Carmel School, Bhadrak</h4>
-                          <span class="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-400/30">86.0% ICSE</span>
-                        </div>
-                        <p class="text-[11px] font-mono text-neutral-400 mt-0.5">Secondary High School &bull; Mathematics &amp; Sciences</p>
-                      </div>
-
-                    </div>
-                  </div>
-
-                  <!-- Verified Hackathons & Internships Badges -->
-                  <div class="space-y-1.5 pt-1">
-                    <div class="flex flex-wrap gap-2">
-                      <span class="px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-[9.5px] font-mono font-bold uppercase text-amber-300 flex items-center gap-1 shadow-sm">
-                        <span>🏆</span> <span>SOA Ideathon Finalist</span>
-                      </span>
-                      <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[9.5px] font-mono font-bold uppercase text-emerald-300 flex items-center gap-1 shadow-sm">
-                        <span>⚡</span> <span>Smart India Hackathon</span>
-                      </span>
-                      <span class="px-2.5 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-[9.5px] font-mono font-bold uppercase text-cyan-300 flex items-center gap-1 shadow-sm">
-                        <span>☁️</span> <span>Google Cloud Hackathon</span>
-                      </span>
-                    </div>
-                  </div>
-
                 </div>
 
-                <!-- Right Column (6 cols): High-Tech IDE Specimen Terminal with Zero-Scrollbar Design -->
-                <div class="lg:col-span-6 flex flex-col justify-between rounded-2xl bg-[#080A12] border border-white/15 overflow-hidden shadow-2xl">
+                <!-- Right Half (6 cols): Real-Time 3D Holographic Cyber-Core & Telemetry -->
+                <div class="lg:col-span-6 relative flex flex-col items-center justify-center p-3 rounded-2xl bg-black/40 border border-white/10 overflow-hidden min-h-[280px]">
                   
-                  <!-- IDE Title & Window Tabs Bar -->
-                  <div class="px-4 py-2.5 bg-black/80 border-b border-white/10 flex items-center justify-between flex-wrap gap-2 shrink-0">
-                    <div class="flex items-center gap-2">
-                      <span class="w-2.5 h-2.5 rounded-full bg-red-500/90 inline-block"></span>
-                      <span class="w-2.5 h-2.5 rounded-full bg-amber-500/90 inline-block"></span>
-                      <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/90 inline-block"></span>
-                      <span class="ml-2 text-[9px] font-mono uppercase text-neutral-400 tracking-wider">ANTIGRAVITY // COMPILER V4.2</span>
+                  <!-- The Interactive 3D Holographic Canvas -->
+                  <div class="relative w-full h-[220px] sm:h-[240px] flex items-center justify-center">
+                    <canvas id="about-core-3d-canvas" class="w-full h-full cursor-grab active:cursor-grabbing"></canvas>
+
+                    <!-- Floating 3D Telemetry Badges anchored around the 3D core -->
+                    <div class="absolute top-2 left-2 px-2.5 py-1 rounded-xl bg-[#090B14]/85 border border-cyan-400/40 text-[9px] font-mono text-cyan-300 shadow-md backdrop-blur-md pointer-events-none">
+                      <span class="font-bold">⚡ 340+</span> LEETCODE
                     </div>
-                    
-                    <div class="flex items-center gap-1">
-                      <button type="button" onclick="switchAboutIDETab('engineer', this)"
-                        class="about-ide-tab active px-2.5 py-0.5 rounded text-[9.5px] font-mono uppercase tracking-wider transition bg-white/10 text-white font-bold border border-white/20">
-                        engineer.ts
-                      </button>
-                      <button type="button" onclick="switchAboutIDETab('architecture', this)"
-                        class="about-ide-tab px-2.5 py-0.5 rounded text-[9.5px] font-mono uppercase tracking-wider transition text-neutral-400 hover:text-white border border-transparent">
-                        stack.yaml
-                      </button>
-                      <button type="button" onclick="switchAboutIDETab('telemetry', this)"
-                        class="about-ide-tab px-2.5 py-0.5 rounded text-[9.5px] font-mono uppercase tracking-wider transition text-neutral-400 hover:text-white border border-transparent">
-                        metrics.json
-                      </button>
+
+                    <div class="absolute top-2 right-2 px-2.5 py-1 rounded-xl bg-[#090B14]/85 border border-emerald-400/40 text-[9px] font-mono text-emerald-300 shadow-md backdrop-blur-md pointer-events-none">
+                      <span class="font-bold">🛠️ 12</span> REPOSITORIES
+                    </div>
+
+                    <div class="absolute bottom-2 left-2 px-2.5 py-1 rounded-xl bg-[#090B14]/85 border border-indigo-400/40 text-[9px] font-mono text-indigo-300 shadow-md backdrop-blur-md pointer-events-none">
+                      <span class="font-bold">💼 04</span> INTERNSHIPS
+                    </div>
+
+                    <div class="absolute bottom-2 right-2 px-2.5 py-1 rounded-xl bg-[#090B14]/85 border border-amber-400/40 text-[9px] font-mono text-amber-300 shadow-md backdrop-blur-md pointer-events-none">
+                      <span class="font-bold">📜 08</span> CERTIFICATIONS
                     </div>
                   </div>
 
-                  <!-- Code Stage with Clean Custom Scrollbar (Zero Ugly Native Scrollbars) -->
-                  <div class="p-4 font-mono text-[11px] sm:text-xs leading-relaxed flex-1 overflow-x-auto overflow-y-auto sem-custom-scroll bg-[#05060B] text-neutral-300 max-h-[220px]">
-                    <pre id="about-ide-code" class="select-text whitespace-pre"><code class="text-neutral-300"><span class="text-indigo-400">import</span> { SoftwareEngineer, Degree } <span class="text-indigo-400">from</span> <span class="text-emerald-300">'@chiranjeeb/core'</span>;
-
-<span class="text-neutral-500">// B.Tech Computer Science & Engineering</span>
-<span class="text-indigo-400">export const</span> <span class="text-amber-300">candidate</span>: SoftwareEngineer = {
-  <span class="text-cyan-300">name</span>: <span class="text-emerald-300">"Chiranjeeb Satapathy"</span>,
-  <span class="text-cyan-300">degree</span>: <span class="text-emerald-300">"B.Tech in Computer Science & Engineering"</span>,
-  <span class="text-cyan-300">institution</span>: <span class="text-emerald-300">"ITER, Siksha 'O' Anusandhan, Bhubaneswar"</span>,
-  <span class="text-cyan-300">graduation</span>: <span class="text-amber-400">2028</span>,
-  <span class="text-cyan-300">algorithmicMastery</span>: <span class="text-emerald-300">"340+ LeetCode Solutions (Optimal Complexity)"</span>,
-  <span class="text-cyan-300">industryInternships</span>: [
-    <span class="text-emerald-300">"IBM SkillsBuild & BharatCares (AICTE AI Scholar)"</span>,
-    <span class="text-emerald-300">"InAmigos Foundation (Full-Stack Engineer)"</span>,
-    <span class="text-emerald-300">"CTTC MSME Bhubaneswar (Core Software Engineer)"</span>,
-    <span class="text-emerald-300">"InternPe (Backend Developer)"</span>
-  ],
-  <span class="text-cyan-300">status</span>: <span class="text-emerald-400 font-bold">"OPEN_FOR_PLACEMENTS_&_SDE_ROLES"</span>
-};</code></pre>
-                  </div>
-
-                  <!-- Terminal Actions Bar -->
-                  <div class="px-4 py-2 bg-black/85 border-t border-white/10 flex items-center justify-between gap-2 shrink-0">
-                    <div class="flex items-center gap-2">
-                      <button type="button" onclick="runAboutDiagnostic()"
-                        class="px-3 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black text-[10px] font-mono font-bold uppercase tracking-wider transition flex items-center gap-1.5 shadow-md shadow-emerald-500/20 active:scale-95">
-                        <span>▶</span>
-                        <span>RUN DIAGNOSTIC</span>
-                      </button>
-                      <button type="button" onclick="copyAboutCode()"
-                        class="px-2.5 py-1.5 rounded-lg border border-white/20 hover:border-white text-white text-[10px] font-mono uppercase tracking-wider transition active:scale-95">
-                        📋 COPY
-                      </button>
-                    </div>
-                    <span class="text-[9px] font-mono text-emerald-400 flex items-center gap-1.5">
-                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                      <span>STATUS: VERIFIED</span>
-                    </span>
-                  </div>
-
-                  <!-- Diagnostic Output Console (Reveals on Diagnostic Run) -->
-                  <div id="about-diagnostic-console" class="hidden px-4 py-2.5 bg-[#030407] border-t border-emerald-500/30 text-[10px] font-mono text-emerald-400 space-y-0.5">
-                    <div>[SYSTEM]:: Initializing candidate evaluation benchmark...</div>
-                    <div class="text-neutral-300">&gt; Algorithmic Speed: 340+ LeetCode problems verified.</div>
-                    <div class="text-neutral-300">&gt; Academic Standing: ITER SOA B.Tech CSE Class of 2028 | Carmel School 86%.</div>
-                    <div class="text-emerald-300 font-bold">&gt;&gt; DIAGNOSTIC PASS: Candidate verified optimal for SDE &amp; AI engineering roles.</div>
-                  </div>
-
-                </div>
-
-              </div>
-
-              <!-- Bottom Row: 4 Metric Badges & Spacious Recruiter Fast-Action Bar -->
-              <div class="pt-3 border-t border-white/10 shrink-0 space-y-3">
-                
-                <!-- 4 Floating Telemetry Specimen Metric Cards -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                  <div class="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-emerald-500/40 transition flex items-center justify-between shadow-sm">
-                    <div>
-                      <div class="text-base sm:text-xl font-black font-mono text-white leading-tight">340+</div>
-                      <div class="text-[8.5px] font-mono uppercase text-emerald-400 font-bold">LeetCode Solved</div>
-                    </div>
-                    <span class="text-base text-emerald-400">⚡</span>
-                  </div>
-
-                  <div class="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-cyan-500/40 transition flex items-center justify-between shadow-sm">
-                    <div>
-                      <div class="text-base sm:text-xl font-black font-mono text-white leading-tight">12</div>
-                      <div class="text-[8.5px] font-mono uppercase text-cyan-400 font-bold">GitHub Repos</div>
-                    </div>
-                    <span class="text-base text-cyan-400">🛠️</span>
-                  </div>
-
-                  <div class="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-indigo-500/40 transition flex items-center justify-between shadow-sm">
-                    <div>
-                      <div class="text-base sm:text-xl font-black font-mono text-white leading-tight">04</div>
-                      <div class="text-[8.5px] font-mono uppercase text-indigo-400 font-bold">Internships</div>
-                    </div>
-                    <span class="text-base text-indigo-400">💼</span>
-                  </div>
-
-                  <div class="p-2.5 rounded-xl bg-white/[0.03] border border-white/10 hover:border-amber-500/40 transition flex items-center justify-between shadow-sm">
-                    <div>
-                      <div class="text-base sm:text-xl font-black font-mono text-white leading-tight">08</div>
-                      <div class="text-[8.5px] font-mono uppercase text-amber-400 font-bold">Certifications</div>
-                    </div>
-                    <span class="text-base text-amber-400">📜</span>
-                  </div>
-                </div>
-
-                <!-- Recruiter Fast-Action Bar (Cleanly Spaced, No Overflow or Clipping) -->
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 p-3 rounded-2xl bg-gradient-to-r from-emerald-500/10 via-cyan-500/10 to-indigo-500/10 border border-cyan-500/30 shadow-lg">
-                  <div class="text-[10px] font-mono text-neutral-200 uppercase tracking-wider text-center sm:text-left flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    <span><strong class="text-white">RECRUITING FOR CAMPUS SDE ROLES?</strong> Download official dossier &amp; credentials.</span>
-                  </div>
-                  
-                  <div class="flex items-center gap-2 shrink-0 flex-wrap justify-center sm:justify-end">
-                    <a href="/media/resume/chiranjeeb_resume.pdf" target="_blank"
-                      class="px-4 py-1.5 rounded-full bg-white text-black hover:bg-neutral-200 text-[10px] font-mono font-bold uppercase transition flex items-center gap-1.5 shadow-md active:scale-95">
-                      <span>RESUME (PDF)</span>
-                      <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                    </a>
-                    <a href="#linkedin-dossier"
-                      class="px-3.5 py-1.5 rounded-full border border-white/20 hover:border-white text-white text-[10px] font-mono uppercase transition">
-                      LINKEDIN DOSSIER ↗
-                    </a>
-                    <button type="button" onclick="openContactModal()"
-                      class="px-4 py-1.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black text-[10px] font-mono font-bold uppercase transition shadow-md shadow-emerald-500/20 active:scale-95">
-                      INTERVIEW
+                  <!-- Interactive Audit Trigger Button -->
+                  <div class="w-full flex items-center justify-between pt-2 border-t border-white/10 mt-1">
+                    <button type="button" onclick="triggerCoreAudit()" id="btn-core-audit"
+                      class="px-3.5 py-1 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black text-[10px] font-mono font-bold uppercase tracking-wider transition flex items-center gap-1.5 shadow-md shadow-emerald-500/20 active:scale-95">
+                      <span>▶</span>
+                      <span>RUN TELEMETRY AUDIT</span>
                     </button>
+                    <span id="core-audit-status" class="text-[9.5px] font-mono text-neutral-400 flex items-center gap-1.5">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                      <span>SYS://60FPS_ORB</span>
+                    </span>
                   </div>
+
+                  <!-- Live Benchmark Readout (Reveals dynamically) -->
+                  <div id="core-audit-readout" class="hidden w-full mt-2 p-2 rounded-lg bg-[#040508] border border-emerald-500/30 text-[9px] font-mono text-emerald-400 space-y-0.5">
+                    <div>[DIAGNOSTIC PASS]:: ITER SOA B.Tech CSE '28 &bull; 340+ LeetCode Verified &bull; Optimal SDE Profile.</div>
+                  </div>
+
                 </div>
 
+              </div>
+
+              <!-- Bottom Footer: Recruiter Fast-Action Bar (Clean, Spacious, No Clipping) -->
+              <div class="pt-2.5 border-t border-white/10 shrink-0 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div class="text-[9.5px] font-mono text-neutral-300 uppercase tracking-wider text-center sm:text-left flex items-center gap-2">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                  <span><strong class="text-white">CAMPUS SDE &amp; AI HIRING:</strong> Verified credentials &amp; dossier archives.</span>
+                </div>
+                
+                <div class="flex items-center gap-2 shrink-0 flex-wrap justify-center sm:justify-end">
+                  <a href="/media/resume/chiranjeeb_resume.pdf" target="_blank"
+                    class="px-3.5 py-1 rounded-full bg-white text-black hover:bg-neutral-200 text-[9.5px] font-mono font-bold uppercase transition flex items-center gap-1 shadow-md active:scale-95">
+                    <span>RESUME (PDF)</span>
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  </a>
+                  <a href="#linkedin-dossier"
+                    class="px-3 py-1 rounded-full border border-white/20 hover:border-white text-white text-[9.5px] font-mono uppercase transition">
+                    LINKEDIN DOSSIER ↗
+                  </a>
+                  <button type="button" onclick="openContactModal()"
+                    class="px-3.5 py-1 rounded-full bg-emerald-500 hover:bg-emerald-400 text-black text-[9.5px] font-mono font-bold uppercase transition shadow-md shadow-emerald-500/20 active:scale-95">
+                    INTERVIEW
+                  </button>
+                </div>
               </div>
 
             </div>
@@ -1354,6 +1277,200 @@
 
       </div>
     </div>
+
+    <!-- Self-Contained 3D Holographic Core Canvas Engine -->
+    <script>
+      (function initCore3DEngine() {
+        const canvas = document.getElementById('about-core-3d-canvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        
+        let width = canvas.width = canvas.parentElement.offsetWidth || 300;
+        let height = canvas.height = canvas.parentElement.offsetHeight || 220;
+
+        window.addEventListener('resize', () => {
+          if (!canvas.parentElement) return;
+          width = canvas.width = canvas.parentElement.offsetWidth || 300;
+          height = canvas.height = canvas.parentElement.offsetHeight || 220;
+        }, { passive: true });
+
+        // 3D Geodesic Icosahedron Math
+        const phi = (1 + Math.sqrt(5)) / 2;
+        const rawVertices = [
+          [-1,  phi, 0], [ 1,  phi, 0], [-1, -phi, 0], [ 1, -phi, 0],
+          [ 0, -1,  phi], [ 0,  1,  phi], [ 0, -1, -phi], [ 0,  1, -phi],
+          [ phi, 0, -1], [ phi, 0,  1], [-phi, 0, -1], [-phi, 0,  1]
+        ];
+
+        // Normalize vertices to sphere radius R
+        const radius = Math.min(width, height) * 0.28;
+        const vertices = rawVertices.map(v => {
+          const len = Math.hypot(v[0], v[1], v[2]);
+          return [v[0] / len * radius, v[1] / len * radius, v[2] / len * radius];
+        });
+
+        // Generate edges based on minimum distance between vertices
+        const edges = [];
+        for (let i = 0; i < vertices.length; i++) {
+          for (let j = i + 1; j < vertices.length; j++) {
+            const d = Math.hypot(vertices[i][0] - vertices[j][0], vertices[i][1] - vertices[j][1], vertices[i][2] - vertices[j][2]);
+            if (d < radius * 1.15) {
+              edges.push([i, j]);
+            }
+          }
+        }
+
+        let rotX = 0;
+        let rotY = 0;
+        let rotZ = 0;
+        let speed = 0.015;
+        let targetSpeed = 0.015;
+        let mouseX = 0;
+        let mouseY = 0;
+
+        canvas.parentElement.addEventListener('mousemove', (e) => {
+          const rect = canvas.getBoundingClientRect();
+          mouseX = ((e.clientX - rect.left) / rect.width - 0.5) * 0.04;
+          mouseY = ((e.clientY - rect.top) / rect.height - 0.5) * 0.04;
+        });
+
+        canvas.parentElement.addEventListener('mouseleave', () => {
+          mouseX = 0;
+          mouseY = 0;
+        });
+
+        window.triggerCoreAudit = function() {
+          if (typeof playAudioClick === 'function') playAudioClick(1400, 0.04);
+          targetSpeed = 0.08;
+          const status = document.getElementById('core-audit-status');
+          const readout = document.getElementById('core-audit-readout');
+          if (status) status.innerHTML = '<span class="text-emerald-400 font-bold animate-pulse">AUDITING 100% PASS</span>';
+          if (readout) readout.classList.remove('hidden');
+          setTimeout(() => {
+            targetSpeed = 0.015;
+          }, 1800);
+        };
+
+        function draw() {
+          ctx.clearRect(0, 0, width, height);
+          const cx = width / 2;
+          const cy = height / 2;
+          const fov = 320;
+
+          // Smooth speed interpolation
+          speed += (targetSpeed - speed) * 0.08;
+          rotY += speed + mouseX;
+          rotX += speed * 0.7 + mouseY;
+          rotZ += speed * 0.4;
+
+          // Trigonometric Rotation Matrix
+          const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+          const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+          const cosZ = Math.cos(rotZ), sinZ = Math.sin(rotZ);
+
+          // Project vertices
+          const projected = vertices.map(v => {
+            // Rotate Y
+            let x1 = v[0] * cosY - v[2] * sinY;
+            let y1 = v[1];
+            let z1 = v[0] * sinY + v[2] * cosY;
+
+            // Rotate X
+            let x2 = x1;
+            let y2 = y1 * cosX - z1 * sinX;
+            let z2 = y1 * sinX + z1 * cosX;
+
+            // Rotate Z
+            let x3 = x2 * cosZ - y2 * sinZ;
+            let y3 = x2 * sinZ + y2 * cosZ;
+            let z3 = z2;
+
+            const scale = fov / (fov + z3);
+            return {
+              x: x3 * scale + cx,
+              y: y3 * scale + cy,
+              z: z3,
+              scale: scale
+            };
+          });
+
+          // Draw Inner Glowing Quantum Energy Core
+          const time = Date.now() * 0.003;
+          const corePulse = Math.sin(time) * 4;
+          const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 0.5 + corePulse);
+          coreGrad.addColorStop(0, 'rgba(6, 182, 212, 0.45)');
+          coreGrad.addColorStop(0.5, 'rgba(16, 185, 129, 0.25)');
+          coreGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+          ctx.fillStyle = coreGrad;
+          ctx.beginPath();
+          ctx.arc(cx, cy, radius * 0.55 + corePulse, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Draw 3D Concentric Gyroscopic Orbiting Rings
+          const ringR = radius * 1.18;
+          ctx.lineWidth = 1.2;
+          
+          // Ring 1 (Cyan)
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, ringR, ringR * Math.abs(cosX), rotY, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(6, 182, 212, 0.35)';
+          ctx.setLineDash([4, 6]);
+          ctx.stroke();
+
+          // Ring 2 (Emerald)
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, ringR * 1.1, ringR * 1.1 * Math.abs(cosY), rotX, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(16, 185, 129, 0.35)';
+          ctx.setLineDash([6, 8]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Orbiting Satellite Beacon on Ring 1
+          const satAngle = time * 2;
+          const satX = cx + Math.cos(satAngle) * ringR;
+          const satY = cy + Math.sin(satAngle) * (ringR * Math.abs(cosX));
+          ctx.beginPath();
+          ctx.arc(satX, satY, 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#22d3ee';
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = '#22d3ee';
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          // Draw Geodesic 3D Edges
+          edges.forEach(([i, j]) => {
+            const p1 = projected[i];
+            const p2 = projected[j];
+            const avgZ = (p1.z + p2.z) / 2;
+            const alpha = Math.max(0.12, Math.min(0.85, (avgZ + radius) / (2 * radius)));
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(6, 182, 212, ${alpha * 0.75})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          });
+
+          // Draw Glowing Geodesic Nodes (Vertices)
+          projected.forEach(p => {
+            const alpha = Math.max(0.2, (p.z + radius) / (2 * radius));
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 2.2 * p.scale, 0, Math.PI * 2);
+            ctx.fillStyle = '#10b981';
+            ctx.shadowBlur = 6;
+            ctx.shadowColor = '#10b981';
+            ctx.globalAlpha = alpha;
+            ctx.fill();
+          });
+          ctx.globalAlpha = 1;
+          ctx.shadowBlur = 0;
+
+          requestAnimationFrame(draw);
+        }
+        requestAnimationFrame(draw);
+      })();
+    </script>
 
     <!-- Self-Contained 3D Celestial Particle Canvas Engine -->
     <script>
