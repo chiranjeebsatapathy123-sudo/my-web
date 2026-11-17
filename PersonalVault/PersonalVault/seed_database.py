@@ -275,5 +275,31 @@ def main():
         )
     print("Certificates seeded successfully.")
 
+    # 4. Seed Verified Education Milestones
+    from portfolio.models import Achievement
+    Achievement.objects.filter(user=user, category='Education').delete()
+    Achievement.objects.create(
+        user=user,
+        title="B.Tech in Computer Science & Engineering (Data Science)",
+        description="Institute of Technical Education and Research (ITER), Siksha 'O' Anusandhan (SOA Deemed to be University), Bhubaneswar (2024–2028). Ongoing Third Year with focus on Algorithms, Machine Learning Systems, Database Architectures, and Cloud Platforms.",
+        date_achieved=datetime.date(2024, 8, 1),
+        category='Education'
+    )
+    Achievement.objects.create(
+        user=user,
+        title="Higher Secondary (+2 Science / PCM & Computer Science)",
+        description="St. Xavier's High School, Kedargouri, Bhubaneswar, Odisha (2022–2024). Higher Secondary Science Stream with Physics, Chemistry, Higher Mathematics, and Computer Science foundations.",
+        date_achieved=datetime.date(2024, 5, 15),
+        category='Education'
+    )
+    Achievement.objects.create(
+        user=user,
+        title="Secondary School Certificate (ICSE Class 10) — 84%",
+        description="Carmel School, Bhadrak, Odisha (Completed 2022). Aggregate result of 84% with academic distinction in Science, Mathematics, and Computer Applications.",
+        date_achieved=datetime.date(2022, 6, 10),
+        category='Education'
+    )
+    print("Education achievements seeded successfully.")
+
 if __name__ == '__main__':
     main()
