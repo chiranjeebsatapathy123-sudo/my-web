@@ -127,15 +127,15 @@ def main():
     # 2. Update Profile
     profile, created = Profile.objects.get_or_create(user=user)
     profile.location = "Bhubaneswar, Odisha, India"
-    profile.phone = "+91 7978250000"
+    profile.phone = "+91 93375 79848"
     profile.bio = (
         "B.Tech Computer Science Engineering student (Class of 2028) at Siksha 'O' Anusandhan University "
         "(ITER-SOA) with a passion for Artificial Intelligence, Machine Learning, Web Development, "
-        "and Computer Vision. Actively exploring software engineering patterns and algorithmic problem-solving."
+        "and Computer Vision. Schooling at St. Xavier's High School, Kedargouri and Carmel School, Bhadrak (84%)."
     )
     profile.linkedin = "https://www.linkedin.com/in/chiranjeeb-satapathy-283b40353"
-    profile.github = "https://github.com/chiranjeeb-satapathy"
-    profile.website = "https://github.com/chiranjeeb-satapathy"
+    profile.github = "https://github.com/chiranjeebsatapathy123-sudo"
+    profile.website = "https://github.com/chiranjeebsatapathy123-sudo"
     
     # Ensure profile image exists
     media_profile_dir = os.path.join("media", "profile")

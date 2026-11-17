@@ -76,12 +76,12 @@ export function initExperienceSection() {
 
     // 5. Update HUD Phase Label
     if (hudPhase) {
-      if (currentProgress < 0.33) {
-        hudPhase.textContent = 'FOUNDATION & ACADEMIC RIGOR (ITER SOA)';
-      } else if (currentProgress < 0.66) {
-        hudPhase.textContent = 'ADVANCED AI & MACHINE LEARNING (CTTC BHUBANESWAR)';
+      if (currentProgress < 0.35) {
+        hudPhase.textContent = "ACADEMIC RIGOR (ITER SOA \u2022 ST. XAVIER'S \u2022 CARMEL SCHOOL)";
+      } else if (currentProgress < 0.70) {
+        hudPhase.textContent = "INDUSTRIAL INTERNSHIPS (INAMIGOS \u2022 IBM AICTE \u2022 CTTC MSME)";
       } else {
-        hudPhase.textContent = 'OPEN SOURCE ARCHITECT (12 PRODUCTION REPOSITORIES)';
+        hudPhase.textContent = "COMPETITIVE SYSTEMS (LEETCODE 340+ \u2022 12 GITHUB REPOS)";
       }
     }
 

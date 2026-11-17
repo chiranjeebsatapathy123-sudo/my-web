@@ -385,9 +385,47 @@
   <!-- Notification Toast Container -->
   <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
+  <!-- Real-Time Cybernetic Telemetry Bar -->
+  <div class="w-full bg-[#0D0D0D] dark:bg-[#070709] text-white border-b border-neutral-800/80 text-[10px] font-mono py-2 px-6 md:px-14 select-none transition-colors">
+    <div class="max-w-[1400px] mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-bold uppercase tracking-wider">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          AVAILABLE FOR ROLES &amp; CONTRACTS
+        </span>
+        <span class="hidden sm:inline-block text-neutral-600">•</span>
+        <span id="live-ist-clock" class="text-neutral-400 font-medium">BHUBANESWAR, IN • 06:00:00 PM IST</span>
+      </div>
+      <div class="flex items-center gap-3 text-neutral-400">
+        <span class="hidden lg:inline-block">12 GITHUB REPOS</span>
+        <span class="hidden lg:inline-block text-neutral-700">•</span>
+        <span class="hidden lg:inline-block">340+ LEETCODE SOLVED</span>
+        <span class="hidden lg:inline-block text-neutral-700">•</span>
+        <span class="hidden lg:inline-block">4 VERIFIED ACCREDITATIONS</span>
+        <!-- Terminal Launcher Pill -->
+        <button type="button" onclick="toggleTerminalModal()" title="Open Interactive Developer Terminal (Ctrl+`)"
+          class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-neutral-700 hover:border-white text-neutral-200 hover:text-white transition bg-neutral-900/80">
+          <span class="text-emerald-400 font-bold">&gt;_</span>
+          <span>TERMINAL</span>
+        </button>
+        <!-- Audio SFX Toggle Button -->
+        <button type="button" id="audio-sfx-btn" onclick="toggleAudioSFX()" title="Toggle Subtle Sound Effects"
+          class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-neutral-700 hover:border-neutral-400 text-neutral-300 hover:text-white transition">
+          <span id="sfx-status-icon">🔊</span>
+          <span id="sfx-status-text">FX ON</span>
+        </button>
+        <!-- Command Palette Trigger -->
+        <button type="button" onclick="openCommandPalette()" title="Open Command Palette (Ctrl+K)"
+          class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border border-neutral-700 hover:border-white text-neutral-300 hover:text-white transition">
+          <span>⌘K</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- BEGIN: Navigation Header -->
   <header
-    class="relative z-40 bg-[#FAFAFA] dark:bg-[#0B0B0B] transition-all duration-300 w-full pt-6 pb-4 px-6 md:px-14 max-w-[1400px] mx-auto flex items-center justify-between"
+    class="relative z-40 bg-[#FAFAFA] dark:bg-[#0B0B0B] transition-all duration-300 w-full pt-4 pb-4 px-6 md:px-14 max-w-[1400px] mx-auto flex items-center justify-between"
     data-purpose="site-navigation">
     <!-- Brand Wordmark -->
     <a class="group font-extrabold text-xl tracking-tight text-black dark:text-white flex items-center" href="#home">
@@ -421,6 +459,13 @@
 
     <!-- Right Social, Theme Toggle & Contact Links -->
     <div class="flex items-center gap-1.5 md:gap-2 p-1.5 bg-white/95 dark:bg-[#151515]/95 border border-[#E2E2E2] dark:border-[#282828] rounded-full shadow-sm">
+      <!-- Command Palette Search Button -->
+      <button type="button" onclick="openCommandPalette()" title="Command Palette (Ctrl+K)"
+        class="hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-full border border-neutral-200 dark:border-neutral-700 hover:border-black dark:hover:border-white text-[10px] font-mono font-semibold text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white transition">
+        <span>Search</span>
+        <kbd class="px-1 py-0.2 rounded bg-neutral-100 dark:bg-neutral-800 text-[9px]">⌘K</kbd>
+      </button>
+
       <!-- Verified GitHub Profile -->
       <a class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white"
         href="https://github.com/chiranjeebsatapathy123-sudo" target="_blank" rel="noopener noreferrer" title="GitHub — Chiranjeeb Satapathy">
@@ -432,7 +477,7 @@
 
       <!-- Verified LinkedIn Profile -->
       <a class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-neutral-100 dark:hover:bg-neutral-800 transition text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white"
-        href="https://linkedin.com/in/chiranjeeb-satapathy-69634b281" target="_blank" rel="noopener noreferrer"
+        href="https://www.linkedin.com/in/chiranjeeb-satapathy-283b40353" target="_blank" rel="noopener noreferrer"
         title="LinkedIn — Chiranjeeb Satapathy">
         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
           <path
@@ -519,12 +564,12 @@
       <div class="pt-6 border-t border-neutral-200 dark:border-neutral-800">
         <p class="text-xs uppercase tracking-widest text-neutral-400 dark:text-neutral-500 mb-1">CHIRANJEEB SATAPATHY</p>
         <p class="text-xs text-neutral-800 dark:text-neutral-200 font-semibold">Data Science Engineer &amp; Full-Stack Developer</p>
-        <p class="text-[10px] text-neutral-500 dark:text-neutral-400 font-mono mt-1">B.Tech CSE-DS &bull; ITER (SOA) '26</p>
-        <p class="text-[10px] text-neutral-400 dark:text-neutral-500 font-mono">Bhubaneswar, Odisha, India</p>
+        <p class="text-[10px] text-neutral-500 dark:text-neutral-400 font-mono mt-1">B.Tech CSE-DS &bull; ITER (SOA University) '28</p>
+        <p class="text-[10px] text-neutral-400 dark:text-neutral-500 font-mono">St. Xavier's Kedargouri &bull; Carmel School</p>
         <div class="flex items-center gap-3 mt-3 pt-3 border-t border-neutral-100 dark:border-neutral-800">
           <a href="https://github.com/chiranjeebsatapathy123-sudo" target="_blank" rel="noopener noreferrer"
             class="text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white text-xs font-mono">GITHUB ↗</a>
-          <a href="https://linkedin.com/in/chiranjeeb-satapathy-69634b281" target="_blank" rel="noopener noreferrer"
+          <a href="https://www.linkedin.com/in/chiranjeeb-satapathy-283b40353" target="_blank" rel="noopener noreferrer"
             class="text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white text-xs font-mono">LINKEDIN ↗</a>
           <a href="https://www.github.com/chiranjeebsatapathy123-sudo/" target="_blank" rel="noopener noreferrer"
             class="text-neutral-600 dark:text-neutral-400 hover:text-black dark:hover:text-white text-xs font-mono">WEBSITE ↗</a>
@@ -738,7 +783,7 @@
 
   <!-- BEGIN: Experience Section ("Where I've Been" — Horizontal Cinematic Installation) -->
   <section class="relative w-full bg-[#070709] text-white overflow-visible" data-purpose="experience-section"
-    id="experience" style="height: 280vh;" string="progress" string-id="experience-journey">
+    id="experience" style="height: 360vh;" string="progress" string-id="experience-journey">
     <!-- Sticky 100vh Theater / Viewport Window -->
     <div id="exp-sticky-viewport"
       class="sticky top-0 w-full h-[100dvh] overflow-hidden bg-[#070709] flex flex-col justify-between select-none">
@@ -760,7 +805,7 @@
         <!-- Lower Ticker (Drifting Right) -->
         <div id="exp-ticker-bottom"
           class="whitespace-nowrap font-black uppercase text-[14vw] tracking-tighter will-change-transform leading-none">
-          BHUBANESWAR &nbsp;&nbsp; ITER &bull; SOA UNIVERSITY &nbsp;&nbsp; CLASS OF 2026 &nbsp;&nbsp; BHUBANESWAR &nbsp;&nbsp;
+          BHUBANESWAR &nbsp;&nbsp; ITER &bull; SOA UNIVERSITY &nbsp;&nbsp; ST. XAVIER'S KEDARGOURI &nbsp;&nbsp; CARMEL SCHOOL BHADRAK &nbsp;&nbsp; BHUBANESWAR &nbsp;&nbsp;
           ITER &bull; SOA UNIVERSITY &nbsp;&nbsp;
         </div>
       </div>
@@ -770,7 +815,7 @@
         class="relative z-30 w-full px-6 md:px-14 pt-6 pb-4 flex items-center justify-between border-b border-white/[0.08] backdrop-blur-md bg-[#070709]/80">
         <div class="flex items-center gap-4">
           <span id="exp-hud-phase" class="text-[11px] font-semibold tracking-widest uppercase text-neutral-400">
-            FOUNDATION &amp; ACADEMICS
+            ACADEMIC RIGOR (ITER SOA • ST. XAVIER'S • CARMEL SCHOOL)
           </span>
         </div>
 
@@ -785,7 +830,7 @@
       <!-- Center: Massive Horizontal Spatial Canvas (Controlled by Vertical Scroll) -->
       <div class="relative z-20 flex-1 w-full overflow-hidden flex items-stretch">
         <div id="exp-horizontal-stage" class="flex items-stretch h-full will-change-transform transition-none"
-          style="width: 290vw;">
+          style="width: 380vw;">
           <!-- ================= INTRO ENVIRONMENT (0vw - 90vw) ================= -->
           <div
             class="exp-panel flex-shrink-0 w-[95vw] md:w-[85vw] px-8 md:px-16 lg:px-24 py-8 md:py-12 flex flex-col justify-start overflow-y-auto no-scrollbar">
@@ -799,7 +844,7 @@
                 WHERE<br>I'VE BEEN
               </h2>
               <p class="text-base sm:text-lg md:text-xl text-neutral-300 leading-relaxed max-w-xl font-normal">
-                Academic progression, software engineering foundations, and applied data science.
+                Academic progression, industrial internships, competitive problem solving, and open source architectures.
               </p>
             </div>
           </div>
@@ -822,7 +867,7 @@
                 </span>
                 <span class="h-[1px] w-12 bg-white/20"></span>
                 <span class="text-xs font-bold tracking-widest uppercase text-white">
-                  B.TECH (CSE-DS) &bull; CLASS OF 2026
+                  B.TECH (CSE-DS) &bull; CLASS OF 2028
                 </span>
               </div>
 
@@ -834,36 +879,39 @@
 
               <!-- Narrative Summary -->
               <p class="text-sm sm:text-base md:text-lg text-neutral-300 leading-relaxed max-w-2xl mb-6 md:mb-8">
-                Bachelor of Technology in Computer Science and Engineering with specialization in Data Science (CSE-DS)
-                at Einstein Academy of Technology and Management (ITER), Bhubaneswar, affiliated to Biju Patnaik
-                University of Technology (SOA UNIVERSITY).
+                Pursuing Bachelor of Technology in Computer Science and Engineering with specialization in Data Science (CSE-DS)
+                at Institute of Technical Education and Research (ITER), Siksha 'O' Anusandhan (SOA Deemed to be University), Bhubaneswar.
+                Rigorous grounding in computational mathematics, statistical modeling, algorithms, and distributed systems.
               </p>
 
               <!-- Milestone Specifications (Hairline Grid) -->
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-white/10 max-w-3xl">
                 <div>
-                  <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1.5">B.TECH (CSE-DS)
+                  <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1.5">B.TECH (CSE-DS)</div>
+                  <div class="text-xs sm:text-sm text-neutral-200 font-medium leading-snug">
+                    ITER — Siksha 'O' Anusandhan (SOA University), Bhubaneswar &bull; Third Year (2024–2028)
                   </div>
-                  <div class="text-xs sm:text-sm text-neutral-200 font-medium leading-snug">Einstein Academy of
-                    Technology &amp; Management (ITER), Bhubaneswar &bull; SOA UNIVERSITY &bull; Third Year (Grad: 2028)</div>
+                  <p class="text-[11px] text-neutral-400 mt-1">Specialization in Data Science, Machine Learning, and Cloud Architectures</p>
                 </div>
                 <div>
-                  <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1.5">CLASS 12
-                    (SCIENCE)</div>
-                  <div class="text-xs sm:text-sm text-neutral-200 font-medium leading-snug">DAV Public School, Unit 8,
-                    Bhubaneswar, Odisha &bull; Science Stream</div>
+                  <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1.5">CLASS 12 (+2 SCIENCE)</div>
+                  <div class="text-xs sm:text-sm text-neutral-200 font-medium leading-snug">
+                    St. Xavier's High School, Kedargouri, Bhubaneswar, Odisha &bull; 2022–2024
+                  </div>
+                  <p class="text-[11px] text-neutral-400 mt-1">Higher Secondary Science Stream &bull; Physics, Chemistry, Math &amp; Computing</p>
                 </div>
                 <div>
-                  <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1.5">CLASS 10 (84%)
+                  <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1.5">CLASS 10 (84%)</div>
+                  <div class="text-xs sm:text-sm text-neutral-200 font-medium leading-snug">
+                    Carmel School, Bhadrak, Odisha &bull; Result: 84%
                   </div>
-                  <div class="text-xs sm:text-sm text-neutral-200 font-medium leading-snug">Carmel School, Bhadrak,
-                    Odisha &bull; Result: 84%</div>
+                  <p class="text-[11px] text-neutral-400 mt-1">ICSE Board Examination &bull; Distinction in Mathematics, Science &amp; Computers</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- ================= CHAPTER 02: INTERNSHIPS & HACKATHONS ================= -->
+          <!-- ================= CHAPTER 02: INTERNSHIPS & SPECIALIZATIONS ================= -->
           <div
             class="exp-panel relative flex-shrink-0 w-[105vw] md:w-[100vw] px-8 md:px-16 lg:px-24 py-8 md:py-12 flex flex-col justify-start overflow-y-auto no-scrollbar">
             <!-- Background Parallax Date Typography -->
@@ -881,24 +929,24 @@
                 </span>
                 <span class="h-[1px] w-12 bg-white/20"></span>
                 <span class="text-xs font-bold tracking-widest uppercase text-white">
-                  INTERNSHIPS &amp; HACKATHONS
+                  INTERNSHIPS &amp; SPECIALIZATIONS
                 </span>
                 <span
                   class="hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full border border-white/20 text-[10px] font-semibold uppercase text-neutral-300">
-                  COMPLETED
+                  VERIFIED
                 </span>
               </div>
 
               <!-- Oversized Typographic Role Title -->
               <h3
                 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-white leading-[0.92] mb-6">
-                INTERNSHIPS &amp;<br>HACKATHONS
+                INTERNSHIPS &amp;<br>SPECIALIZATIONS
               </h3>
 
               <!-- Narrative Summary -->
               <p class="text-sm sm:text-base md:text-lg text-neutral-300 leading-relaxed max-w-2xl mb-6 md:mb-8">
-                Completed industry-recognized internships in AI Web Development and Data Analytics with AI, alongside
-                competitive participation in artificial intelligence hackathons.
+                Completed industry-recognized software engineering internships in AI Web Development and Data Analytics with AI, alongside
+                professional AI &amp; ML training under MSME Govt. of India.
               </p>
 
               <!-- Milestone Specifications (Hairline Grid) -->
@@ -924,11 +972,75 @@
                     ↗</a>
                 </div>
                 <div>
-                  <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1.5">HACKATHONS</div>
-                  <div class="text-xs sm:text-sm text-neutral-200 font-medium leading-snug space-y-1">
-                    <p>&bull; SOA UNIVERSITY Hackathon 2025 — Participant</p>
-                    <p>&bull; Hack2Skill: Build with AI (2nd Ed.) — Participant</p>
+                  <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1.5">ADVANCED AI &amp; ML</div>
+                  <div class="text-xs sm:text-sm text-neutral-200 font-medium leading-snug">
+                    CTTC Bhubaneswar &bull; MSME Govt. of India (2024)
                   </div>
+                  <a href="/media/certificates/cttc_cert.png" target="_blank" rel="noopener noreferrer"
+                    class="inline-block mt-2 text-[11px] underline text-white hover:text-neutral-300">View Accreditation
+                    ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= CHAPTER 03: COMPETITIVE PROBLEM SOLVING & OPEN SOURCE ================= -->
+          <div
+            class="exp-panel relative flex-shrink-0 w-[105vw] md:w-[100vw] px-8 md:px-16 lg:px-24 py-8 md:py-12 flex flex-col justify-start overflow-y-auto no-scrollbar">
+            <!-- Background Parallax Date Typography -->
+            <div
+              class="exp-date-bg absolute top-2 md:top-4 right-12 md:right-28 text-[12vw] md:text-[14vw] font-black uppercase text-white/[0.04] tracking-tighter select-none pointer-events-none will-change-transform"
+              data-parallax-factor="0.15">
+              SYSTEMS
+            </div>
+
+            <div class="relative z-10 max-w-5xl my-auto">
+              <!-- Eyebrow & Date -->
+              <div class="flex items-center gap-4 mb-4">
+                <span class="text-xs font-semibold tracking-widest uppercase text-neutral-400">
+                  COMPETITIVE CODING &bull; 12 GITHUB REPOSITORIES
+                </span>
+                <span class="h-[1px] w-12 bg-white/20"></span>
+                <span class="text-xs font-bold tracking-widest uppercase text-white">
+                  340+ LEETCODE PROBLEMS
+                </span>
+              </div>
+
+              <!-- Oversized Typographic Role Title -->
+              <h3
+                class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-white leading-[0.92] mb-6">
+                ALGORITHMS &amp;<br>OPEN SOURCE
+              </h3>
+
+              <!-- Narrative Summary -->
+              <p class="text-sm sm:text-base md:text-lg text-neutral-300 leading-relaxed max-w-2xl mb-6 md:mb-8">
+                Active competitive programmer with 340+ LeetCode problems conquered across dynamic programming, trees, and graphs, paired with 12 production GitHub repositories spanning computer vision, full-stack web platforms, and distributed tools.
+              </p>
+
+              <!-- Milestone Specifications (Hairline Grid) -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-white/10 max-w-3xl">
+                <div>
+                  <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1.5">LEETCODE MASTERY</div>
+                  <div class="text-xs sm:text-sm text-neutral-200 font-medium leading-snug">
+                    340+ Problems Solved &bull; Python, Java &amp; C++
+                  </div>
+                  <p class="text-[11px] text-neutral-400 mt-1">Conquered Complex DP, Graph Traversal, Binary Search &amp; Tree Algorithms</p>
+                </div>
+                <div>
+                  <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1.5">HACKATHONS &amp; AI</div>
+                  <div class="text-xs sm:text-sm text-neutral-200 font-medium leading-snug space-y-1">
+                    <p>&bull; SOA UNIVERSITY Hackathon 2025</p>
+                    <p>&bull; Hack2Skill: Build with AI (2nd Ed.)</p>
+                  </div>
+                  <p class="text-[11px] text-neutral-400 mt-1">Engineered rapid AI prototypes under tight deadlines</p>
+                </div>
+                <div>
+                  <div class="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-1.5">12 GITHUB REPOS</div>
+                  <div class="text-xs sm:text-sm text-neutral-200 font-medium leading-snug">
+                    AgroFedly, MediStock, Nirmit, CloudVault, EcoFuture &amp; more
+                  </div>
+                  <a href="https://github.com/chiranjeebsatapathy123-sudo" target="_blank" rel="noopener noreferrer"
+                    class="inline-block mt-2 text-[11px] underline text-white hover:text-neutral-300">Explore GitHub Archive ↗</a>
                 </div>
               </div>
             </div>
@@ -944,13 +1056,18 @@
         <div class="flex items-center gap-2 sm:gap-4">
           <button type="button"
             class="exp-jump-btn text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-md border border-white/20 text-white bg-white/10 transition-all hover:bg-white/20"
-            data-target-progress="0.30">
-            EDUCATION
+            data-target-progress="0.25">
+            ACADEMIC FOUNDATIONS
           </button>
           <button type="button"
             class="exp-jump-btn text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-md border border-white/5 text-neutral-500 hover:text-white transition-all hover:border-white/20"
-            data-target-progress="0.75">
-            INTERNSHIPS &amp; HACKATHONS
+            data-target-progress="0.55">
+            INTERNSHIPS &amp; INDUSTRY
+          </button>
+          <button type="button"
+            class="exp-jump-btn text-[11px] font-bold tracking-widest uppercase px-3 py-1 rounded-md border border-white/5 text-neutral-500 hover:text-white transition-all hover:border-white/20"
+            data-target-progress="0.85">
+            HACKATHONS &amp; CODE
           </button>
         </div>
       </footer>
@@ -1121,69 +1238,226 @@
 
     <!-- Categorized Technical Skills Section -->
     <div id="skills" class="max-w-4xl mx-auto mt-16 pt-12 border-t border-neutral-200 dark:border-neutral-800">
-      <div class="mb-8">
-        <span class="text-xs font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-1">TECHNICAL TOOLKIT</span>
-        <h3 class="text-2xl md:text-3xl font-black uppercase tracking-tight text-neutral-900 dark:text-neutral-100">
-          TECHNICAL SKILLS &amp; TECHNOLOGIES
-        </h3>
-        <p class="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mt-1">
-          Documented technical stack from portfolio and practical engineering
-        </p>
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-1">TECHNICAL TOOLKIT</span>
+          <h3 class="text-2xl md:text-3xl font-black uppercase tracking-tight text-neutral-900 dark:text-neutral-100">
+            TECHNICAL SKILLS &amp; TECHNOLOGIES
+          </h3>
+          <p class="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mt-1">
+            Engineered stack across real-world systems, ML pipelines, and production repositories
+          </p>
+        </div>
+
+        <!-- Real-time Skill Filter Search -->
+        <div class="relative w-full md:w-72">
+          <input type="text" id="skill-search-input" oninput="filterSkillsSearch(this.value)"
+            placeholder="Search technologies..."
+            class="w-full px-4 py-2 pl-9 rounded-full border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-[#151515] text-xs text-neutral-800 dark:text-neutral-200 placeholder-neutral-400 focus:outline-none focus:border-black dark:focus:border-white transition">
+          <svg class="w-3.5 h-3.5 text-neutral-400 absolute left-3.5 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="M21 21l-4.35-4.35"></path>
+          </svg>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Core Competency Visual Telemetry Gauges -->
+      <div class="mb-10 p-6 rounded-3xl bg-neutral-50 dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800">
+        <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-4">
+          CORE DISCIPLINE PROFICIENCY TELEMETRY
+        </span>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+          <!-- 1 -->
+          <div>
+            <div class="flex justify-between text-xs font-bold text-neutral-800 dark:text-neutral-200 mb-1.5">
+              <span>Python &amp; Data Science / ML Pipelines</span>
+              <span class="font-mono text-emerald-600 dark:text-emerald-400">95%</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-400" style="width: 95%;"></div>
+            </div>
+          </div>
+          <!-- 2 -->
+          <div>
+            <div class="flex justify-between text-xs font-bold text-neutral-800 dark:text-neutral-200 mb-1.5">
+              <span>Modern Full-Stack (React, Next.js, TypeScript)</span>
+              <span class="font-mono text-emerald-600 dark:text-emerald-400">92%</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-blue-500 to-indigo-400" style="width: 92%;"></div>
+            </div>
+          </div>
+          <!-- 3 -->
+          <div>
+            <div class="flex justify-between text-xs font-bold text-neutral-800 dark:text-neutral-200 mb-1.5">
+              <span>Database Architectures (PostgreSQL, MongoDB, MySQL)</span>
+              <span class="font-mono text-emerald-600 dark:text-emerald-400">90%</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-purple-500 to-indigo-400" style="width: 90%;"></div>
+            </div>
+          </div>
+          <!-- 4 -->
+          <div>
+            <div class="flex justify-between text-xs font-bold text-neutral-800 dark:text-neutral-200 mb-1.5">
+              <span>Backend &amp; Distributed APIs (Node.js, Express, REST)</span>
+              <span class="font-mono text-emerald-600 dark:text-emerald-400">88%</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-400" style="width: 88%;"></div>
+            </div>
+          </div>
+          <!-- 5 -->
+          <div>
+            <div class="flex justify-between text-xs font-bold text-neutral-800 dark:text-neutral-200 mb-1.5">
+              <span>Core Algorithms &amp; Java (LeetCode 340+ Solved)</span>
+              <span class="font-mono text-emerald-600 dark:text-emerald-400">86%</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-400" style="width: 86%;"></div>
+            </div>
+          </div>
+          <!-- 6 -->
+          <div>
+            <div class="flex justify-between text-xs font-bold text-neutral-800 dark:text-neutral-200 mb-1.5">
+              <span>Cloud &amp; DevOps (Docker, GCP, Supabase, Vercel)</span>
+              <span class="font-mono text-emerald-600 dark:text-emerald-400">84%</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-neutral-200 dark:bg-neutral-800 overflow-hidden">
+              <div class="h-full rounded-full bg-gradient-to-r from-rose-500 to-pink-400" style="width: 84%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="flex flex-wrap items-center gap-2 mb-6">
+        <button type="button" onclick="filterSkillCategory('all')" id="skill-cat-all"
+          class="skill-cat-btn px-4 py-1.5 rounded-full bg-black dark:bg-white text-white dark:text-black text-[11px] font-bold tracking-wider uppercase transition">
+          ALL TECHNOLOGIES
+        </button>
+        <button type="button" onclick="filterSkillCategory('ai-ml')" id="skill-cat-ai-ml"
+          class="skill-cat-btn px-4 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 text-[11px] font-bold tracking-wider uppercase hover:border-black dark:hover:border-white transition">
+          AI &amp; MACHINE LEARNING
+        </button>
+        <button type="button" onclick="filterSkillCategory('full-stack')" id="skill-cat-full-stack"
+          class="skill-cat-btn px-4 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 text-[11px] font-bold tracking-wider uppercase hover:border-black dark:hover:border-white transition">
+          FULL-STACK &amp; WEB
+        </button>
+        <button type="button" onclick="filterSkillCategory('backend-db')" id="skill-cat-backend-db"
+          class="skill-cat-btn px-4 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 text-[11px] font-bold tracking-wider uppercase hover:border-black dark:hover:border-white transition">
+          BACKEND &amp; DATABASES
+        </button>
+        <button type="button" onclick="filterSkillCategory('tools')" id="skill-cat-tools"
+          class="skill-cat-btn px-4 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 text-[11px] font-bold tracking-wider uppercase hover:border-black dark:hover:border-white transition">
+          CLOUD &amp; DEVTOOLS
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="skill-cards-grid">
         <!-- Programming Languages -->
-        <div class="p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-1.5">PROGRAMMING
-            LANGUAGES</span>
-          <p class="text-sm font-semibold text-neutral-900 dark:text-neutral-200">Python, JavaScript, TypeScript, Java</p>
+        <div class="skill-card p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm transition hover:border-black dark:hover:border-neutral-600" data-category="full-stack backend-db">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-2">PROGRAMMING LANGUAGES</span>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Python</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">JavaScript (ES6+)</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">TypeScript</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Core Java</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">SQL</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">C++</span>
+          </div>
         </div>
 
-        <!-- Frontend -->
-        <div class="p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-1.5">FRONTEND</span>
-          <p class="text-sm font-semibold text-neutral-900 dark:text-neutral-200">HTML, CSS, React, Next.js, Tailwind CSS</p>
+        <!-- AI & Machine Learning -->
+        <div class="skill-card p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm transition hover:border-black dark:hover:border-neutral-600" data-category="ai-ml">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-2">DATA SCIENCE &amp; APPLIED AI</span>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Pandas</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">NumPy</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Scikit-Learn</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">YOLOv8</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">OpenCV</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Google Gemini API</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Joblib</span>
+          </div>
         </div>
 
-        <!-- Backend -->
-        <div class="p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-1.5">BACKEND</span>
-          <p class="text-sm font-semibold text-neutral-900 dark:text-neutral-200">Node.js, Express.js</p>
+        <!-- Frontend Frameworks -->
+        <div class="skill-card p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm transition hover:border-black dark:hover:border-neutral-600" data-category="full-stack">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-2">MODERN FRONTEND &amp; UI</span>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">React</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Next.js</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Tailwind CSS v3</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">HTML5 &bull; CSS3</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Framer Motion</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">WebGL &bull; Three.js</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Chart.js &bull; Recharts</span>
+          </div>
+        </div>
+
+        <!-- Backend Architecture -->
+        <div class="skill-card p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm transition hover:border-black dark:hover:border-neutral-600" data-category="backend-db">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-2">BACKEND &amp; ARCHITECTURE</span>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Node.js</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Express.js</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Django &bull; Django REST</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">FastAPI</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">RESTful APIs</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">WebSockets</span>
+          </div>
         </div>
 
         <!-- Databases -->
-        <div class="p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-1.5">DATABASES</span>
-          <p class="text-sm font-semibold text-neutral-900 dark:text-neutral-200">MySQL, MongoDB, PostgreSQL</p>
-        </div>
-
-        <!-- Data Science & Machine Learning -->
-        <div class="p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-1.5">DATA SCIENCE &amp;
-            MACHINE LEARNING</span>
-          <p class="text-sm font-semibold text-neutral-900 dark:text-neutral-200">Pandas, NumPy, scikit-learn</p>
+        <div class="skill-card p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm transition hover:border-black dark:hover:border-neutral-600" data-category="backend-db">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-2">DATABASES &amp; STORAGE</span>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">MySQL</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">PostgreSQL</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">MongoDB</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Firebase Firestore</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Redis (Caching)</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">pgvector</span>
+          </div>
         </div>
 
         <!-- Cloud & Deployment -->
-        <div class="p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-1.5">CLOUD &amp;
-            DEPLOYMENT</span>
-          <p class="text-sm font-semibold text-neutral-900 dark:text-neutral-200">Firebase, Supabase, Vercel</p>
+        <div class="skill-card p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm transition hover:border-black dark:hover:border-neutral-600" data-category="tools">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-2">CLOUD &amp; INFRASTRUCTURE</span>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Docker</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Google Cloud Platform</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Vercel Edge</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Supabase</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Firebase Auth</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Render</span>
+          </div>
         </div>
 
         <!-- Developer Tools -->
-        <div class="p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-1.5">DEVELOPER
-            TOOLS</span>
-          <p class="text-sm font-semibold text-neutral-900 dark:text-neutral-200">Git, GitHub, Visual Studio Code, Jupyter Notebook</p>
+        <div class="skill-card p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm transition hover:border-black dark:hover:border-neutral-600" data-category="tools">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-2">DEVTOOLS &amp; WORKFLOW</span>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Git &bull; GitHub</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">VS Code</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Jupyter Notebooks</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Postman</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Vite</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Linux CLI</span>
+          </div>
         </div>
 
-        <!-- Other Technologies -->
-        <div class="p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
-          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-1.5">OTHER
-            TECHNOLOGIES</span>
-          <p class="text-sm font-semibold text-neutral-900 dark:text-neutral-200">Google Gemini, Joblib, pgvector, Firebase Firestore,
-            Firebase Authentication, Framer Motion, Recharts, shadcn/ui, Vite, Flask, Render, Android development</p>
+        <!-- Problem Solving & Certifications -->
+        <div class="skill-card p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm transition hover:border-black dark:hover:border-neutral-600" data-category="ai-ml backend-db">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-2">ALGORITHMIC MASTERY</span>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">LeetCode 340+ Solved</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Dynamic Programming</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Graph Theory</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Binary Search</span>
+            <span class="skill-tag px-2.5 py-1 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200">Trees &amp; Heaps</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1199,9 +1473,9 @@
         <span class="text-[10px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500 block mb-1">ACCREDITATIONS &amp;
           CERTIFICATIONS</span>
         <h3 class="text-2xl font-black uppercase tracking-tight text-neutral-900 dark:text-neutral-100">VERIFIED CREDENTIALS</h3>
-        <p class="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mt-2">THREE VERIFIED ACCREDITATIONS</p>
+        <p class="text-xs text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mt-2">FOUR VERIFIED ACCREDITATIONS</p>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full flex-1">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full flex-1">
         <!-- 1 -->
         <a href="/media/certificates/cttc_cert.png" target="_blank"
           rel="noopener noreferrer"
@@ -1211,11 +1485,11 @@
               <span class="text-[9px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500">CREDENTIAL 01</span>
               <span class="text-xs text-neutral-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors">↗</span>
             </div>
-            <p class="text-sm font-bold uppercase text-neutral-900 dark:text-neutral-100 mt-2 group-hover:underline">Advanced AI & Machine Learning</p>
-            <span class="text-xs text-neutral-500 dark:text-neutral-400 block mt-1">Central Tool Room & Training Centre (CTTC), Bhubaneswar &bull; MSME Govt. of India</span>
+            <p class="text-sm font-bold uppercase text-neutral-900 dark:text-neutral-100 mt-2 group-hover:underline">Advanced AI &amp; Machine Learning</p>
+            <span class="text-xs text-neutral-500 dark:text-neutral-400 block mt-1">Central Tool Room &amp; Training Centre (CTTC), Bhubaneswar &bull; MSME Govt. of India</span>
           </div>
           <div class="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
-            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">&bull; VERIFIED ACCREDITATION</span>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">&bull; VERIFIED</span>
             <span class="text-[10px] font-mono text-neutral-400">2024</span>
           </div>
         </a>
@@ -1233,7 +1507,7 @@
             <span class="text-xs text-neutral-500 dark:text-neutral-400 block mt-1">Meta / Coursera Professional Certificate</span>
           </div>
           <div class="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
-            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">&bull; VERIFIED ACCREDITATION</span>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">&bull; VERIFIED</span>
             <span class="text-[10px] font-mono text-neutral-400">2024</span>
           </div>
         </a>
@@ -1251,8 +1525,26 @@
             <span class="text-xs text-neutral-500 dark:text-neutral-400 block mt-1">Google Cloud Credentials</span>
           </div>
           <div class="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
-            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">&bull; VERIFIED ACCREDITATION</span>
+            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">&bull; VERIFIED</span>
             <span class="text-[10px] font-mono text-neutral-400">2024</span>
+          </div>
+        </a>
+
+        <!-- 4 -->
+        <a href="https://drive.google.com/file/d/1EiqVULM7Sh53yhr_E-9FIZ1RYNn-bSfz/view?usp=sharing" target="_blank"
+          rel="noopener noreferrer"
+          class="group p-5 rounded-2xl bg-white dark:bg-[#151515] border border-neutral-200 dark:border-neutral-800 shadow-sm flex flex-col justify-between hover:border-black dark:hover:border-neutral-500 transition-all">
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="text-[9px] font-mono uppercase tracking-widest text-neutral-400 dark:text-neutral-500">CREDENTIAL 04</span>
+              <span class="text-xs text-neutral-400 dark:text-neutral-500 group-hover:text-black dark:group-hover:text-white transition-colors">↗</span>
+            </div>
+            <p class="text-sm font-bold uppercase text-neutral-900 dark:text-neutral-100 mt-2 group-hover:underline">Data Analytics with AI</p>
+            <span class="text-xs text-neutral-500 dark:text-neutral-400 block mt-1">IBM SkillsBuild &amp; BharatCares (AICTE) &bull; IBMACBHDAI0164</span>
+          </div>
+          <div class="mt-4 pt-3 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
+            <span class="text-[10px] font-mono uppercase tracking-wider text-emerald-600 dark:text-emerald-400 font-bold">&bull; VERIFIED</span>
+            <span class="text-[10px] font-mono text-neutral-400">2026</span>
           </div>
         </a>
       </div></div>
@@ -1293,9 +1585,9 @@
         </a>
 
         <!-- Download PDF Button -->
-        <a href="/media/resume/chiranjeeb_resume.pdf" download="Chiranjeeb-Dash-Resume.pdf"
+        <a href="/media/resume/chiranjeeb_resume.pdf" download="Chiranjeeb-Satapathy-Resume.pdf"
           class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full bg-white dark:bg-[#151515] text-black dark:text-white border border-neutral-300 dark:border-neutral-700 hover:border-black dark:hover:border-white text-xs font-bold uppercase tracking-wider hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all shadow-sm hover:shadow-xl hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-black dark:focus-visible:ring-white focus-visible:ring-offset-2"
-          aria-label="Download Chiranjeeb Satapathy's resume as Chiranjeeb-Dash-Resume.pdf">
+          aria-label="Download Chiranjeeb Satapathy's resume as Chiranjeeb-Satapathy-Resume.pdf">
           <span>DOWNLOAD PDF</span>
           <span class="text-sm" aria-hidden="true">↓</span>
         </a>
@@ -1355,7 +1647,7 @@
 
         <!-- LinkedIn -->
         <a class="px-6 py-2.5 rounded-full border border-neutral-700 hover:border-white text-xs font-medium tracking-wider uppercase transition text-neutral-300 hover:text-white inline-flex items-center gap-2"
-          href="https://linkedin.com/in/chiranjeeb-satapathy-69634b281" target="_blank" rel="noopener noreferrer">
+          href="https://www.linkedin.com/in/chiranjeeb-satapathy-283b40353" target="_blank" rel="noopener noreferrer">
           <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
             <path
               d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
@@ -1499,6 +1791,103 @@
           class="w-full py-3 bg-black dark:bg-white text-white dark:text-black rounded-xl text-xs font-bold tracking-widest uppercase hover:bg-neutral-800 dark:hover:bg-neutral-200 transition">
           CLOSE
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Interactive Developer Terminal -->
+  <div id="terminal-modal" onclick="if(event.target === this) closeTerminalModal()"
+    class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-200 flex items-center justify-center p-3 sm:p-6">
+    <div id="terminal-card"
+      class="bg-[#0B0D13] text-neutral-200 rounded-2xl max-w-3xl w-full h-[540px] max-h-[90vh] shadow-2xl border border-neutral-800 flex flex-col overflow-hidden font-mono text-xs transform scale-95 transition-transform duration-200">
+      <!-- Title Bar -->
+      <div class="px-4 py-3 bg-[#131622] border-b border-neutral-800 flex items-center justify-between select-none">
+        <div class="flex items-center gap-2">
+          <button onclick="closeTerminalModal()" class="w-3 h-3 rounded-full bg-rose-500/80 hover:bg-rose-500 transition-colors" title="Close"></button>
+          <button onclick="clearTerminal()" class="w-3 h-3 rounded-full bg-amber-500/80 hover:bg-amber-500 transition-colors" title="Clear screen"></button>
+          <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+          <span class="ml-2 text-[11px] text-neutral-400 font-semibold tracking-wider">chiranjeeb@system:~ (zsh) — Web Terminal</span>
+        </div>
+        <div class="flex items-center gap-3 text-[10px] text-neutral-400">
+          <span>Type <kbd class="px-1.5 py-0.5 rounded bg-neutral-800 text-amber-300">help</kbd></span>
+          <button onclick="closeTerminalModal()" class="text-neutral-400 hover:text-white text-sm" aria-label="Close terminal">✕</button>
+        </div>
+      </div>
+
+      <!-- Terminal Output Canvas -->
+      <div id="terminal-output" class="flex-1 p-4 overflow-y-auto space-y-2 select-text no-scrollbar leading-relaxed">
+        <div class="text-emerald-400 font-bold whitespace-pre text-[10px] sm:text-xs">
+   ______ __    _                     _            __ 
+  / ____// /_  (_)________ _____     (_)__  ___   / /_
+ / /    / __ \/ // ___/ __ `/ __ \   / // _ \/ _ \ / __ \
+/ /___ / / / / // /  / /_/ // / / /  / //  __/  __// /_/ /
+\____//_/ /_/_//_/   \__,_//_/ /_/__/ / \___/\___//_.___/ 
+                                 /___/                    
+        </div>
+        <p class="text-neutral-300">Welcome to Chiranjeeb Satapathy's Interactive Developer Terminal [v2.4.0].</p>
+        <p class="text-neutral-500 text-[11px]">Type <span class="text-amber-400 font-bold">help</span> to list commands, <span class="text-cyan-400 font-bold">edu</span> for academic journey, <span class="text-emerald-400 font-bold">sudo hire</span> for quick outreach.</p>
+        <div class="h-px bg-neutral-800 my-2"></div>
+      </div>
+
+      <!-- Active Command Input Line -->
+      <div class="p-3 bg-[#0E111A] border-t border-neutral-800 flex items-center gap-2">
+        <span class="text-emerald-400 font-bold select-none">chiranjeeb@portfolio</span>
+        <span class="text-neutral-600 select-none">:</span>
+        <span class="text-cyan-400 font-bold select-none">~</span>
+        <span class="text-neutral-400 font-bold select-none">$</span>
+        <input type="text" id="terminal-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          placeholder="type a command (help, edu, skills, projects, sudo hire)..."
+          class="flex-1 bg-transparent border-none text-white focus:outline-none font-mono text-xs">
+        <button onclick="handleTerminalSubmit()" class="px-2.5 py-1 rounded bg-neutral-800 hover:bg-neutral-700 text-[10px] text-neutral-200 transition">Run ↵</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Command Palette (Ctrl+K) -->
+  <div id="command-palette-modal" onclick="if(event.target === this) closeCommandPalette()"
+    class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-200 flex items-start justify-center pt-20 px-4">
+    <div id="command-palette-card"
+      class="bg-white dark:bg-[#151515] text-neutral-900 dark:text-neutral-100 rounded-3xl max-w-xl w-full shadow-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden transform scale-95 transition-transform duration-200">
+      <!-- Search Input -->
+      <div class="p-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center gap-3">
+        <svg class="w-4 h-4 text-neutral-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="M21 21l-4.35-4.35"></path>
+        </svg>
+        <input type="text" id="command-palette-input" autocomplete="off" spellcheck="false"
+          placeholder="Search commands, projects, sections..."
+          class="flex-1 bg-transparent border-none text-sm text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none">
+        <kbd class="px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-[10px] font-mono text-neutral-500">ESC</kbd>
+      </div>
+
+      <!-- Action Items List -->
+      <div id="command-palette-results" class="p-2 max-h-80 overflow-y-auto no-scrollbar space-y-1">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Certificate Lightbox Modal -->
+  <div id="cert-modal" onclick="if(event.target === this) closeCertModal()"
+    class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-200 flex items-center justify-center p-4">
+    <div id="cert-modal-card"
+      class="bg-white dark:bg-[#151515] rounded-3xl max-w-2xl w-full p-6 shadow-2xl border border-neutral-200 dark:border-neutral-800 transform scale-95 transition-transform duration-200 flex flex-col">
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-neutral-200 dark:border-neutral-800">
+        <div>
+          <span id="cert-modal-issuer" class="text-[10px] font-mono uppercase tracking-widest text-emerald-600 dark:text-emerald-400 font-bold">VERIFIED ACCREDITATION</span>
+          <h3 id="cert-modal-title" class="text-lg font-black uppercase text-neutral-900 dark:text-neutral-100">CERTIFICATE TITLE</h3>
+        </div>
+        <button onclick="closeCertModal()" class="w-8 h-8 rounded-full border border-neutral-300 dark:border-neutral-700 flex items-center justify-center text-neutral-600 dark:text-neutral-400 hover:border-black dark:hover:border-white hover:text-black dark:hover:text-white">✕</button>
+      </div>
+      <div class="w-full h-80 rounded-2xl overflow-hidden bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center mb-4">
+        <img id="cert-modal-img" src="" alt="Certificate" class="w-full h-full object-contain p-2">
+      </div>
+      <div class="flex items-center justify-between pt-2">
+        <span class="text-xs text-neutral-500 font-mono">Official Verified Credential</span>
+        <a id="cert-modal-link" href="#" target="_blank" rel="noopener noreferrer"
+          class="px-5 py-2 rounded-full bg-black dark:bg-white text-white dark:text-black text-xs font-bold uppercase tracking-wider hover:bg-neutral-800 dark:hover:bg-neutral-200 transition">
+          Open Verification Link ↗
+        </a>
       </div>
     </div>
   </div>
@@ -1992,8 +2381,540 @@
 
 
 
+    // ==========================================
+    // Real-Time IST Telemetry Clock
+    // ==========================================
+    function updateLiveISTClock() {
+      const clockEl = document.getElementById('live-ist-clock');
+      if (!clockEl) return;
+      try {
+        const now = new Date();
+        const options = {
+          timeZone: 'Asia/Kolkata',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        };
+        const istTime = new Intl.DateTimeFormat('en-US', options).format(now);
+        clockEl.textContent = `BHUBANESWAR, IN • ${istTime} IST`;
+      } catch (e) {
+        const now = new Date();
+        clockEl.textContent = `BHUBANESWAR, IN • ${now.toLocaleTimeString()} IST`;
+      }
+    }
+
+    // ==========================================
+    // Subtle Web Audio Synthesizer (0 dependencies)
+    // ==========================================
+    let audioCtx = null;
+    let audioSFXEnabled = true;
+
+    function initAudioSFX() {
+      const saved = localStorage.getItem('echo_sfx');
+      if (saved !== null) {
+        audioSFXEnabled = saved === 'true';
+      }
+      updateAudioSFXUI();
+    }
+
+    function toggleAudioSFX() {
+      audioSFXEnabled = !audioSFXEnabled;
+      localStorage.setItem('echo_sfx', audioSFXEnabled ? 'true' : 'false');
+      updateAudioSFXUI();
+      if (audioSFXEnabled) playAudioClick(880, 0.03);
+    }
+
+    function updateAudioSFXUI() {
+      const icon = document.getElementById('sfx-status-icon');
+      const text = document.getElementById('sfx-status-text');
+      if (icon) icon.textContent = audioSFXEnabled ? '🔊' : '🔇';
+      if (text) text.textContent = audioSFXEnabled ? 'FX ON' : 'FX OFF';
+    }
+
+    function playAudioClick(freq = 900, duration = 0.02) {
+      if (!audioSFXEnabled) return;
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        if (!audioCtx) audioCtx = new AudioContext();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    // ==========================================
+    // Skills Matrix Filtering & Search
+    // ==========================================
+    function filterSkillCategory(cat) {
+      playAudioClick(800, 0.025);
+      const buttons = document.querySelectorAll('.skill-cat-btn');
+      buttons.forEach(b => {
+        b.className = 'skill-cat-btn px-4 py-1.5 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 text-neutral-700 dark:text-neutral-300 text-[11px] font-bold tracking-wider uppercase hover:border-black dark:hover:border-white transition';
+      });
+      const activeBtn = document.getElementById(`skill-cat-${cat}`);
+      if (activeBtn) {
+        activeBtn.className = 'skill-cat-btn px-4 py-1.5 rounded-full bg-black dark:bg-white text-white dark:text-black text-[11px] font-bold tracking-wider uppercase transition shadow-sm';
+      }
+
+      const cards = document.querySelectorAll('.skill-card');
+      cards.forEach(card => {
+        const cardCat = card.getAttribute('data-category') || '';
+        if (cat === 'all' || cardCat.includes(cat)) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function filterSkillsSearch(query) {
+      const q = query.trim().toLowerCase();
+      const tags = document.querySelectorAll('.skill-tag');
+      const cards = document.querySelectorAll('.skill-card');
+
+      if (!q) {
+        tags.forEach(t => {
+          t.classList.remove('bg-emerald-500/20', 'text-emerald-400', 'border', 'border-emerald-500/40');
+          t.classList.add('bg-neutral-100', 'dark:bg-neutral-800', 'text-neutral-800', 'dark:text-neutral-200');
+        });
+        cards.forEach(c => c.style.display = '');
+        return;
+      }
+
+      cards.forEach(card => {
+        const cardTags = card.querySelectorAll('.skill-tag');
+        let cardMatches = false;
+        cardTags.forEach(t => {
+          const text = t.textContent.toLowerCase();
+          if (text.includes(q)) {
+            cardMatches = true;
+            t.classList.remove('bg-neutral-100', 'dark:bg-neutral-800', 'text-neutral-800', 'dark:text-neutral-200');
+            t.classList.add('bg-emerald-500/20', 'text-emerald-400', 'border', 'border-emerald-500/40');
+          } else {
+            t.classList.remove('bg-emerald-500/20', 'text-emerald-400', 'border', 'border-emerald-500/40');
+            t.classList.add('bg-neutral-100', 'dark:bg-neutral-800', 'text-neutral-800', 'dark:text-neutral-200');
+          }
+        });
+        card.style.display = cardMatches ? '' : 'none';
+      });
+    }
+
+    // ==========================================
+    // Certificate Lightbox Modal
+    // ==========================================
+    function openCertModal(imgSrc, title, issuer, verifyUrl) {
+      playAudioClick(950, 0.03);
+      const modal = document.getElementById('cert-modal');
+      const card = document.getElementById('cert-modal-card');
+      const img = document.getElementById('cert-modal-img');
+      const titleEl = document.getElementById('cert-modal-title');
+      const issuerEl = document.getElementById('cert-modal-issuer');
+      const link = document.getElementById('cert-modal-link');
+
+      if (img) img.src = imgSrc;
+      if (titleEl) titleEl.textContent = title;
+      if (issuerEl) issuerEl.textContent = issuer || 'VERIFIED ACCREDITATION';
+      if (link) link.href = verifyUrl || imgSrc;
+
+      if (modal && card) {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        card.classList.remove('scale-95');
+        card.classList.add('scale-100');
+      }
+    }
+
+    function closeCertModal() {
+      playAudioClick(750, 0.02);
+      const modal = document.getElementById('cert-modal');
+      const card = document.getElementById('cert-modal-card');
+      if (modal && card) {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        card.classList.remove('scale-100');
+        card.classList.add('scale-95');
+      }
+    }
+
+    // ==========================================
+    // Interactive Developer Terminal Playground
+    // ==========================================
+    let terminalHistory = [];
+    let terminalHistoryIndex = -1;
+
+    function openTerminalModal() {
+      playAudioClick(1100, 0.03);
+      const modal = document.getElementById('terminal-modal');
+      const card = document.getElementById('terminal-card');
+      const input = document.getElementById('terminal-input');
+      if (modal && card) {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        card.classList.remove('scale-95');
+        card.classList.add('scale-100');
+        setTimeout(() => { if (input) input.focus(); }, 100);
+      }
+    }
+
+    function closeTerminalModal() {
+      playAudioClick(750, 0.02);
+      const modal = document.getElementById('terminal-modal');
+      const card = document.getElementById('terminal-card');
+      if (modal && card) {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        card.classList.remove('scale-100');
+        card.classList.add('scale-95');
+      }
+    }
+
+    function toggleTerminalModal() {
+      const modal = document.getElementById('terminal-modal');
+      if (modal && modal.classList.contains('pointer-events-none')) {
+        openTerminalModal();
+      } else {
+        closeTerminalModal();
+      }
+    }
+
+    function clearTerminal() {
+      playAudioClick(850, 0.02);
+      const output = document.getElementById('terminal-output');
+      if (output) {
+        output.innerHTML = '<p class="text-neutral-500 text-[11px]">Terminal cleared. Type <span class="text-amber-400 font-bold">help</span> for commands.</p>';
+      }
+    }
+
+    function handleTerminalSubmit() {
+      const input = document.getElementById('terminal-input');
+      const output = document.getElementById('terminal-output');
+      if (!input || !output) return;
+
+      const raw = input.value.trim();
+      input.value = '';
+      if (!raw) return;
+
+      playAudioClick(1200, 0.02);
+      terminalHistory.push(raw);
+      terminalHistoryIndex = terminalHistory.length;
+
+      // Echo command
+      const cmdEcho = document.createElement('div');
+      cmdEcho.className = 'flex items-center gap-2 text-neutral-400 text-xs mt-2';
+      cmdEcho.innerHTML = `<span class="text-emerald-400 font-bold">chiranjeeb@portfolio</span>:<span class="text-cyan-400">~</span>$ <span class="text-white font-semibold">${raw}</span>`;
+      output.appendChild(cmdEcho);
+
+      const cmd = raw.toLowerCase().trim();
+      const res = document.createElement('div');
+      res.className = 'text-xs text-neutral-300 ml-2 mt-1 space-y-1';
+
+      if (cmd === 'help') {
+        res.innerHTML = `
+          <p class="text-amber-400 font-bold mb-1">AVAILABLE COMMANDS:</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] font-mono">
+            <div><span class="text-emerald-400 font-bold">whoami</span> / <span class="text-emerald-400 font-bold">bio</span> - Chiranjeeb's engineering summary</div>
+            <div><span class="text-emerald-400 font-bold">edu</span> / <span class="text-emerald-400 font-bold">education</span> - Academic journey &amp; institutions</div>
+            <div><span class="text-emerald-400 font-bold">skills</span> - Categorized engineering stack</div>
+            <div><span class="text-emerald-400 font-bold">projects</span> - 12 verified GitHub repositories</div>
+            <div><span class="text-emerald-400 font-bold">certs</span> - Four verified accreditations</div>
+            <div><span class="text-emerald-400 font-bold">contact</span> - Reach out via email or phone</div>
+            <div><span class="text-emerald-400 font-bold">sudo hire</span> - Recruiter fast-track easter egg</div>
+            <div><span class="text-emerald-400 font-bold">theme</span> - Toggle Dark/Light mode</div>
+            <div><span class="text-emerald-400 font-bold">time</span> - Current live IST telemetry</div>
+            <div><span class="text-emerald-400 font-bold">clear</span> - Clear terminal window</div>
+            <div><span class="text-emerald-400 font-bold">exit</span> - Close terminal window</div>
+          </div>
+        `;
+      } else if (cmd === 'whoami' || cmd === 'bio' || cmd === 'about') {
+        res.innerHTML = `
+          <p><span class="text-cyan-400 font-bold">Chiranjeeb Satapathy</span> — Data Science Engineer &amp; Full-Stack Developer</p>
+          <p class="text-neutral-400 text-[11px]">Specializing in machine learning pipelines, deep learning computer vision (YOLOv8), scalable distributed web systems, and algorithmic problem-solving. Based in Bhubaneswar, Odisha, India.</p>
+        `;
+      } else if (cmd === 'edu' || cmd === 'education') {
+        res.innerHTML = `
+          <p class="text-cyan-400 font-bold">ACADEMIC FOUNDATIONS:</p>
+          <p>1. <span class="text-white font-semibold">B.Tech in Computer Science &amp; Engineering (Data Science)</span> (2024–2028)</p>
+          <p class="text-neutral-400 text-[11px] ml-4">Institute of Technical Education and Research (ITER) — Siksha 'O' Anusandhan (SOA Deemed to be University), Bhubaneswar</p>
+          <p>2. <span class="text-white font-semibold">Higher Secondary (+2 Science / PCM &amp; Computer Science)</span> (2022–2024)</p>
+          <p class="text-neutral-400 text-[11px] ml-4">St. Xavier's High School, Kedargouri, Bhubaneswar, Odisha</p>
+          <p>3. <span class="text-white font-semibold">Secondary School (ICSE Class 10) — Result: 84%</span> (2022)</p>
+          <p class="text-neutral-400 text-[11px] ml-4">Carmel School, Bhadrak, Odisha</p>
+        `;
+      } else if (cmd === 'skills') {
+        res.innerHTML = `
+          <p class="text-amber-400 font-bold">TECHNICAL TOOLKIT:</p>
+          <p><span class="text-emerald-400 font-semibold">Languages:</span> Python, JavaScript, TypeScript, Core Java, SQL, C++</p>
+          <p><span class="text-emerald-400 font-semibold">AI / ML:</span> Pandas, NumPy, Scikit-Learn, YOLOv8, OpenCV, Gemini API, Joblib</p>
+          <p><span class="text-emerald-400 font-semibold">Frontend:</span> React, Next.js, Tailwind CSS v3, Three.js, HTML5/CSS3</p>
+          <p><span class="text-emerald-400 font-semibold">Backend &amp; DB:</span> Node.js, Express, Django REST, MySQL, PostgreSQL, MongoDB, Firebase</p>
+          <p><span class="text-emerald-400 font-semibold">Cloud &amp; Tools:</span> Docker, Google Cloud, Vercel, Git/GitHub, VS Code</p>
+        `;
+      } else if (cmd === 'projects') {
+        res.innerHTML = `
+          <p class="text-cyan-400 font-bold">12 PRODUCTION GITHUB REPOSITORIES:</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px] font-mono">
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/AgroFedly" target="_blank" class="text-emerald-400 underline">AgroFedly</a> (YOLOv8 AI Supply Chain)</div>
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/medi-stock" target="_blank" class="text-emerald-400 underline">MediStock Pro</a> (Healthcare Inventory)</div>
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/real_emotion" target="_blank" class="text-emerald-400 underline">Real Emotion</a> (60 FPS Neural CV)</div>
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/nirmit" target="_blank" class="text-emerald-400 underline">Margdarshak AI</a> (Vernacular STEM NLP)</div>
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/my-web" target="_blank" class="text-emerald-400 underline">CloudVault</a> (Private Cloud &amp; AI)</div>
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/ZenFlow" target="_blank" class="text-emerald-400 underline">ZenFlow</a> (Agile Kanban Suite)</div>
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/EcoFuture" target="_blank" class="text-emerald-400 underline">EcoFuture</a> (Carbon Footprint AI)</div>
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/VisionPulse" target="_blank" class="text-emerald-400 underline">VisionPulse</a> (Automated Quality CV)</div>
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/weather-dashboard" target="_blank" class="text-emerald-400 underline">AtmosphereIQ</a> (Geospatial Weather)</div>
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/e-commerce" target="_blank" class="text-emerald-400 underline">NextGen E-Commerce</a> (Decoupled Store)</div>
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/student-forum" target="_blank" class="text-emerald-400 underline">CampusConnect</a> (Academic Discussions)</div>
+            <div>&bull; <a href="https://github.com/chiranjeebsatapathy123-sudo/Rpm_Game" target="_blank" class="text-emerald-400 underline">Life RPG</a> (Behavioral Habit Engine)</div>
+          </div>
+        `;
+      } else if (cmd === 'certs') {
+        res.innerHTML = `
+          <p class="text-emerald-400 font-bold">FOUR VERIFIED ACCREDITATIONS:</p>
+          <p>&bull; <span class="text-white">Advanced AI &amp; Machine Learning</span> — CTTC Bhubaneswar (MSME Govt. of India)</p>
+          <p>&bull; <span class="text-white">Meta Front-End Developer</span> — Meta / Coursera Professional</p>
+          <p>&bull; <span class="text-white">Google Cloud Computing Foundations</span> — Google Cloud Credentials</p>
+          <p>&bull; <span class="text-white">Data Analytics with AI</span> — IBM SkillsBuild &amp; BharatCares (AICTE)</p>
+        `;
+      } else if (cmd === 'contact') {
+        res.innerHTML = `
+          <p class="text-cyan-400 font-bold">CONTACT INFORMATION:</p>
+          <p>Email: <a href="mailto:chiranjeebsatapathy123@gmail.com" class="text-emerald-400 underline">chiranjeebsatapathy123@gmail.com</a></p>
+          <p>Phone: <a href="tel:+919337579848" class="text-emerald-400 underline">+91 93375 79848</a></p>
+          <p>LinkedIn: <a href="https://www.linkedin.com/in/chiranjeeb-satapathy-283b40353" target="_blank" class="text-emerald-400 underline">linkedin.com/in/chiranjeeb-satapathy-283b40353</a></p>
+          <p>GitHub: <a href="https://github.com/chiranjeebsatapathy123-sudo" target="_blank" class="text-emerald-400 underline">github.com/chiranjeebsatapathy123-sudo</a></p>
+        `;
+      } else if (cmd === 'sudo hire' || cmd === 'hire') {
+        res.innerHTML = `
+          <p class="text-amber-300 font-bold">🎉 ACCESS GRANTED: INITIATING RECRUITER FAST-TRACK!</p>
+          <p class="text-neutral-400 text-[11px]">Connecting directly to Chiranjeeb Satapathy's priority outreach channel...</p>
+        `;
+        playAudioClick(1400, 0.08);
+        setTimeout(() => {
+          closeTerminalModal();
+          openContactModal();
+          showToast('Priority outreach channel opened. Let’s collaborate!');
+        }, 600);
+      } else if (cmd === 'clear') {
+        clearTerminal();
+        return;
+      } else if (cmd === 'theme') {
+        handleThemeToggle();
+        res.innerHTML = `<p class="text-neutral-400">Theme toggled to <span class="text-white font-bold">${getTheme()}</span> mode.</p>`;
+      } else if (cmd === 'time') {
+        const now = new Date();
+        res.innerHTML = `<p class="text-cyan-400 font-mono">Current Telemetry: ${now.toString()}</p>`;
+      } else if (cmd === 'exit' || cmd === 'quit') {
+        closeTerminalModal();
+        return;
+      } else {
+        res.innerHTML = `<p class="text-rose-400">zsh: command not found: ${raw}. Type <span class="text-amber-300 font-bold">help</span> to see available commands.</p>`;
+      }
+
+      output.appendChild(res);
+      output.scrollTop = output.scrollHeight;
+    }
+
+    // ==========================================
+    // Command Palette (Ctrl+K / ⌘K)
+    // ==========================================
+    const cpCommands = [
+      { title: 'Jump to Hero', category: 'Navigation', action: () => window.location.hash = '#home' },
+      { title: 'Jump to About Me (ScrollExpandMedia)', category: 'Navigation', action: () => window.location.hash = '#about' },
+      { title: 'Jump to Journey (Where I’ve Been)', category: 'Navigation', action: () => window.location.hash = '#experience' },
+      { title: 'Jump to Featured Projects (FlexCarousel)', category: 'Navigation', action: () => window.location.hash = '#projects' },
+      { title: 'Jump to 3D Engineering Reel (WorksWheel)', category: 'Navigation', action: () => window.location.hash = '#landing-pages' },
+      { title: 'Jump to Focus Areas & Skills', category: 'Navigation', action: () => window.location.hash = '#services' },
+      { title: 'Jump to Verified Certifications', category: 'Navigation', action: () => window.location.hash = '#certifications' },
+      { title: 'Jump to Curriculum Vitae (Resume)', category: 'Navigation', action: () => window.location.hash = '#resume' },
+      { title: 'Jump to Contact / Let’s Talk', category: 'Navigation', action: () => window.location.hash = '#contact' },
+      { title: 'Open Interactive Developer Terminal', category: 'Tool', action: () => openTerminalModal() },
+      { title: 'Toggle Dark / Light Theme', category: 'Action', action: () => handleThemeToggle() },
+      { title: 'Toggle UI Sound Effects (FX)', category: 'Action', action: () => toggleAudioSFX() },
+      { title: 'Copy Email to Clipboard', category: 'Contact', action: () => copyContactEmail() },
+      { title: 'Open Verified LinkedIn Profile', category: 'External', action: () => window.open('https://www.linkedin.com/in/chiranjeeb-satapathy-283b40353', '_blank') },
+      { title: 'Open GitHub Profile (12 Repos)', category: 'External', action: () => window.open('https://github.com/chiranjeebsatapathy123-sudo', '_blank') },
+      { title: 'Open Contact Form Modal', category: 'Action', action: () => openContactModal() }
+    ];
+
+    let cpActiveIndex = 0;
+    let cpFiltered = [...cpCommands];
+
+    function openCommandPalette() {
+      playAudioClick(1000, 0.025);
+      const modal = document.getElementById('command-palette-modal');
+      const card = document.getElementById('command-palette-card');
+      const input = document.getElementById('command-palette-input');
+      if (modal && card) {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        card.classList.remove('scale-95');
+        card.classList.add('scale-100');
+        if (input) {
+          input.value = '';
+          renderCommandPalette('');
+          setTimeout(() => input.focus(), 100);
+        }
+      }
+    }
+
+    function closeCommandPalette() {
+      playAudioClick(750, 0.02);
+      const modal = document.getElementById('command-palette-modal');
+      const card = document.getElementById('command-palette-card');
+      if (modal && card) {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        card.classList.remove('scale-100');
+        card.classList.add('scale-95');
+      }
+    }
+
+    function renderCommandPalette(query) {
+      const resultsContainer = document.getElementById('command-palette-results');
+      if (!resultsContainer) return;
+      const q = query.trim().toLowerCase();
+
+      cpFiltered = cpCommands.filter(c =>
+        c.title.toLowerCase().includes(q) || c.category.toLowerCase().includes(q)
+      );
+
+      if (cpFiltered.length === 0) {
+        resultsContainer.innerHTML = '<div class="p-6 text-center text-xs text-neutral-400">No matching commands or destinations found.</div>';
+        return;
+      }
+
+      if (cpActiveIndex >= cpFiltered.length) cpActiveIndex = 0;
+
+      resultsContainer.innerHTML = cpFiltered.map((item, idx) => `
+        <div onclick="executeCPItem(${idx})"
+          class="cp-item px-3.5 py-2.5 rounded-2xl flex items-center justify-between text-xs cursor-pointer transition ${idx === cpActiveIndex ? 'bg-neutral-100 dark:bg-neutral-800 text-black dark:text-white font-bold' : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-900'}">
+          <div class="flex items-center gap-2.5">
+            <span class="w-1.5 h-1.5 rounded-full ${idx === cpActiveIndex ? 'bg-black dark:bg-white' : 'bg-neutral-300 dark:bg-neutral-700'}"></span>
+            <span>${item.title}</span>
+          </div>
+          <span class="text-[10px] font-mono tracking-wider uppercase text-neutral-400 px-2 py-0.5 rounded bg-neutral-200/50 dark:bg-neutral-800/80">${item.category}</span>
+        </div>
+      `).join('');
+    }
+
+    function executeCPItem(index) {
+      if (cpFiltered[index]) {
+        closeCommandPalette();
+        playAudioClick(1200, 0.03);
+        setTimeout(() => {
+          cpFiltered[index].action();
+        }, 150);
+      }
+    }
+
+    // Global Keyboard Listeners (Ctrl+K, Ctrl+`, Escape, Arrow Keys)
+    document.addEventListener('keydown', (e) => {
+      // 1. Command Palette Trigger (Cmd+K or Ctrl+K)
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        const cpModal = document.getElementById('command-palette-modal');
+        if (cpModal && cpModal.classList.contains('pointer-events-none')) {
+          openCommandPalette();
+        } else {
+          closeCommandPalette();
+        }
+        return;
+      }
+
+      // 2. Terminal Trigger (Ctrl+` or ` when not in input)
+      if ((e.metaKey || e.ctrlKey) && e.key === '`') {
+        e.preventDefault();
+        toggleTerminalModal();
+        return;
+      }
+
+      // 3. Escape to close any open modal
+      if (e.key === 'Escape') {
+        const certModal = document.getElementById('cert-modal');
+        const termModal = document.getElementById('terminal-modal');
+        const cpModal = document.getElementById('command-palette-modal');
+        const projModal = document.getElementById('project-modal');
+        const contactModal = document.getElementById('contact-modal');
+        const cartModal = document.getElementById('cart-modal');
+
+        if (cpModal && !cpModal.classList.contains('pointer-events-none')) closeCommandPalette();
+        if (termModal && !termModal.classList.contains('pointer-events-none')) closeTerminalModal();
+        if (certModal && !certModal.classList.contains('pointer-events-none')) closeCertModal();
+        if (projModal && !projModal.classList.contains('pointer-events-none')) closeProjectModal();
+        if (contactModal && !contactModal.classList.contains('pointer-events-none')) closeContactModal();
+        if (cartModal && !cartModal.classList.contains('pointer-events-none')) closeCartModal();
+        return;
+      }
+
+      // 4. Command Palette Arrow Key Navigation
+      const cpModal = document.getElementById('command-palette-modal');
+      if (cpModal && !cpModal.classList.contains('pointer-events-none')) {
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          cpActiveIndex = (cpActiveIndex + 1) % Math.max(1, cpFiltered.length);
+          renderCommandPalette(document.getElementById('command-palette-input').value);
+          playAudioClick(650, 0.015);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          cpActiveIndex = (cpActiveIndex - 1 + cpFiltered.length) % Math.max(1, cpFiltered.length);
+          renderCommandPalette(document.getElementById('command-palette-input').value);
+          playAudioClick(650, 0.015);
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          executeCPItem(cpActiveIndex);
+        }
+      }
+
+      // 5. Terminal Arrow Key History
+      const termModal = document.getElementById('terminal-modal');
+      if (termModal && !termModal.classList.contains('pointer-events-none')) {
+        const input = document.getElementById('terminal-input');
+        if (document.activeElement === input) {
+          if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (terminalHistory.length > 0 && terminalHistoryIndex > 0) {
+              terminalHistoryIndex--;
+              input.value = terminalHistory[terminalHistoryIndex];
+            }
+          } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (terminalHistoryIndex < terminalHistory.length - 1) {
+              terminalHistoryIndex++;
+              input.value = terminalHistory[terminalHistoryIndex];
+            } else {
+              terminalHistoryIndex = terminalHistory.length;
+              input.value = '';
+            }
+          } else if (e.key === 'Enter') {
+            e.preventDefault();
+            handleTerminalSubmit();
+          }
+        }
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const cpInput = document.getElementById('command-palette-input');
+      if (cpInput) {
+        cpInput.addEventListener('input', (e) => {
+          cpActiveIndex = 0;
+          renderCommandPalette(e.target.value);
+        });
+      }
+    });
+
     // Initialize application
     function initApp() {
+      updateLiveISTClock();
+      setInterval(updateLiveISTClock, 1000);
+      initAudioSFX();
 
       const sections = document.querySelectorAll('section[id], main[id]');
       const navLinks = {

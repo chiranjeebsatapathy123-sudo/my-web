@@ -48,7 +48,7 @@ def generate_resume_pdf(output_path):
     
     # Contact Info
     draw.text((80, 175), "Email: chiranjeebsatapathy123@gmail.com", fill='#e2e8f0', font=font_regular)
-    draw.text((550, 175), "Location: Bhubaneswar, India", fill='#e2e8f0', font=font_regular)
+    draw.text((550, 175), "Phone: +91 93375 79848  |  Bhubaneswar, India", fill='#e2e8f0', font=font_regular)
     draw.text((80, 215), "LinkedIn: linkedin.com/in/chiranjeeb-satapathy-283b40353", fill='#e2e8f0', font=font_regular)
     draw.text((550, 215), "GitHub: github.com/chiranjeebsatapathy123-sudo", fill='#e2e8f0', font=font_regular)
 
@@ -90,22 +90,39 @@ def generate_resume_pdf(output_path):
 
     # 2. Education
     draw_section_header("Education")
-    draw.text((80, y_pos), "B.Tech in Computer Science Engineering (AI & ML Focus)", fill=primary_color, font=font_bold_medium)
-    draw.text((width - 250, y_pos), "2024 - 2028 (Expected)", fill=text_color, font=font_regular)
-    y_pos += 25
-    draw.text((80, y_pos), "Siksha 'O' Anusandhan University (ITER-SOA), Bhubaneswar", fill=text_color, font=font_italic)
+    # Undergrad
+    draw.text((80, y_pos), "B.Tech in Computer Science & Engineering (Data Science)", fill=primary_color, font=font_bold_medium)
+    draw.text((width - 250, y_pos), "2024 - 2028 (Ongoing)", fill=text_color, font=font_regular)
+    y_pos += 24
+    draw.text((80, y_pos), "Institute of Technical Education and Research (ITER) - Siksha 'O' Anusandhan (SOA), Bhubaneswar", fill=text_color, font=font_italic)
+    y_pos += 24
+    draw.text((80, y_pos), "Core Coursework: Data Structures & Algorithms, Machine Learning Systems, Database Architectures, Operating Systems", fill=text_color, font=font_regular)
     y_pos += 30
-    draw.text((80, y_pos), "Relevant Coursework: Data Structures & Algorithms, Database Management, Computer Vision, OOP", fill=text_color, font=font_regular)
-    y_pos += 60
+
+    # High School
+    draw.text((80, y_pos), "Higher Secondary Education (+2 Science / PCM & Computer Science)", fill=primary_color, font=font_bold_medium)
+    draw.text((width - 250, y_pos), "2022 - 2024", fill=text_color, font=font_regular)
+    y_pos += 24
+    draw.text((80, y_pos), "St. Xavier's High School, Kedargouri, Bhubaneswar, Odisha", fill=text_color, font=font_italic)
+    y_pos += 30
+
+    # Secondary School
+    draw.text((80, y_pos), "Secondary School Certificate (ICSE Class 10) - Result: 84%", fill=primary_color, font=font_bold_medium)
+    draw.text((width - 250, y_pos), "Completed 2022", fill=text_color, font=font_regular)
+    y_pos += 24
+    draw.text((80, y_pos), "Carmel School, Bhadrak, Odisha (Distinction in Science, Mathematics & Computer Applications)", fill=text_color, font=font_italic)
+    y_pos += 45
 
     # 3. Experience
     draw_section_header("Internships & Professional Experience")
     
     experiences = [
-        ("AI/ML Intern", "CTTC", "Date - Date", 
-         "Worked on Artificial Intelligence and Machine Learning models."),
-        ("Web Development Intern", "Thiranex", "Date - Date", 
-         "Developed and maintained web applications and responsive user interfaces.")
+        ("AI Web Development Intern", "InAmigos Foundation (Remote)", "June 2026 - July 2026", 
+         "Developed intelligent full-stack web applications and integrated responsive interfaces with AI APIs."),
+        ("Data Analytics with AI Intern", "IBM SkillsBuild & BharatCares (AICTE)", "Aug 2026 - Sept 2026", 
+         "Conducted predictive data analytics, statistical modeling, and machine learning workflows on real-world datasets."),
+        ("Advanced AI & Machine Learning Specialization", "CTTC Bhubaneswar (MSME Govt. of India)", "2024", 
+         "Extensive hands-on training in deep learning architectures, computer vision models, and neural pipelines.")
     ]
     
     for title, org, date, desc in experiences:
