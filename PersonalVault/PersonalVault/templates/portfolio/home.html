@@ -689,12 +689,30 @@
     <!-- Center Headshot & Symmetrical Content Grid -->
     <div class="relative grid grid-cols-1 md:grid-cols-12 items-center mt-2 md:-mt-6">
 
-      <!-- Left Column: Developer info & Arrow -->
+      <!-- Left Column: Developer Info, Coordinates, Arrow & Engineering Maxim -->
       <div
-        class="md:col-span-3 flex flex-col items-start md:items-start pl-2 md:pl-6 order-2 md:order-1 pt-6 md:pt-0 relative z-30">
-        <span class="text-xs font-bold tracking-wider uppercase text-neutral-800 dark:text-neutral-200 mb-6">AI/ML & DEEP LEARNING ENGINEER &bull;
-          FULL-STACK ARCHITECT</span>
-        <a class="circle-btn w-14 h-14 md:w-16 md:h-16 border-neutral-300 dark:border-neutral-700" href="#about"
+        class="md:col-span-3 flex flex-col items-start md:items-start pl-2 md:pl-6 order-2 md:order-1 pt-6 md:pt-0 relative z-30 space-y-5">
+        <!-- Location & Status Chip -->
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-200/60 dark:bg-neutral-800/70 border border-neutral-300/80 dark:border-neutral-700/60 text-[10px] font-mono uppercase tracking-widest text-neutral-700 dark:text-neutral-300 select-none shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>BHUBANESWAR, IN &bull; 20.2961&deg; N</span>
+        </div>
+
+        <div>
+          <span class="text-xs font-black tracking-wider uppercase text-neutral-900 dark:text-neutral-100 block">
+            COMPUTER SCIENCE ENGINEER
+          </span>
+          <span class="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 uppercase tracking-widest block mt-1">
+            AI/ML &bull; DISTRIBUTED FULL-STACK
+          </span>
+        </div>
+
+        <!-- Stylish Philosophical Quote 1 -->
+        <p class="text-[11px] font-mono text-neutral-600 dark:text-neutral-400 leading-relaxed uppercase tracking-wider max-w-[240px] text-left border-l border-emerald-500/50 pl-2.5">
+          "BRIDGING DETERMINISTIC COMPUTATIONAL LOGIC WITH PROBABILISTIC MACHINE INTELLIGENCE."
+        </p>
+
+        <a class="circle-btn w-14 h-14 md:w-16 md:h-16 border-neutral-300 dark:border-neutral-700 mt-2" href="#about"
           aria-label="Scroll to About Section">
           <svg class="w-5 h-5 text-neutral-800 dark:text-neutral-200 transform rotate-45" fill="none" stroke="currentColor" stroke-width="1.8"
             viewBox="0 0 24 24">
@@ -731,29 +749,39 @@
         </div>
       </div>
 
-      <!-- Right Column: Pitch and Disciplines -->
+      <!-- Right Column: Stylish Quotes, Maxims and Disciplines -->
       <div
-        class="md:col-span-3 flex flex-col items-start md:items-end text-left order-3 pt-6 md:pt-0 pr-2 md:pr-6 space-y-10 relative z-30">
-        <!-- Pitch Quote -->
-        <p
-          class="text-[11px] md:text-xs uppercase font-medium leading-relaxed tracking-wider text-neutral-700 dark:text-neutral-300 max-w-[240px] text-left">
-          "I BUILD PRACTICAL SOFTWARE AND EXPLORE INTELLIGENT SYSTEMS."
+        class="md:col-span-3 flex flex-col items-start md:items-end text-left order-3 pt-6 md:pt-0 pr-2 md:pr-6 space-y-8 relative z-30">
+        <!-- Primary Editorial Architecture Quote -->
+        <blockquote class="border-l-2 md:border-l-0 md:border-r-2 border-emerald-500 pl-3 md:pl-0 md:pr-3 text-left md:text-right max-w-[260px]">
+          <p class="text-[11px] md:text-xs uppercase font-semibold leading-relaxed tracking-wider text-neutral-800 dark:text-neutral-200">
+            "ARCHITECTURE IS THE ART OF HOW TO WASTE SPACE; ENGINEERING IS THE ART OF DOING THAT WITH SUB-MILLISECOND PRECISION."
+          </p>
+          <cite class="block text-[9px] font-mono text-emerald-600 dark:text-emerald-400 uppercase tracking-widest mt-1.5">
+            &mdash; SOFTWARE ARCHITECTURE MAXIM
+          </cite>
+        </blockquote>
+
+        <!-- Secondary Quote -->
+        <p class="text-[10px] font-mono text-neutral-500 dark:text-neutral-400 uppercase tracking-widest max-w-[240px] text-left md:text-right leading-relaxed">
+          "GOOD SOFTWARE IS PREDICTABLE. GREAT SOFTWARE FEELS INEVITABLE."
         </p>
 
         <!-- Discipline List with hover interaction -->
         <div
-          class="flex flex-col space-y-3 text-[11px] md:text-xs font-semibold tracking-widest text-neutral-600 dark:text-neutral-400 uppercase">
+          class="flex flex-col space-y-2.5 text-[11px] md:text-xs font-semibold tracking-widest text-neutral-600 dark:text-neutral-400 uppercase text-left md:text-right">
+          <span class="text-[9px] font-mono uppercase tracking-widest text-neutral-400 block mb-1">AREAS OF MASTERY</span>
           <a href="#services" onclick="selectService(0)"
-            class="hover:text-black dark:hover:text-white hover:translate-x-1 md:hover:-translate-x-1 transition-all inline-flex items-center gap-1.5">
-            <span>DATA SCIENCE &amp; ML</span>
+            class="hover:text-black dark:hover:text-white hover:translate-x-1 md:hover:-translate-x-1 transition-all inline-flex items-center md:justify-end gap-1.5">
+            <span>AI SYSTEMS &bull; VISION &amp; ML</span>
           </a>
           <a href="#services" onclick="selectService(1)"
-            class="hover:text-black dark:hover:text-white hover:translate-x-1 md:hover:-translate-x-1 transition-all inline-flex items-center gap-1.5 font-bold text-black dark:text-white">
-            <span>FULL-STACK DEVELOPMENT</span>
+            class="hover:text-black dark:hover:text-white hover:translate-x-1 md:hover:-translate-x-1 transition-all inline-flex items-center md:justify-end gap-1.5 font-bold text-black dark:text-white">
+            <span>FULL-STACK WEB PLATFORMS</span>
           </a>
           <a href="#services" onclick="selectService(2)"
-            class="hover:text-black dark:hover:text-white hover:translate-x-1 md:hover:-translate-x-1 transition-all inline-flex items-center gap-1.5">
-            <span>CORE SOFTWARE &amp; CLOUD</span>
+            class="hover:text-black dark:hover:text-white hover:translate-x-1 md:hover:-translate-x-1 transition-all inline-flex items-center md:justify-end gap-1.5">
+            <span>DISTRIBUTED BACKEND &amp; CLOUD</span>
           </a>
         </div>
       </div>
@@ -807,7 +835,7 @@
                   class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-white/10 pb-3">
                   <h3
                     class="text-xs sm:text-sm md:text-base font-extrabold uppercase tracking-tight text-white max-w-xl">
-                    "I BUILD PRACTICAL SOFTWARE AND EXPLORE INTELLIGENT SYSTEMS."
+                    "CODE IS THE MEDIUM THROUGH WHICH HUMAN INTENTION BECOMES MECHANICAL REALITY."
                   </h3>
                   <span class="text-[10px] font-mono tracking-wider uppercase text-neutral-400 shrink-0">
                     BHUBANESWAR, ODISHA, INDIA
@@ -1749,6 +1777,7 @@
 
       <!-- Metallic Callout Headline -->
       <div class="w-full text-center py-6 md:py-10">
+        <p class="text-xs font-mono uppercase tracking-widest text-emerald-400 mb-2">"EVERY ENTERPRISE ARCHITECTURE BEGINS WITH AN AUDACIOUS COMMIT."</p>
         <p class="text-xs font-mono uppercase tracking-widest text-neutral-400 mb-4">"LET'S BUILD SOMETHING MEANINGFUL."
         </p>
         <h2
@@ -3689,6 +3718,36 @@
       });
     })();
   </script>
+
+  <!-- 3D Card Hover Tilt & Dynamic Glare Engine -->
+  <script>
+    (function initCardTilt() {
+      if (window.matchMedia('(pointer: coarse)').matches) return;
+      const cards = document.querySelectorAll('.card-interactive, .exp-panel, #flex-carousel-container, #works-wheel-container');
+      
+      cards.forEach(card => {
+        card.style.transformStyle = 'preserve-3d';
+        card.style.transition = 'transform 0.15s ease-out, box-shadow 0.15s ease-out';
+        
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -5;
+          const rotateY = ((x - centerX) / centerX) * 5;
+          
+          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.01, 1.01, 1.01)`;
+        });
+        
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        });
+      });
+    })();
+  </script>
+
 </body>
 
 
