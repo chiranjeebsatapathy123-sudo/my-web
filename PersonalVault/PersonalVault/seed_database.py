@@ -131,7 +131,7 @@ def main():
     profile.bio = (
         "B.Tech Computer Science Engineering student (Class of 2028) at Siksha 'O' Anusandhan University "
         "(ITER-SOA) with a passion for Artificial Intelligence, Machine Learning, Web Development, "
-        "and Computer Vision. Schooling at St. Xavier's High School, Kedargouri and Carmel School, Bhadrak (84%)."
+        "and Computer Vision. Schooling at St. Xavier's High School, Kedargouri and Carmel School, Bhadrak (86%)."
     )
     profile.linkedin = "https://www.linkedin.com/in/chiranjeeb-satapathy-283b40353"
     profile.github = "https://github.com/chiranjeebsatapathy123-sudo"
@@ -280,7 +280,7 @@ def main():
     Achievement.objects.filter(user=user, category='Education').delete()
     Achievement.objects.create(
         user=user,
-        title="B.Tech in Computer Science & Engineering (Data Science)",
+        title="B.Tech in Computer Science & Engineering",
         description="Institute of Technical Education and Research (ITER), Siksha 'O' Anusandhan (SOA Deemed to be University), Bhubaneswar (2024–2028). Ongoing Third Year with focus on Algorithms, Machine Learning Systems, Database Architectures, and Cloud Platforms.",
         date_achieved=datetime.date(2024, 8, 1),
         category='Education'
@@ -294,12 +294,37 @@ def main():
     )
     Achievement.objects.create(
         user=user,
-        title="Secondary School Certificate (ICSE Class 10) — 84%",
-        description="Carmel School, Bhadrak, Odisha (Completed 2022). Aggregate result of 84% with academic distinction in Science, Mathematics, and Computer Applications.",
+        title="Secondary School Certificate (ICSE Class 10) — 86%",
+        description="Carmel School, Bhadrak, Odisha (Completed 2022). Aggregate result of 86% with academic distinction in Science, Mathematics, and Computer Applications.",
         date_achieved=datetime.date(2022, 6, 10),
         category='Education'
     )
     print("Education achievements seeded successfully.")
+    # Seed Competitive Hackathons
+    Achievement.objects.filter(user=user, category='Hackathons').delete()
+    Achievement.objects.create(
+        user=user,
+        title="SOA Ideathon Hackathon Finalist",
+        description="ITER Siksha 'O' Anusandhan University Ideathon. Developed rapid technical AI prototype solution and presented architectural pitch.",
+        date_achieved=datetime.date(2024, 9, 20),
+        category='Hackathons'
+    )
+    Achievement.objects.create(
+        user=user,
+        title="Smart India Hackathon (SIH) Participant",
+        description="Ministry of Education Govt. of India. National-level software engineering initiative solving nationwide institutional challenges.",
+        date_achieved=datetime.date(2024, 10, 15),
+        category='Hackathons'
+    )
+    Achievement.objects.create(
+        user=user,
+        title="Google Cloud Hackathon Builder",
+        description="Google Cloud GenAI & Distributed Infrastructure Hackathon. Built cloud-native ML inference pipeline using Google Cloud architecture.",
+        date_achieved=datetime.date(2024, 11, 5),
+        category='Hackathons'
+    )
+    print("Hackathons seeded successfully.")
+
 
 if __name__ == '__main__':
     main()

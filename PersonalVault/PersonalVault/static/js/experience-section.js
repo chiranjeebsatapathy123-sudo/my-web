@@ -79,7 +79,7 @@ export function initExperienceSection() {
       if (currentProgress < 0.35) {
         hudPhase.textContent = "ACADEMIC RIGOR (ITER SOA \u2022 ST. XAVIER'S \u2022 CARMEL SCHOOL)";
       } else if (currentProgress < 0.70) {
-        hudPhase.textContent = "INDUSTRIAL INTERNSHIPS (INAMIGOS \u2022 IBM AICTE \u2022 CTTC MSME)";
+        hudPhase.textContent = "INTERNSHIPS & HACKATHONS (SOA IDEATHON \u2022 SIH \u2022 GOOGLE CLOUD \u2022 IBM \u2022 CTTC)";
       } else {
         hudPhase.textContent = "COMPETITIVE SYSTEMS (LEETCODE 340+ \u2022 12 GITHUB REPOS)";
       }

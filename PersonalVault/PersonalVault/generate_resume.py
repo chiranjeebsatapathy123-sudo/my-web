@@ -91,7 +91,7 @@ def generate_resume_pdf(output_path):
     # 2. Education
     draw_section_header("Education")
     # Undergrad
-    draw.text((80, y_pos), "B.Tech in Computer Science & Engineering (Data Science)", fill=primary_color, font=font_bold_medium)
+    draw.text((80, y_pos), "B.Tech in Computer Science & Engineering", fill=primary_color, font=font_bold_medium)
     draw.text((width - 250, y_pos), "2024 - 2028 (Ongoing)", fill=text_color, font=font_regular)
     y_pos += 24
     draw.text((80, y_pos), "Institute of Technical Education and Research (ITER) - Siksha 'O' Anusandhan (SOA), Bhubaneswar", fill=text_color, font=font_italic)
@@ -107,7 +107,7 @@ def generate_resume_pdf(output_path):
     y_pos += 30
 
     # Secondary School
-    draw.text((80, y_pos), "Secondary School Certificate (ICSE Class 10) - Result: 84%", fill=primary_color, font=font_bold_medium)
+    draw.text((80, y_pos), "Secondary School Certificate (ICSE Class 10) - Result: 86%", fill=primary_color, font=font_bold_medium)
     draw.text((width - 250, y_pos), "Completed 2022", fill=text_color, font=font_regular)
     y_pos += 24
     draw.text((80, y_pos), "Carmel School, Bhadrak, Odisha (Distinction in Science, Mathematics & Computer Applications)", fill=text_color, font=font_italic)
@@ -135,6 +135,23 @@ def generate_resume_pdf(output_path):
     y_pos += 20
 
     # 4. Key Projects
+    draw_section_header("Competitive Hackathons & Ideathons")
+    hackathons = [
+        ("SOA Ideathon Hackathon", "ITER Siksha 'O' Anusandhan University", "2024",
+         "Ideathon Finalist & Prototype Developer - Built rapid AI-integrated technical prototype solution."),
+        ("Smart India Hackathon (SIH)", "Ministry of Education Govt. of India", "2024",
+         "National Engineering Hackathon Participant - Tackled nationwide governance problem statements."),
+        ("Google Cloud Hackathon", "Google Cloud GenAI Challenge", "2024",
+         "Cloud Solutions Builder - Developed distributed cloud-native architecture using Google Cloud services.")
+    ]
+    for title, org, date, desc in hackathons:
+        draw.text((80, y_pos), f"{title} - {org}", fill=primary_color, font=font_bold_medium)
+        draw.text((width - 250, y_pos), date, fill=text_color, font=font_regular)
+        y_pos += 24
+        draw.text((80, y_pos), f"- {desc}", fill=text_color, font=font_regular)
+        y_pos += 32
+    y_pos += 15
+
     draw_section_header("Academic & Personal Projects")
     
     # Project 1
